@@ -1,4 +1,4 @@
-namespace InfoBoard;
+namespace InfoBoard.Views;
 
 public partial class NotePage : ContentPage
 {

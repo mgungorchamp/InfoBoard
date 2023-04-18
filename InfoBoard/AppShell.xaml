@@ -2,19 +2,19 @@
 <Shell
     x:Class="InfoBoard.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:InfoBoard"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+    xmlns:views="clr-namespace:InfoBoard.Views"
     Shell.FlyoutBehavior="Disabled">
 
     <TabBar>
         <ShellContent
             Title="Notes"
-            ContentTemplate="{DataTemplate local:NotePage}"
+            ContentTemplate="{DataTemplate views:NotePage}"
             Icon="{OnPlatform 'icon_notes.png', iOS='icon_notes_ios.png', MacCatalyst='icon_notes_ios.png'}" />
 
         <ShellContent
             Title="About"
-            ContentTemplate="{DataTemplate local:AboutPage}"
+            ContentTemplate="{DataTemplate views:AboutPage}"
             Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />
     </TabBar>
 
