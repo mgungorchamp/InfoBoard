@@ -1,5 +1,6 @@
 namespace InfoBoard.Views;
 
+//https://learn.microsoft.com/en-us/dotnet/maui/tutorials/notes-app/?view=net-maui-7.0&source=docs&tutorial-step=4
 public partial class NotePage : ContentPage
 {
     string _fileName = Path.Combine(FileSystem.AppDataDirectory, "notes.txt");
