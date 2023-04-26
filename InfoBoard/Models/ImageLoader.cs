@@ -10,10 +10,26 @@ internal class ImageLoader
 {
     public ObservableCollection<string> ImageBasket { get; set; } = new ObservableCollection<string>();
 
-    public ImageLoader() =>
-        LoadNotes();
+    public Image FirstImage 
+    {
+       
+        get 
+        {
+            Image image = new Image();
+            image.Source = new UriImageSource
+            {
+                Uri = new Uri("http://clipart-library.com/image_gallery2/Nature-PNG-File.png"),
+                CacheValidity = new TimeSpan(10, 0, 0, 0)
+            };       
 
-    public void LoadNotes()
+            return image; 
+        } 
+    }
+
+    public ImageLoader() =>
+        LoadImages();
+
+    public void LoadImages()
     {
         ImageBasket.Clear();
 
@@ -24,13 +40,13 @@ internal class ImageLoader
         IEnumerable<string> imageList = Directory
 
                                     // Select the file names from the directory
-                                    .EnumerateFiles(appDataPath, "*.jpg")
+                                    .EnumerateFiles(appDataPath, "*.png")
                                     
                                     // With the final collection of notes, order them by date
-                                    .OrderBy(note => note);
+                                    .OrderBy(pic => pic);
 
         // Add each note into the ObservableCollection
-        foreach (string note in imageList)
-            ImageBasket.Add(note);
+        foreach (string anImage in imageList)
+            ImageBasket.Add(anImage);
     }
 }

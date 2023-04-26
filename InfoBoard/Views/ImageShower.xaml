@@ -1,19 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.ImageShower"
              Title="Image Shower">
+    <ContentPage.BindingContext>
+        <models:ImageLoader/>
+    </ContentPage.BindingContext>
+    
     <VerticalStackLayout>
         <Label 
-            Text="Welcome to .NET MAUI!"
+            Text="Image Shower***********"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Image Source="{Binding}">
+
+        <Image Source="{Binding FirstImage.Source}">
+           
         </Image>
 
-        <ItemGroup>
-            <MauiIcon Include="Resources\AppIcon\appicon.png" BaseSize="128,128" />
-        </ItemGroup>
+        <Image>
+            <Image.Source>
+                <UriImageSource Uri="http://clipart-library.com/image_gallery2/Nature-PNG.png"
+                        CacheValidity="10:00:00:00" />
+            </Image.Source>
+        </Image>
+
+        <!-- <Label Text="{Binding firstImage}" />-->
+
+
+        <!-- Display notes in a list -->
+        <CollectionView x:Name="imageCollection"
+                        ItemsSource="{Binding ImageBasket}"
+                        Margin="20" >
+                         <!-- SelectionMode="Single" -->
+                         <!--SelectionChanged="notesCollection_SelectionChanged" -->    
+
+            <!-- Designate how the collection of items are laid out -->
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <!-- Define the appearance of each item in the list -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+
+                        <Image Source="{Binding firstImage}"
+                                 SemanticProperties.Description="Bismillah!"
+                                 HeightRequest="64" />
+                        <!--  <Label Text="{Binding Text}" FontSize="22"/>
+                        <Label Text="{Binding Date}" FontSize="14" TextColor="Silver"/>-->
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
 
 
     </VerticalStackLayout>
