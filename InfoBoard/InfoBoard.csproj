@@ -66,6 +66,9 @@
 	  <MauiXaml Update="Views\AllNotesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ImageDisplay.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ImageShower.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -8,6 +8,11 @@
 
     <TabBar>
         <ShellContent
+            Title="Image Display"
+            ContentTemplate="{DataTemplate views:ImageDisplay}"
+            Icon="{OnPlatform 'icon_notes.png', iOS='icon_notes_ios.png', MacCatalyst='icon_notes_ios.png'}" />
+        
+        <ShellContent
             Title="Notes"
             ContentTemplate="{DataTemplate views:AllNotesPage}"
             Icon="{OnPlatform 'icon_notes.png', iOS='icon_notes_ios.png', MacCatalyst='icon_notes_ios.png'}" />
@@ -15,12 +20,8 @@
         <ShellContent
             Title="About"
             ContentTemplate="{DataTemplate views:AboutPage}"
-            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />
-        
-        <ShellContent
-            Title="Image Show"
-            ContentTemplate="{DataTemplate views:ImageShower}"
-            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />
+            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />        
+       
     </TabBar>
 
 </Shell>
