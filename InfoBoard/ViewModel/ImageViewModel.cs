@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InfoBoard.Models;
+using InfoBoard.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,6 +17,8 @@ namespace InfoBoard.ViewModel
         private string _imageSource;
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
+
+        List<FileInformation> FileList = new List<FileInformation>();
 
         public string ImageSource {
             get => _imageSource;
@@ -40,7 +44,29 @@ namespace InfoBoard.ViewModel
         {
             _cachingInterval = new TimeSpan(0, 0, 0, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-            ChangeImage();
+            Task.Run(() => RetrieveImages()).Wait();
+            DisplayAnImageEachTimelapse();            
+        }
+
+        private async void DisplayAnImageEachTimelapse()
+        {
+            foreach (var file in FileList)
+            {
+                _imageSource = file.PresignedURL;
+                OnPropertyChanged(nameof(ImageSource));
+                await Task.Delay(_refreshInMiliSecond);
+            }
+            DisplayAnImageEachTimelapse();
+        }
+
+        public async void RetrieveImages() 
+        {
+            RestService restService = new RestService();       
+            var task = restService.RefreshDataAsync();
+            task.Wait();
+            FileList = task.Result;
+
+            //FileList = await restService.RefreshDataAsync();
         }
 
         //https://www.labnol.org/embed/google/drive/
