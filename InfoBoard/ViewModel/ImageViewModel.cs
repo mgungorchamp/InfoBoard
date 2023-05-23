@@ -1,12 +1,9 @@
 ﻿using InfoBoard.Models;
-using InfoBoard.Services;
-using System;
-using System.Collections.Generic;
+using InfoBoard.Services; 
 using System.ComponentModel;
-using System.Linq;
+using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace InfoBoard.ViewModel
 {
@@ -44,8 +41,37 @@ namespace InfoBoard.ViewModel
         {
             _cachingInterval = new TimeSpan(0, 0, 0, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-            Task.Run(() => RetrieveImages()).Wait();
-            DisplayAnImageEachTimelapse();            
+            // Task.Run(() => RetrieveImages()).Wait();
+            // DisplayAnImageEachTimelapse();            
+            DisplayAnImageFromLocalFolder();
+        }
+
+
+        private async void DisplayAnImageFromLocalFolder()
+        {
+
+            // Get the folder where the images are stored.
+            string appDataPath = FileSystem.AppDataDirectory;
+            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+
+            //string fileNames = Directory.GetFiles(directoryName);
+            SaveFilesToLocalDirectory localFiles = new SaveFilesToLocalDirectory();  
+            
+            Task.Run(() => localFiles.RetrieveImages()).Wait();
+            //RetrieveImages();
+
+            foreach (var fileInformation in localFiles.FileList)
+            {
+                string fileName = Path.Combine(directoryName, fileInformation.s3key);
+                if (File.Exists(fileName))
+                {
+                    _imageSource = fileName;
+                    OnPropertyChanged(nameof(ImageSource));
+                    await Task.Delay(_refreshInMiliSecond);
+                }                 
+            }
+
+            DisplayAnImageFromLocalFolder();
         }
 
         private async void DisplayAnImageEachTimelapse()

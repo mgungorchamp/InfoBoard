@@ -18,11 +18,17 @@
         <Image   
             Aspect="AspectFill"           
             VerticalOptions="CenterAndExpand" 
-            HorizontalOptions="CenterAndExpand">            
-            <Image.Source>
-                <UriImageSource Uri="{Binding ImageSource}"
-                        CacheValidity="{Binding Interval}" />
-            </Image.Source>          
+            HorizontalOptions="CenterAndExpand"
+            Source="{Binding ImageSource}">            
+                   
+                   
         </Image>
     </VerticalStackLayout>
 </ContentPage>
+
+<!-- <Image.Source>-->
+  <!--   <FileImageSource File="{Binding ImageSource}"-->
+
+                <!--   <UriImageSource Uri="{Binding ImageSource}"-->
+        <!-- CacheValidity="{Binding Interval}" />-->
+<!-- </Image.Source>  -->

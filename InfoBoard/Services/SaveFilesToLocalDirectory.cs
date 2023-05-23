@@ -9,10 +9,10 @@ namespace InfoBoard.Services
 {
     internal class SaveFilesToLocalDirectory
     {
-        List<FileInformation> FileList;
+        public List<FileInformation> FileList;
         public void fetchAndSave() 
         {
-            // Get the folder where the notes are stored.
+            // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
 
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
@@ -27,9 +27,10 @@ namespace InfoBoard.Services
                 string fileName = Path.Combine(directoryInfo.FullName, file.s3key);
                 File.WriteAllText(fileName, file.presignedURL);
             }
+            //Console.WriteLine("Done: fetchAndSave");
         }
 
-        private void RetrieveImages()
+        public void RetrieveImages()
         {
             FileList = new List<FileInformation>();
 
