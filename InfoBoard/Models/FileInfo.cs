@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace InfoBoard.Models
 {
-    public class FileInformation
+    public record class FileInformation
     {
-        public int ID { get; set; }
-        public int UserID { get; set; }
-        public string Name{ get; set; }
-        public string Path { get; set; }
-        public string S3Key { get; set; }
-        public int Size { get; set; }
-        public DateTime UploadedAt { get; set; }
-        public string PresignedURL { get; set; }
+        public int id { get; set; }
+        public int user_id { get; set; }
+        public string name { get; set; }
+        public string path { get; set; }
+        public string s3key { get; set; }
+        public int size { get; set; }
+        public string uploaded_at { get; set; }
+        public string presignedURL { get; set; }
+
+
     }
 }

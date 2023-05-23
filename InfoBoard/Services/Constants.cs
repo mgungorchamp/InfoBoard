@@ -8,6 +8,7 @@ namespace InfoBoard.Services
 {
     public static class Constants
     {
+        public static string LocalDirectory = "Media";
         // URL of REST service
         //public static string RestUrl = "https://dotnetmauitodorest.azurewebsites.net/api/todoitems/{0}";
 

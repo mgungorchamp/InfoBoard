@@ -1,4 +1,6 @@
-﻿namespace InfoBoard;
+﻿using InfoBoard.Services;
+
+namespace InfoBoard;
 
 public partial class AppShell : Shell
 {
@@ -6,5 +8,7 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
         Routing.RegisterRoute(nameof(Views.NotePage), typeof(Views.NotePage));
+        SaveFilesToLocalDirectory saveFilesToLocalDirectory = new SaveFilesToLocalDirectory();
+        saveFilesToLocalDirectory.fetchAndSave();
     }
 }

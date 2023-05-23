@@ -52,7 +52,7 @@ namespace InfoBoard.ViewModel
         {
             foreach (var file in FileList)
             {
-                _imageSource = file.PresignedURL;
+                _imageSource = file.presignedURL;
                 OnPropertyChanged(nameof(ImageSource));
                 await Task.Delay(_refreshInMiliSecond);
             }
