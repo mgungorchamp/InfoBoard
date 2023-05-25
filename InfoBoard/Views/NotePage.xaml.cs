@@ -8,8 +8,8 @@ namespace InfoBoard.Views;
 public partial class NotePage : ContentPage
 {
     public NotePage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         string appDataPath = FileSystem.AppDataDirectory;
         string randomFileName = $"{Path.GetRandomFileName()}.notes.txt";
 

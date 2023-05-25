@@ -1,9 +1,8 @@
 ﻿using InfoBoard.Models;
-using InfoBoard.Services; 
+using InfoBoard.Services;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
- 
+
 
 namespace InfoBoard.ViewModel
 {
@@ -37,7 +36,7 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public ImageViewModel() 
+        public ImageViewModel()
         {
             _cachingInterval = new TimeSpan(0, 0, 0, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
@@ -55,8 +54,8 @@ namespace InfoBoard.ViewModel
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //string fileNames = Directory.GetFiles(directoryName);
-            SaveFilesToLocalDirectory localFiles = new SaveFilesToLocalDirectory();  
-            
+            SaveFilesToLocalDirectory localFiles = new SaveFilesToLocalDirectory();
+
             Task.Run(() => localFiles.RetrieveImages()).Wait();
             //RetrieveImages();
 
@@ -68,7 +67,7 @@ namespace InfoBoard.ViewModel
                     _imageSource = fileName;
                     OnPropertyChanged(nameof(ImageSource));
                     await Task.Delay(_refreshInMiliSecond);
-                }                 
+                }
             }
 
             DisplayAnImageFromLocalFolder();
@@ -85,9 +84,9 @@ namespace InfoBoard.ViewModel
             DisplayAnImageEachTimelapse();
         }
 
-        public async void RetrieveImages() 
+        public async void RetrieveImages()
         {
-            RestService restService = new RestService();       
+            RestService restService = new RestService();
             var task = restService.RefreshDataAsync();
             task.Wait();
             FileList = task.Result;
@@ -107,7 +106,7 @@ namespace InfoBoard.ViewModel
         public async void ChangeImage()
         {
             _imageSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
-                //"https://innovation.wustl.edu/wp-content/uploads/2022/07/WashU-startup-wall-in-Cortex-Innovation-Community-768x512.jpg"; //https://picsum.photos/200/300
+            //"https://innovation.wustl.edu/wp-content/uploads/2022/07/WashU-startup-wall-in-Cortex-Innovation-Community-768x512.jpg"; //https://picsum.photos/200/300
             OnPropertyChanged(nameof(ImageSource));
             await Task.Delay(_refreshInMiliSecond);
 
@@ -117,20 +116,20 @@ namespace InfoBoard.ViewModel
             _imageSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
             OnPropertyChanged(nameof(ImageSource));
             await Task.Delay(_refreshInMiliSecond);
-/*
-            _imageSource = "https://aka.ms/campus.jpg"; //https://picsum.photos/200/300
-            OnPropertyChanged(nameof(ImageSource));
-            await Task.Delay(_refreshInMiliSecond);
+            /*
+                        _imageSource = "https://aka.ms/campus.jpg"; //https://picsum.photos/200/300
+                        OnPropertyChanged(nameof(ImageSource));
+                        await Task.Delay(_refreshInMiliSecond);
 
-        /*
-            _imageSource = "https://vermontic.com/wp-content/uploads/2023/04/lake-champlain-scenic-water-204309-1024x768.jpg";
-            OnPropertyChanged(nameof(ImageSource));
-            await Task.Delay(_refreshInMiliSecond);
+                    /*
+                        _imageSource = "https://vermontic.com/wp-content/uploads/2023/04/lake-champlain-scenic-water-204309-1024x768.jpg";
+                        OnPropertyChanged(nameof(ImageSource));
+                        await Task.Delay(_refreshInMiliSecond);
 
-            _imageSource = "https://media.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
-            OnPropertyChanged(nameof(ImageSource));
-            await Task.Delay(_refreshInMiliSecond);
-        */
+                        _imageSource = "https://media.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
+                        OnPropertyChanged(nameof(ImageSource));
+                        await Task.Delay(_refreshInMiliSecond);
+                    */
 
             _imageSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
             OnPropertyChanged(nameof(ImageSource));
