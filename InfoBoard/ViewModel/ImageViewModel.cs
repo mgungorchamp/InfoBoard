@@ -54,9 +54,9 @@ namespace InfoBoard.ViewModel
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //string fileNames = Directory.GetFiles(directoryName);
-            SaveFilesToLocalDirectory localFiles = new SaveFilesToLocalDirectory();
+            FileDownloadService localFiles = new FileDownloadService();
 
-            Task.Run(() => localFiles.RetrieveImages()).Wait();
+            Task.Run(() => localFiles.getMediaFileNames()).Wait();
             //RetrieveImages();
 
             foreach (var fileInformation in localFiles.FileList)
@@ -87,7 +87,7 @@ namespace InfoBoard.ViewModel
         public async void RetrieveImages()
         {
             RestService restService = new RestService();
-            var task = restService.RefreshDataAsync();
+            var task = restService.downloadMediaFileNames();
             task.Wait();
             FileList = task.Result;
 

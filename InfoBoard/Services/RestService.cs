@@ -25,7 +25,7 @@ namespace InfoBoard.Services
             };
         }
 
-        public async Task<List<FileInformation>> RefreshDataAsync()
+        public async Task<List<FileInformation>> downloadMediaFileNames()
         {
             Items = new List<FileInformation>();
 

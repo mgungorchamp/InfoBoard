@@ -6,31 +6,40 @@
 
 namespace InfoBoard.Services
 {
-    internal class SaveFilesToLocalDirectory
+    internal class FileDownloadService
     {
         public List<FileInformation> FileList;
 
 
-        public async void fetchAndSave()
+        public async void downloadMediaFiles()
         {
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
 
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
-            DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryName);
+            //create the directory if it doesn't exist
+            DirectoryInfo directoryInfo;
+            if (!Directory.Exists(directoryName))
+                directoryInfo = Directory.CreateDirectory(directoryName);
+            else
+                directoryInfo = new DirectoryInfo(directoryName);
 
-            Task.Run(() => RetrieveImages()).Wait();
-            //RetrieveImages();
-
+            //Get file names from the server
+            Task.Run(() => getMediaFileNames()).Wait();
+            
+            //Download each file from the server to local folder
             foreach (var file in FileList)
             {
                 string localFileName = Path.Combine(directoryInfo.FullName, file.s3key);
-                //TODO this needs to be streamed 
+                
+                //Download the file content as byte array from presigned URL
                 HttpClient _client = new HttpClient();
                 Uri uri = new Uri(file.presignedURL);
                 byte[] fileContent = _client.GetByteArrayAsync(uri).Result;
+                //Save it to local folder
                 File.WriteAllBytes(localFileName, fileContent);
+
                 /*
                 using (Stream s = _client.GetStreamAsync(uri).Result)
                 using (StreamReader sr = new StreamReader(s))
@@ -43,15 +52,13 @@ namespace InfoBoard.Services
             //Console.WriteLine("Done: fetchAndSave");
         }
 
-        public void RetrieveImages()
+        public void getMediaFileNames()
         {
             FileList = new List<FileInformation>();
-
             RestService restService = new RestService();
-            var task = restService.RefreshDataAsync();
+            var task = restService.downloadMediaFileNames();
             task.Wait();
             FileList = task.Result;
-
             //FileList = await restService.RefreshDataAsync();
         }
 
