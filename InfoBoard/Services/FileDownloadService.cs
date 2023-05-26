@@ -11,9 +11,15 @@ namespace InfoBoard.Services
     internal class FileDownloadService
     {
         private List<FileInformation> fileList = new List<FileInformation>();
-     
+
+        private DeviceSettings deviceSettings;
+
         public List<FileInformation> getFileList() 
         {
+            
+            //Get Device settings
+            Task.Run(() => deviceSettings = loadDeviceSettings()).Wait();            
+
             updateFiles();
             return fileList;
         }
@@ -65,7 +71,7 @@ namespace InfoBoard.Services
                 if (fileListFromServer.Count != 0)
                 {
                     //Save those files to local directory
-                    Task.Run(() => downloadMediaFilesToLocalDirectory(fileListFromServer)).Wait();
+                    Task.Run(() => downloadFilesToLocalDirectory(fileListFromServer)).Wait();
                     //Save media file names (as JSON) to local folder 
                     saveMediaNamesToLocalJSON(fileListFromServer);
                     fileList = readMediaNamesFromLocalJSON();
@@ -107,7 +113,7 @@ namespace InfoBoard.Services
             IEnumerable<FileInformation> differenceQuery = fileListFromServer.Except(fileListFromLocal);
             foreach (FileInformation file in differenceQuery)
             {
-                downloadMediaFileToLocalDirectory(file);
+                downloadFileToLocalDirectory(file);
             }
 
             // In the local but not at the server delete those files
@@ -143,8 +149,8 @@ namespace InfoBoard.Services
         }
 
 
-            // If media folder is not created it creates, if exist it retuns the existing one
-            private DirectoryInfo getMediaFolder() 
+        // If media folder is not created it creates, if exist it retuns the existing one
+        private DirectoryInfo getMediaFolder() 
         {
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
@@ -159,17 +165,17 @@ namespace InfoBoard.Services
             return directoryInfo;
         }
 
-        private void downloadMediaFilesToLocalDirectory(List<FileInformation> fileList)
+        private void downloadFilesToLocalDirectory(List<FileInformation> fileList)
         {
             //Download each file from the server to local folder
             foreach (var file in fileList)
             {
-                downloadMediaFileToLocalDirectory(file);
+                downloadFileToLocalDirectory(file);
             }
             //Console.WriteLine("Done: fetchAndSave");
         }
 
-        private void downloadMediaFileToLocalDirectory(FileInformation fileInformation)
+        private void downloadFileToLocalDirectory(FileInformation fileInformation)
         {
             DirectoryInfo directoryInfo = getMediaFolder();
              
@@ -201,6 +207,8 @@ namespace InfoBoard.Services
             return task.Result;
             //FileList = await restService.RefreshDataAsync();
         }
+
+        
 
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
         private void saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
@@ -237,6 +245,59 @@ namespace InfoBoard.Services
                 fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
             }
             return fileList;
+        }
+
+        // HANDSHAKE - Register device and get settings
+
+        public DeviceSettings loadDeviceSettings()
+        {
+            DeviceSettings deviceSettings = readSettingsFromLocalJSON();
+
+            if (deviceSettings.deviceId == "NOTSET")
+            {
+                RestService restService = new RestService();
+                var task = restService.registerDevice();
+                task.Wait();
+                deviceSettings = task.Result;
+                saveSettingsToLocalAsJSON(deviceSettings);
+            }
+            return deviceSettings;            
+        }
+
+        //Read local JSON file - if exist - if not return empty fileList
+        private DeviceSettings readSettingsFromLocalJSON()
+        {
+            DeviceSettings deviceSettings = new DeviceSettings();
+            JsonSerializerOptions _serializerOptions;
+            _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            string fileName = "DeviceSettings.json";
+            string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
+            if (File.Exists(fullPathJsonFileName))
+            {
+                string jsonString = File.ReadAllText(fullPathJsonFileName);
+                deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+            }
+            return deviceSettings;
+        }
+
+        private void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
+        {
+            JsonSerializerOptions _serializerOptions;
+            _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            string fileName = "DeviceSettings.json";
+            string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
+            string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
+            File.WriteAllText(fullPathFileName, jsonString);
         }
 
     }
