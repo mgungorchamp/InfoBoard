@@ -93,7 +93,7 @@ namespace InfoBoard.Services
             //Get file names from the server - fileListFromServer
             Task.Run(() => fileListFromServer = getMediaFileNamesFromServer()).Wait();
 
-            //Find intersect files - if updated redowload them
+            //Find intersect files - if updated re-download them
             //https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.intersect?view=net-7.0
             //IEnumerable<FileInformation> both = fileListFromLocal.Intersect(fileListFromServer);
             //foreach (FileInformation id in both)
@@ -101,6 +101,7 @@ namespace InfoBoard.Services
                 //TODO: Read local files last download or update date and compare it with from server
                 //;//compare last update date with local date ... if different redownload
             //}
+
             // In the server but not at the local download those files
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
             IEnumerable<FileInformation> differenceQuery = fileListFromServer.Except(fileListFromLocal);
@@ -116,7 +117,6 @@ namespace InfoBoard.Services
             {
                 deleteLocalFile(file);
             }
-
 
             saveMediaNamesToLocalJSON(fileListFromServer);
             fileList = readMediaNamesFromLocalJSON();
