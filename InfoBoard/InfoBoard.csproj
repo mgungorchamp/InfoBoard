@@ -77,8 +77,4 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Resources\Images\ImageLibrary\" />
-	</ItemGroup>
-
 </Project>

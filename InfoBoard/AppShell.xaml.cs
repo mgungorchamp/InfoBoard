@@ -18,9 +18,12 @@ public partial class AppShell : Shell
         // Delete the local one if it's no longer in the JSON
         // Redownload if the pull date is older than the file update date 
         // Download the file if there is no file with that in the local folder  
-        FileDownloadService downloader = new FileDownloadService();
+        
+        //FileDownloadService downloader = new FileDownloadService();
+        //downloader.updateFiles();
+
         // saveFilesToLocalDirectory.fetchAndSave();
-        Task.Run(() => downloader.downloadMediaFiles()).Wait();
+        //Task.Run(() => downloader.downloadMediaFiles()).Wait();
 
     }
 }

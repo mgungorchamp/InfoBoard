@@ -1,5 +1,6 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
+using Microsoft.Maui.Storage;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -54,12 +55,22 @@ namespace InfoBoard.ViewModel
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //string fileNames = Directory.GetFiles(directoryName);
-            FileDownloadService localFiles = new FileDownloadService();
+            FileDownloadService fileDownloadService = new FileDownloadService();
+            //fileDownloadService.updateFiles();
 
-            Task.Run(() => localFiles.getMediaFileNames()).Wait();
+            //Task.Run(() => fileDownloadService.getMediaFileNamesFromServer()).Wait();
             //RetrieveImages();
 
-            foreach (var fileInformation in localFiles.FileList)
+            List<FileInformation> fileList = fileDownloadService.getFileList();
+            //No files to show
+            if (fileList.Count == 0)
+            {
+                _imageSource = "uploadimage.png";
+                OnPropertyChanged(nameof(ImageSource));
+                return;
+            }
+
+            foreach (var fileInformation in fileList)
             {
                 string fileName = Path.Combine(directoryName, fileInformation.s3key);
                 if (File.Exists(fileName))
@@ -71,6 +82,33 @@ namespace InfoBoard.ViewModel
             }
 
             DisplayAnImageFromLocalFolder();
+        }
+
+        private async void DisplayAnImageFromLocalFolderOLDtoDELETE()
+        {
+
+            // Get the folder where the images are stored.
+            string appDataPath = FileSystem.AppDataDirectory;
+            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+
+            //string fileNames = Directory.GetFiles(directoryName);
+            FileDownloadService localFiles = new FileDownloadService();
+
+            Task.Run(() => localFiles.getMediaFileNamesFromServer()).Wait();
+            //RetrieveImages();
+
+            foreach (var fileInformation in localFiles.getFileList())
+            {
+                string fileName = Path.Combine(directoryName, fileInformation.s3key);
+                if (File.Exists(fileName))
+                {
+                    _imageSource = fileName;
+                    OnPropertyChanged(nameof(ImageSource));
+                    await Task.Delay(_refreshInMiliSecond);
+                }
+            }
+
+            //DisplayAnImageFromLocalFolder();
         }
 
         private async void DisplayAnImageEachTimelapse()
