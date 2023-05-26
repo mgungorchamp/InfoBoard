@@ -11,7 +11,7 @@ namespace InfoBoard.Services
     internal class FileDownloadService
     {
         private List<FileInformation> fileList;
-        private bool fileCorrupted = false;
+     
         public List<FileInformation> getFileList() 
         {
             updateFiles();
@@ -83,9 +83,8 @@ namespace InfoBoard.Services
             {
                 string fileName = Path.Combine(directoryName, fileInformation.s3key);
                 if (!File.Exists(fileName))
-                {
-                    fileCorrupted = true;
-                    fileListFromLocal.Clear();
+                {              
+                    fileListFromLocal.Clear(); // Fresh start, since there is missing files
                     break;
                 }
             }
