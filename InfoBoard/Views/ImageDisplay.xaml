@@ -15,7 +15,7 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
 
-        <Image   
+        <Image 
             Aspect="AspectFill"           
             VerticalOptions="CenterAndExpand" 
             HorizontalOptions="CenterAndExpand"

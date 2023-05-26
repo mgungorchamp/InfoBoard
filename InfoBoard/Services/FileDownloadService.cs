@@ -10,7 +10,7 @@ namespace InfoBoard.Services
 {
     internal class FileDownloadService
     {
-        private List<FileInformation> fileList;
+        private List<FileInformation> fileList = new List<FileInformation>();
      
         public List<FileInformation> getFileList() 
         {
@@ -41,7 +41,7 @@ namespace InfoBoard.Services
         - and overwrite the content of the local JSON file with the new JSON file   
          */
 
-        private void updateFiles() 
+        private void updateFiles()
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
@@ -51,8 +51,14 @@ namespace InfoBoard.Services
             //And save the JSON file to local directory
             if (fileListFromLocal.Count == 0)
             {
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+                if (accessType != NetworkAccess.Internet)
+                {
+                    return;
+                }
+
                 List<FileInformation> fileListFromServer = new List<FileInformation>();
-                
+
                 //Get file names from the server - fileListFromServer
                 Task.Run(() => fileListFromServer = getMediaFileNamesFromServer()).Wait();
 
@@ -66,30 +72,24 @@ namespace InfoBoard.Services
                 }
             }
             else
-                synchronizeFiles();
-
+            {
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+                if (accessType == NetworkAccess.Internet)
+                {
+                    synchronizeFiles();
+                    return;
+                }
+                fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
+            }
         }
 
         private void synchronizeFiles()
         {
             //CASE 2 - Download NEW files
             //Download a file if there is no file with that name in the local JSON file 
-            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
-            //check if local files if does not exist - corrupted - redownload all
-            // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
-            foreach (var fileInformation in fileListFromLocal)
-            {
-                string fileName = Path.Combine(directoryName, fileInformation.s3key);
-                if (!File.Exists(fileName))
-                {              
-                    fileListFromLocal.Clear(); // Fresh start, since there is missing files
-                    break;
-                }
-            }
+            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJsonCheckDiscrepancy();
 
-                    List<FileInformation> fileListFromServer = new List<FileInformation>();
+            List<FileInformation> fileListFromServer = new List<FileInformation>();
             //Get file names from the server - fileListFromServer
             Task.Run(() => fileListFromServer = getMediaFileNamesFromServer()).Wait();
 
@@ -123,8 +123,28 @@ namespace InfoBoard.Services
         }
 
 
-        // If media folder is not created it creates, if exist it retuns the existing one
-        private DirectoryInfo getMediaFolder() 
+        private List<FileInformation> readMediaNamesFromLocalJsonCheckDiscrepancy()
+        {
+            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
+            // check if local files if does not exist - corrupted - redownload all
+            // Get the folder where the images are stored.
+            string appDataPath = FileSystem.AppDataDirectory;
+            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+            foreach (var fileInformation in fileListFromLocal)
+            {
+                string fileName = Path.Combine(directoryName, fileInformation.s3key);
+                if (!File.Exists(fileName))
+                {
+                    fileListFromLocal.Clear(); // Fresh start, since there is missing files
+                    break;
+                }
+            }
+            return fileListFromLocal;
+        }
+
+
+            // If media folder is not created it creates, if exist it retuns the existing one
+            private DirectoryInfo getMediaFolder() 
         {
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
@@ -210,10 +230,10 @@ namespace InfoBoard.Services
             };
 
             string fileName = "FileInformation.json";
-            string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
-            if(File.Exists(fullPathFileName))
+            string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
+            if(File.Exists(fullPathJsonFileName))
             {
-                string jsonString = File.ReadAllText(fullPathFileName);
+                string jsonString = File.ReadAllText(fullPathJsonFileName);
                 fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
             }
             return fileList;

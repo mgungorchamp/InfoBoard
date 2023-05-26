@@ -15,6 +15,9 @@ namespace InfoBoard.ViewModel
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
 
+        private FileDownloadService fileDownloadService = new FileDownloadService();
+
+        //I think to be deleted
         List<FileInformation> FileList = new List<FileInformation>();
 
         public string ImageSource {
@@ -55,7 +58,7 @@ namespace InfoBoard.ViewModel
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //string fileNames = Directory.GetFiles(directoryName);
-            FileDownloadService fileDownloadService = new FileDownloadService();
+            
             //fileDownloadService.updateFiles();
 
             //Task.Run(() => fileDownloadService.getMediaFileNamesFromServer()).Wait();
@@ -63,7 +66,7 @@ namespace InfoBoard.ViewModel
 
             List<FileInformation> fileList = fileDownloadService.getFileList();
             //No files to show
-            if (fileList.Count == 0)
+            if ( fileList.Count == 0)
             {
                 _imageSource = "uploadimage.png";
                 OnPropertyChanged(nameof(ImageSource));
