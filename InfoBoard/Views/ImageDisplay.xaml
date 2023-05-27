@@ -2,26 +2,22 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
-             x:Class="InfoBoard.Views.ImageDisplay"             
-             Title="Image Display">
+             x:Class="InfoBoard.Views.ImageDisplay">
 
     <ContentPage.BindingContext>
         <viewmodel:ImageViewModel/>
     </ContentPage.BindingContext>
     
     <VerticalStackLayout>
-        <Label 
+        <!--<Label 
             Text="{Binding ImageSource}"
             VerticalOptions="Center" 
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"/>-->
 
         <Image 
-            Aspect="AspectFill"           
-            VerticalOptions="CenterAndExpand" 
-            HorizontalOptions="CenterAndExpand"
+            x:Name="mainPageImage"
+            Aspect="AspectFit" 
             Source="{Binding ImageSource}">            
-                   
-                   
         </Image>
     </VerticalStackLayout>
 </ContentPage>

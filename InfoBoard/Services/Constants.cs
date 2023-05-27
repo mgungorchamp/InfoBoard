@@ -14,9 +14,10 @@
         public static string UserId = "10";
         public static string MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/files.php?userid={UserId}";
 
+        public static string TEMPORARY_CODE = getHandshakeKey();
 
         //https://guzelboard.com/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
-        public static string HANDSHAKE_URL = $"{Scheme}://{HostUrl}/api/handshake.php?temporary_code={getHandshakeKey()}&device_type=MVP&version=1";
+        public static string HANDSHAKE_URL = $"{Scheme}://{HostUrl}/api/handshake.php?temporary_code={TEMPORARY_CODE}&device_type=MVP&version=1";
 
         //public static string Port = "5001";
         //public static string RestUrl = $"{Scheme}://{LocalhostUrl}:{Port}/api/todoitems/{{0}}";

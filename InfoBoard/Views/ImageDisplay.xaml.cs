@@ -7,5 +7,6 @@ public partial class ImageDisplay : ContentPage
         InitializeComponent();
         //BindingContext = new ImageViewModel();
         //DisplayAlert("Downloading Files", "Fetching files and storing them to local folder", "OK");
+        //mainPageImage.Aspect = .
     }
 }
