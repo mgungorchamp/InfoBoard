@@ -58,7 +58,7 @@ namespace InfoBoard.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    try
+                    try // THIS MIGHT BE UNNEDED 
                     {
                         deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
                     }
