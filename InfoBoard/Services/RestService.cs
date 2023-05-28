@@ -47,9 +47,38 @@ namespace InfoBoard.Services
             return Items;
         }
 
-        public async Task<DeviceSettings> registerDevice()
+        public async Task<DeviceSettings> retrieveDeviceSettings(string deviceID)
         {
             DeviceSettings deviceSettings = new DeviceSettings();   
+
+            Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceID));
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    try
+                    {
+                        deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
+                    }
+                    catch (JsonException jsonException)
+                    {
+                        Console.WriteLine(@"\tERROR {0}", jsonException);
+                    }
+                    //deviceSettings.deviceId = "MURAT";            
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return deviceSettings;
+        }
+
+        public async Task<ErrorInfo> registerDevice()
+        {
+            ErrorInfo errorInfo = new ErrorInfo();
 
             Uri uri = new Uri(string.Format(Constants.HANDSHAKE_URL, string.Empty));
             try
@@ -58,14 +87,14 @@ namespace InfoBoard.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
+                    errorInfo = JsonSerializer.Deserialize<ErrorInfo>(content, _serializerOptions);                    
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0}", ex.Message);
             }
-            return deviceSettings;
+            return errorInfo;
         }
     }
 }

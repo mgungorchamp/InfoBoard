@@ -12,8 +12,15 @@
         <Label
             x:Name="RegisterKey"
             Text="Temporary Code"
+            FontSize="Medium"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        
+        <ImageButton 
+            x:Name="qrImageButton"
+            Clicked="OnQRImageButtonClicked"
+            HorizontalOptions="Center"
+            VerticalOptions="Center" />
         
     </VerticalStackLayout>
 </ContentPage>

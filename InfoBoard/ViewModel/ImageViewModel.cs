@@ -52,8 +52,6 @@ namespace InfoBoard.ViewModel
 
         private async void DisplayAnImageFromLocalFolder()
         {
-
-           
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);

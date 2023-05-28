@@ -11,16 +11,17 @@ namespace InfoBoard.Services
     internal class FileDownloadService
     {
         private List<FileInformation> fileList = new List<FileInformation>();
-
-        private DeviceSettings deviceSettings;
+        DeviceSettingsService settingsService = new DeviceSettingsService();
+        DeviceSettings deviceSettings;
 
         public List<FileInformation> getFileList() 
         {
-            
-            //Get Device settings
-            Task.Run(() => deviceSettings = loadDeviceSettings()).Wait();            
 
-            updateFiles();
+            //Get Device settings
+            deviceSettings = settingsService.loadDeviceSettings();
+
+            //synchronise files 
+            synchroniseMediaFiles();
             return fileList;
         }
 
@@ -47,7 +48,7 @@ namespace InfoBoard.Services
         - and overwrite the content of the local JSON file with the new JSON file   
          */
 
-        private void updateFiles()
+        private void synchroniseMediaFiles()
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
@@ -82,14 +83,14 @@ namespace InfoBoard.Services
                 NetworkAccess accessType = Connectivity.Current.NetworkAccess;
                 if (accessType == NetworkAccess.Internet)
                 {
-                    synchronizeFiles();
+                    oneWaySynchroniseFiles();
                     return;
                 }
                 fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
             }
         }
 
-        private void synchronizeFiles()
+        private void oneWaySynchroniseFiles()
         {
             //CASE 2 - Download NEW files
             //Download a file if there is no file with that name in the local JSON file 
@@ -246,59 +247,5 @@ namespace InfoBoard.Services
             }
             return fileList;
         }
-
-        // HANDSHAKE - Register device and get settings
-
-        public DeviceSettings loadDeviceSettings()
-        {
-            DeviceSettings deviceSettings = readSettingsFromLocalJSON();
-
-            if (deviceSettings.deviceId == "NOTSET")
-            {
-                RestService restService = new RestService();
-                var task = restService.registerDevice();
-                task.Wait();
-                deviceSettings = task.Result;
-                saveSettingsToLocalAsJSON(deviceSettings);
-            }
-            return deviceSettings;            
-        }
-
-        //Read local JSON file - if exist - if not return empty fileList
-        private DeviceSettings readSettingsFromLocalJSON()
-        {
-            DeviceSettings deviceSettings = new DeviceSettings();
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
-
-            string fileName = "DeviceSettings.json";
-            string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
-            if (File.Exists(fullPathJsonFileName))
-            {
-                string jsonString = File.ReadAllText(fullPathJsonFileName);
-                deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
-            }
-            return deviceSettings;
-        }
-
-        private void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
-        {
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
-
-            string fileName = "DeviceSettings.json";
-            string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
-            string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-            File.WriteAllText(fullPathFileName, jsonString);
-        }
-
     }
 }
