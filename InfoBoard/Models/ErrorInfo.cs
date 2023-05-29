@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace InfoBoard.Models
 {
     public class ErrorInfo
-    {
-        public int error { get; set; }
+    {          
+        public int code { get; set; }
         public string message { get; set; }
+        
     }
 }

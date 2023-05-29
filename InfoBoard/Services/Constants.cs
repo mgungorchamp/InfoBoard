@@ -14,12 +14,16 @@
         public static string UserId = "10";
         public static string MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/files.php?userid={UserId}";
 
-        public static string TEMPORARY_CODE = updateTemporaryCode();
+        public static string TEMPORARY_CODE;
 
         //https://guzelboard.com/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
-        public static string HANDSHAKE_URL = $"{Scheme}://{HostUrl}/api/handshake.php?temporary_code={TEMPORARY_CODE}&device_type=MVP&version=1";
+        public static string HANDSHAKE_URL;
+        private static void updateHandshakeUrl(string temporaryCode)
+        {
+            HANDSHAKE_URL = $"{Scheme}://{HostUrl}/api/handshake.php?temporary_code={temporaryCode}&device_type=MVP&version=1";
+        }
 
-        public static string DEVICE_SETTINGS_URL = $"{Scheme}://{HostUrl}/api/settings.php?device_id=";
+        public static string DEVICE_SETTINGS_URL = $"{Scheme}://{HostUrl}/api/settings.php?device_key=";
 
 
         //public static string Port = "5001";
@@ -30,10 +34,11 @@
         public static string QR_IMAGE_NAME_4_TEMP_CODE = "qrCodeImageFile.png";
 
 
-        // Random alphanumeric string to use as a security key for the handshake
-        public static string updateTemporaryCode()
-        {
 
+
+        // Random alphanumeric string to use as a security key for the handshake
+        public static void resetTemporaryCodeAndHandshakeURL()
+        {
             Random random = new Random();
 
             // String that contain both alphabets and numbers
@@ -56,8 +61,7 @@
             }
 
             TEMPORARY_CODE = randomID;
-            return randomID;
-
+            updateHandshakeUrl(TEMPORARY_CODE);
         }
 
         public static DirectoryInfo getMediaDirectoryInformation()

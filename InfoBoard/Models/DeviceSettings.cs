@@ -2,10 +2,10 @@
 {
     public class DeviceSettings
     {
-        public DeviceSettings()
-        {
-            deviceId = "NOTSET";
-        }
-        public string deviceId { get; set; }         
+        #nullable enable
+        public ErrorInfo? error { get; set; }        
+
+        public string? device_key { get; set; }
+        #nullable disable
     }
 }

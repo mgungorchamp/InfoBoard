@@ -10,6 +10,7 @@ using SixLabors.ImageSharp;
 using Microsoft.Win32;
 using System.Windows.Input;
 using System.Diagnostics.Metrics;
+using InfoBoard.Models;
 
 namespace InfoBoard.ViewModel
 {
@@ -26,7 +27,12 @@ namespace InfoBoard.ViewModel
         public Command OnQRImageButtonClickedCommand { get; set; }
         public RegisterDeviceViewModel() 
         {
-            counter = 1;          
+            startRegistration();
+        }
+
+        public void startRegistration()
+        {
+            counter = 1;
             //Initial Code Generation
             generateQrCode();
             //First Register Attempt
@@ -34,13 +40,11 @@ namespace InfoBoard.ViewModel
             //Set timer to call to register with new code
             startTimedRegisterationEvent();
 
-
             OnQRImageButtonClickedCommand = new Command(
                 execute: () =>
                 {
-                    generateQrCode();                    
+                    generateQrCode();
                 });
-            
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
@@ -77,12 +81,11 @@ namespace InfoBoard.ViewModel
 
         private void startTimedRegisterationEvent()
         {            
-           
             //aTimer.Elapsed += updateQrCodeImageAndRegisterDevice;
             aTimer.Elapsed += async (sender, e) => await registerDevice();
          
             aTimer.Start();
-            aTimer.Interval = 5 * 1000;      // This should be like 15 seconds or more      
+            aTimer.Interval = 15 * 1000;      // This should be like 15 seconds or more      
           
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -90,34 +93,54 @@ namespace InfoBoard.ViewModel
             OnPropertyChanged();
 
         }
-        private void generateQrCode() 
+        private async void generateQrCode() 
         { 
-            Constants.TEMPORARY_CODE = Constants.updateTemporaryCode();
-            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;
-            createQrCrCodeImage(Constants.TEMPORARY_CODE);
+            //Reset the temporary code and handshake URL
+            Constants.resetTemporaryCodeAndHandshakeURL();
+
+            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;            
+
+            //Give full path to API with QR Code 
+            //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
+            createQrCrCodeImage(Constants.HANDSHAKE_URL);
             _qrImageButton = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE);
 
             _status = "New QR Code Generated";
             OnPropertyChanged(nameof(RegisterationKey));
             OnPropertyChanged(nameof(QRImageButton));            
             OnPropertyChanged(nameof(Status));
+            
+            // Navigate to the specified URL in the system browser.
+            await Launcher.Default.OpenAsync(Constants.HANDSHAKE_URL);            
         }
 
         private async Task<string> registerDevice()
         {
-            _status = "registerDevice";
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType != NetworkAccess.Internet)
+            { 
+                _status = "No Internet Connection";
+                OnPropertyChanged(nameof(Status));
+                return _status;
+            }
+
+            _status = "Registering Device";
            
             //Register Device
-            RegisterDevice register = new RegisterDevice();
-            //_status = register.registerDevice();
-            string result  = await (register.registerDevice());
-            //_status = status;
-            _status = $"{result} Attempt {counter++}";
-
-            // TODO if succesfully registered  => check result text or make it boolean
-            // aTimer event should stop
-            // aTimer.Stop();
-
+            RegisterDevice register = new RegisterDevice();            
+            RegisterationResult registrationResult = await (register.startRegistration());
+            
+            if (registrationResult == null)
+            {
+                DeviceSettingsService service = new DeviceSettingsService();
+                DeviceSettings deviceSettings=  service.readSettingsFromLocalJSON();
+                _status = $"Already registered device. \nDevice ID: {deviceSettings.device_key}";
+                aTimer.Stop(); // Timer needs to be stopped after successful registration               
+            }
+            else
+            {                
+                _status = $"Registration Failed. \nError: {registrationResult.error} \nAttempt {counter++}";                
+            }
             OnPropertyChanged(nameof(Status));
             return _status;
         }

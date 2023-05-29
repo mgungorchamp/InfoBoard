@@ -5,22 +5,28 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using InfoBoard.Models;
+using InfoBoard.ViewModel;
 
 namespace InfoBoard.Services
 {
     internal class DeviceSettingsService
-    {
-        public static DeviceSettings deviceSettings;
-
+    {       
         //If not registered, it tries to register if registered reads 
         public DeviceSettings loadDeviceSettings()
         {
-            deviceSettings = readSettingsFromLocalJSON();
-
-            if (deviceSettings.deviceId == "NOTSET")
+            DeviceSettings deviceSettings = readSettingsFromLocalJSON();
+            
+            //No settings found - register device
+            if (deviceSettings == null)
             {
+                RegisterDeviceViewModel registerDeviceViewModel = new RegisterDeviceViewModel();
+                registerDeviceViewModel.startRegistration();
+            }
+            //already registered - get/update settings 
+            else
+            {               
                 //Get Device settings
-                Task.Run(() => deviceSettings = retrieveDeviceSettingsFromServer()).Wait();
+                Task.Run(() => deviceSettings = retrieveDeviceSettingsFromServer(deviceSettings.device_key)).Wait();
                 saveSettingsToLocalAsJSON(deviceSettings);
             }
             return deviceSettings;
@@ -28,26 +34,21 @@ namespace InfoBoard.Services
 
         // HANDSHAKE - Register device and get settings
         // If already registered then just get settings
-        private DeviceSettings retrieveDeviceSettingsFromServer()
-        {
+        public DeviceSettings retrieveDeviceSettingsFromServer(string device_key)
+        {     
             RestService restService = new RestService();
-            var task = restService.retrieveDeviceSettings(deviceSettings.deviceId);
+            var task = restService.retrieveDeviceSettings(device_key);
             task.Wait();
-            DeviceSettings retrievedDeviceSettings = task.Result;
-
-            if (retrievedDeviceSettings.deviceId != "NOTSET")
-            {
-                ;// Settings obtained succesfuly from server
-            }
+            DeviceSettings retrievedDeviceSettings = task.Result;          
             return retrievedDeviceSettings;
         }
 
         
 
         //Read local JSON file - if exist - if not return empty DeviceSettings
-        private DeviceSettings readSettingsFromLocalJSON()
+        public DeviceSettings readSettingsFromLocalJSON()
         {
-            DeviceSettings tempDeviceSettings = new DeviceSettings();
+            //DeviceSettings tempDeviceSettings = new DeviceSettings();
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {
@@ -60,9 +61,10 @@ namespace InfoBoard.Services
             if (File.Exists(fullPathJsonFileName))
             {
                 string jsonString = File.ReadAllText(fullPathJsonFileName);
-                tempDeviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+                DeviceSettings tempDeviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+                return tempDeviceSettings;
             }
-            return tempDeviceSettings;
+            return null;
         }
 
         public void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)

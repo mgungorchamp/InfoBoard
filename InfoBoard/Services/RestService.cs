@@ -28,7 +28,11 @@ namespace InfoBoard.Services
 
         public async Task<List<FileInformation>> downloadMediaFileNames()
         {
-            Items = new List<FileInformation>();
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType != NetworkAccess.Internet)
+            {
+                return null;
+            }          
 
             Uri uri = new Uri(string.Format(Constants.MEDIA_FILES_URL, string.Empty));
             try
@@ -36,20 +40,26 @@ namespace InfoBoard.Services
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
+                    //Items = new List<FileInformation>();
                     string content = await response.Content.ReadAsStringAsync();
                     Items = JsonSerializer.Deserialize<List<FileInformation>>(content, _serializerOptions);
+                    return Items;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0}", ex.Message);
             }
-            return Items;
+            return null;
         }
 
         public async Task<DeviceSettings> retrieveDeviceSettings(string deviceID)
         {
-            DeviceSettings deviceSettings = new DeviceSettings();   
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType != NetworkAccess.Internet)
+            {
+                return null;
+            }
 
             Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceID));
             try
@@ -57,66 +67,45 @@ namespace InfoBoard.Services
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
+                    DeviceSettings deviceSettings;
                     string content = await response.Content.ReadAsStringAsync();
-                    try // THIS MIGHT BE UNNEDED 
-                    {
-                        deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
-                    }
-                    catch (JsonException jsonException)
-                    {
-                        Console.WriteLine(@"\tERROR {0}", jsonException);
-                    }
-                    //deviceSettings.deviceId = "MURAT";            
+                    deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
+                    return deviceSettings;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0}", ex.Message);
             }
-            return deviceSettings;
+            return null;
         }
 
         
-        public async Task<ErrorInfo> registerDevice()
+        public async Task<RegisterationResult> registerDevice()
         {
-            ErrorInfo errorInfo = new ErrorInfo();
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType != NetworkAccess.Internet)
+            {
+                return null;
+            }
 
-            Uri uri = new Uri(string.Format(Constants.HANDSHAKE_URL, string.Empty));
+            Uri uri = new Uri(Constants.HANDSHAKE_URL);
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
+                    RegisterationResult registerationResult;
                     string content = await response.Content.ReadAsStringAsync();
-                    errorInfo = JsonSerializer.Deserialize<ErrorInfo>(content, _serializerOptions);                    
+                    registerationResult = JsonSerializer.Deserialize<RegisterationResult>(content, _serializerOptions);    
+                    return registerationResult;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0}", ex.Message);
             }
-            return errorInfo;
-        }
-
-        public async Task<ErrorInfo> registerDeviceSync()
-        {
-            ErrorInfo errorInfo = new ErrorInfo();
-
-            Uri uri = new Uri(string.Format(Constants.HANDSHAKE_URL, string.Empty));
-            try
-            {
-                HttpResponseMessage response = await _client.GetAsync(uri);
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    errorInfo = JsonSerializer.Deserialize<ErrorInfo>(content, _serializerOptions);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(@"\tERROR {0}", ex.Message);
-            }
-            return errorInfo;
+            return null;
         }
     }
 }
