@@ -9,7 +9,8 @@ namespace InfoBoard.Services
 {
     internal class RegisterDevice
     {
-        public void registerDevice()
+
+        public async Task<string> registerDevice()
         {
             DeviceSettingsService settingsService = new DeviceSettingsService();
             DeviceSettings tempDeviceSettings = settingsService.loadDeviceSettings();
@@ -19,25 +20,42 @@ namespace InfoBoard.Services
             {
                 ErrorInfo errorInfo = new ErrorInfo();
                 //Get Device settings
-                Task.Run(() => errorInfo = requestDeviceRegisterFromServer()).Wait();
+                //Task.Run(() => errorInfo = requestDeviceRegisterFromServer()).Wait();
+                errorInfo = await requestDeviceRegisterFromServer();
 
                 if (errorInfo.message == "unrecognized_device")
                 {
-                    ;//call itself after 10 minutes with a new temp id. 
-                     //registerDevice();
+                    return "Unrecognized Device";//call itself after 10 minutes with a new temp id. 
+                                                 //registerDevice();
+                }
+                else 
+                {
+                    //This should return SUCCESS or something like that 
+                    tempDeviceSettings = settingsService.loadDeviceSettings();
+                    return $"Device ID is: {tempDeviceSettings.deviceId}";
                 }
 
-            }           
+            }    
+            return $"This device has already been registered with Device ID is: {tempDeviceSettings.deviceId}";
         }
 
         // HANDSHAKE - Register device and get settings
-        // If already registered then just get settings
-        private ErrorInfo requestDeviceRegisterFromServer()
+        // If already registered then just return device id
+        private async Task<ErrorInfo> requestDeviceRegisterFromServer()
         {
             RestService restService = new RestService();
-            var task = restService.registerDevice();
-            task.Wait();
-            ErrorInfo registerResult = task.Result;           
+            ErrorInfo registerResult = (await restService.registerDevice());
+          
+            //ErrorInfo registerResult = task.Result;
+            //ToDo: 
+            //Save the device id into settings via DeviceSettings class 
+            if (registerResult.message != "unrecognized_device")
+            { 
+                DeviceSettingsService settingsService = new DeviceSettingsService();
+                DeviceSettings deviceSettings = new DeviceSettings();
+                deviceSettings.deviceId = registerResult.message; // This should be the device ID 
+                settingsService.saveSettingsToLocalAsJSON(deviceSettings);
+            }
             return registerResult;
         }
 

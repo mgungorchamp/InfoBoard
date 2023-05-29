@@ -65,7 +65,7 @@ namespace InfoBoard.Services
             return tempDeviceSettings;
         }
 
-        private void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
+        public void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions

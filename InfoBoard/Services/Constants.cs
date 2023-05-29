@@ -37,7 +37,8 @@
             Random random = new Random();
 
             // String that contain both alphabets and numbers
-            String keyPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            //String keyPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            String keyPool = "ABCDEFGHKLMNPQRSTUVWXYZ123456789";
             int size = 6;
 
             // Initializing the empty string

@@ -76,6 +76,7 @@ namespace InfoBoard.Services
             return deviceSettings;
         }
 
+        
         public async Task<ErrorInfo> registerDevice()
         {
             ErrorInfo errorInfo = new ErrorInfo();
@@ -88,6 +89,27 @@ namespace InfoBoard.Services
                 {
                     string content = await response.Content.ReadAsStringAsync();
                     errorInfo = JsonSerializer.Deserialize<ErrorInfo>(content, _serializerOptions);                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+            return errorInfo;
+        }
+
+        public async Task<ErrorInfo> registerDeviceSync()
+        {
+            ErrorInfo errorInfo = new ErrorInfo();
+
+            Uri uri = new Uri(string.Format(Constants.HANDSHAKE_URL, string.Empty));
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    errorInfo = JsonSerializer.Deserialize<ErrorInfo>(content, _serializerOptions);
                 }
             }
             catch (Exception ex)

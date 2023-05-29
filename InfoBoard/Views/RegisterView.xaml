@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
              x:Class="InfoBoard.Views.RegisterView"
              Title="Register Device...">
+    <ContentPage.BindingContext>
+        <viewmodel:RegisterDeviceViewModel/>
+    </ContentPage.BindingContext>
+    
     <VerticalStackLayout>
         <Label
             Text="Register Your Device"
@@ -10,17 +15,25 @@
             HorizontalOptions="Center" />
 
         <Label
-            x:Name="RegisterKey"
-            Text="Temporary Code"
+            x:Name="RegisterKeyLabel"
+            Text="{Binding RegisterationKey}"
             FontSize="Medium"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         
         <ImageButton 
             x:Name="qrImageButton"
-            Clicked="OnQRImageButtonClicked"
+            Source="{Binding QRImageButton}"
+            Command="{Binding OnQRImageButtonClickedCommand}"
             HorizontalOptions="Center"
             VerticalOptions="Center" />
-        
+
+        <Label
+            x:Name="statusLabel" 
+            Text="{Binding Status}"
+            FontSize="Small"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
     </VerticalStackLayout>
 </ContentPage>

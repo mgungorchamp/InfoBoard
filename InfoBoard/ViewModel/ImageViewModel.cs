@@ -1,6 +1,7 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using Microsoft.Maui.Storage;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -45,7 +46,8 @@ namespace InfoBoard.ViewModel
             _cachingInterval = new TimeSpan(0, 0, 0, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
             // Task.Run(() => RetrieveImages()).Wait();
-            // DisplayAnImageEachTimelapse();            
+            // DisplayAnImageEachTimelapse();
+           
             DisplayAnImageFromLocalFolder();
         }
 
@@ -57,11 +59,14 @@ namespace InfoBoard.ViewModel
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //string fileNames = Directory.GetFiles(directoryName);
-            
+
             //fileDownloadService.updateFiles();
 
             //Task.Run(() => fileDownloadService.getMediaFileNamesFromServer()).Wait();
             //RetrieveImages();
+
+            // TODO: getFileList should be TIMED EVENT not everytime - can be every 10 mins? or more
+            // CAN BE PUT INTO SETTINGS TOO  - File Snyc Frequency
 
             List<FileInformation> fileList = fileDownloadService.getFileList();
             //No files to show
@@ -127,10 +132,14 @@ namespace InfoBoard.ViewModel
         public async void RetrieveImages()
         {
             RestService restService = new RestService();
-            var task = restService.downloadMediaFileNames();
-            task.Wait();
-            FileList = task.Result;
 
+            //Get Device settings
+            //Task.Run(() => FileList = restService.downloadMediaFileNames().Result).Wait();
+            FileList = await (restService.downloadMediaFileNames());
+
+            // var task = restService.downloadMediaFileNames();
+            // task.Wait();
+            // FileList = task.Result;
             //FileList = await restService.RefreshDataAsync();
         }
 
