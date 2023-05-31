@@ -26,7 +26,7 @@ namespace InfoBoard.Services
             };
         }
 
-        public async Task<List<FileInformation>> downloadMediaFileNames()
+        public async Task<List<FileInformation>> retrieveFileList()
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType != NetworkAccess.Internet)

@@ -90,33 +90,7 @@ namespace InfoBoard.ViewModel
 
             DisplayAnImageFromLocalFolder();
         }
-
-        private async void DisplayAnImageFromLocalFolderOLDtoDELETE()
-        {
-
-            // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
-
-            //string fileNames = Directory.GetFiles(directoryName);
-            FileDownloadService localFiles = new FileDownloadService();
-
-            Task.Run(() => localFiles.getMediaFileNamesFromServer()).Wait();
-            //RetrieveImages();
-
-            foreach (var fileInformation in localFiles.getFileList())
-            {
-                string fileName = Path.Combine(directoryName, fileInformation.s3key);
-                if (File.Exists(fileName))
-                {
-                    _imageSource = fileName;
-                    OnPropertyChanged(nameof(ImageSource));
-                    await Task.Delay(_refreshInMiliSecond);
-                }
-            }
-
-            //DisplayAnImageFromLocalFolder();
-        }
+         
 
         private async void DisplayAnImageEachTimelapse()
         {
@@ -135,7 +109,7 @@ namespace InfoBoard.ViewModel
 
             //Get Device settings
             //Task.Run(() => FileList = restService.downloadMediaFileNames().Result).Wait();
-            FileList = await (restService.downloadMediaFileNames());
+            FileList = await (restService.retrieveFileList());
 
             // var task = restService.downloadMediaFileNames();
             // task.Wait();

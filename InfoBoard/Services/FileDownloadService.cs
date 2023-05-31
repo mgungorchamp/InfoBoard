@@ -9,7 +9,7 @@ namespace InfoBoard.Services
 {
     internal class FileDownloadService
     {
-        private List<FileInformation> fileList = new List<FileInformation>();
+        //private List<FileInformation> fileList = new List<FileInformation>();
        
         DeviceSettings deviceSettings;
 
@@ -23,7 +23,7 @@ namespace InfoBoard.Services
             
             //synchronise files 
             synchroniseMediaFiles();
-            return fileList;
+            return readMediaNamesFromLocalJSON(); ;
         }
 
 
@@ -54,87 +54,96 @@ namespace InfoBoard.Services
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
             //Case 1: First time dowloading all the files 
-            //If the local JSON file does not exist fileList will have zero files in it
+            //If the local JSON file does not exist fileList will be null
             //Then dowload all media files to local directory 
             //And save the JSON file to local directory
-            if (fileListFromLocal.Count == 0)
+            if (fileListFromLocal == null)
             {
-                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-                if (accessType != NetworkAccess.Internet)
-                {
-                    return;
-                }
-
-                List<FileInformation> fileListFromServer = new List<FileInformation>();
-
-                //Get file names from the server - fileListFromServer
-                Task.Run(() => fileListFromServer = getMediaFileNamesFromServer()).Wait();
-
-                if (fileListFromServer.Count != 0)
-                {
-                    //Save those files to local directory
-                    Task.Run(() => downloadFilesToLocalDirectory(fileListFromServer)).Wait();
-                    //Save media file names (as JSON) to local folder 
-                    saveMediaNamesToLocalJSON(fileListFromServer);
-                    fileList = readMediaNamesFromLocalJSON();
-                }
+                downloadAllFilesFromServer();
             }
             else
+            {                 
+                oneWaySynchroniseFiles();                
+               // fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
+            }
+        }
+
+        private void downloadAllFilesFromServer() 
+        {
+            List<FileInformation> fileList = null;
+
+            //Get file names from the server - fileListFromServer
+            Task.Run(() => fileList = getFileListFromServer()).Wait();
+
+            if (fileList != null)
             {
-                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-                if (accessType == NetworkAccess.Internet)
-                {
-                    oneWaySynchroniseFiles();
-                    return;
-                }
-                fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
+                //Save those files to local directory
+                Task.Run(() => downloadFilesToLocalDirectory(fileList)).Wait();
+                //Save media file names (as JSON) to local folder 
+                saveMediaNamesToLocalJSON(fileList);
             }
         }
 
         private void oneWaySynchroniseFiles()
         {
-            //CASE 2 - Download NEW files
-            //Download a file if there is no file with that name in the local JSON file 
-            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJsonCheckDiscrepancy();
 
-            List<FileInformation> fileListFromServer = new List<FileInformation>();
+            //If any of the local files missing - corrupted - try downloading all files
+            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJsonCheckDiscrepancy();            
+            if (fileListFromLocal == null)
+            {
+                downloadAllFilesFromServer();
+                return;
+            }
+
+            List<FileInformation> fileListFromServer = null;
             //Get file names from the server - fileListFromServer
-            Task.Run(() => fileListFromServer = getMediaFileNamesFromServer()).Wait();
+            Task.Run(() => fileListFromServer = getFileListFromServer()).Wait();
+
+            //If fileListFromServer null just abort the operations
+            if (fileListFromServer == null)
+                return;
+
+            if(fileListFromLocal.Equals(fileListFromServer))
+                return;
+
 
             //Find intersect files - if updated re-download them
             //https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.intersect?view=net-7.0
             //IEnumerable<FileInformation> both = fileListFromLocal.Intersect(fileListFromServer);
             //foreach (FileInformation id in both)
-            //{
-                //TODO: Read local files last download or update date and compare it with from server
-                //;//compare last update date with local date ... if different redownload
+            //{ 
+            //TODO: DOWLOAD UPDATED FILES
+            //Read local files last download or update date and compare it with from server
+            //;//compare last update date with local date ... if different redownload
             //}
 
             // In the server but not at the local download those files
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
-            IEnumerable<FileInformation> differenceQuery = fileListFromServer.Except(fileListFromLocal);
-            foreach (FileInformation file in differenceQuery)
+
+            //CASE 2 - Download NEW files
+            IEnumerable<FileInformation> missingLocalFiles = fileListFromServer.Except(fileListFromLocal);
+            foreach (FileInformation file in missingLocalFiles)
             {
                 downloadFileToLocalDirectory(file);
             }
 
+            //CASE 2 - DELETE removed files
             // In the local but not at the server delete those files
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
-            IEnumerable<FileInformation> deleteLocalFiles = fileListFromLocal.Except(fileListFromServer);
-            foreach (FileInformation file in deleteLocalFiles)
+            IEnumerable<FileInformation> filesDeletedFromServer = fileListFromLocal.Except(fileListFromServer);
+            foreach (FileInformation file in filesDeletedFromServer)
             {
                 deleteLocalFile(file);
             }
 
-            saveMediaNamesToLocalJSON(fileListFromServer);
-            fileList = readMediaNamesFromLocalJSON();
+            saveMediaNamesToLocalJSON(fileListFromServer);           
         }
 
 
         private List<FileInformation> readMediaNamesFromLocalJsonCheckDiscrepancy()
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
-            // check if local files if does not exist - corrupted - redownload all
+            // check if any of the local files missing - corrupted - return null
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
@@ -143,7 +152,7 @@ namespace InfoBoard.Services
                 string fileName = Path.Combine(directoryName, fileInformation.s3key);
                 if (!File.Exists(fileName))
                 {
-                    fileListFromLocal.Clear(); // Fresh start, since there is missing files
+                    fileListFromLocal = null; // Fresh start, since there is missing files
                     break;
                 }
             }
@@ -199,18 +208,16 @@ namespace InfoBoard.Services
             File.Delete(localFullFileName);
         }
 
-        public List<FileInformation> getMediaFileNamesFromServer()
+        public List<FileInformation> getFileListFromServer()
         {
            // fileListFromServer = new List<FileInformation>();
             RestService restService = new RestService();
-            var task = restService.downloadMediaFileNames();
+            var task = restService.retrieveFileList();
             task.Wait();
             //fileListFromServer = task.Result;
             return task.Result;
             //FileList = await restService.RefreshDataAsync();
-        }
-
-        
+        }        
 
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
         private void saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
@@ -231,7 +238,7 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return empty fileList
         private List<FileInformation> readMediaNamesFromLocalJSON()
         {
-            List<FileInformation> fileList = new List<FileInformation>();
+            List<FileInformation> fileList = null;
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {
