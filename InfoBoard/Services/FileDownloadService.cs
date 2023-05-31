@@ -10,7 +10,7 @@ namespace InfoBoard.Services
     internal class FileDownloadService
     {
         private List<FileInformation> fileList = new List<FileInformation>();
-        DeviceSettingsService settingsService = new DeviceSettingsService();
+        DeviceSettingsService settingsService = DeviceSettingsService.Instance;
         DeviceSettings deviceSettings;
 
         public List<FileInformation> getFileList() 

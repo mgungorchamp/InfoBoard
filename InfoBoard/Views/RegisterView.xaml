@@ -4,9 +4,9 @@
              xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
              x:Class="InfoBoard.Views.RegisterView"
              Title="Register Device...">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <viewmodel:RegisterDeviceViewModel/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     
     <VerticalStackLayout>
         <Label

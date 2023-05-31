@@ -14,8 +14,18 @@ using InfoBoard.Models;
 
 namespace InfoBoard.ViewModel
 {
-    internal class RegisterDeviceViewModel : INotifyPropertyChanged
+    public sealed class RegisterDeviceViewModel : INotifyPropertyChanged
     {
+        private static readonly RegisterDeviceViewModel instance = new();
+        static RegisterDeviceViewModel()
+        {
+        }
+       
+        public static RegisterDeviceViewModel Instance {
+            get {
+                return instance;
+            }
+        }   
         public event PropertyChangedEventHandler PropertyChanged;
         System.Timers.Timer aTimer = new System.Timers.Timer();
 
@@ -25,26 +35,25 @@ namespace InfoBoard.ViewModel
         private int counter;
 
         public Command OnQRImageButtonClickedCommand { get; set; }
-        public RegisterDeviceViewModel() 
+        private RegisterDeviceViewModel() 
         {
-            startRegistration();
+            //Initial Code Generation t
+            generateQrCode();
+
+            OnQRImageButtonClickedCommand = new Command(
+               execute: () =>
+               {
+                   //generateQrCode();
+                   startRegistration();
+               });
+            //Set timer to call to register with new code
+            //startTimedRegisterationEvent();
         }
 
         public void startRegistration()
         {
-            counter = 1;
-            //Initial Code Generation
-            generateQrCode();
-            //First Register Attempt
-            Task.Run(() => registerDevice()).Wait();
-            //Set timer to call to register with new code
-            startTimedRegisterationEvent();
-
-            OnQRImageButtonClickedCommand = new Command(
-                execute: () =>
-                {
-                    generateQrCode();
-                });
+            counter = 1;          
+            Task.Run(() => registerDeviceViaServer()).Wait();          
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
@@ -82,10 +91,10 @@ namespace InfoBoard.ViewModel
         private void startTimedRegisterationEvent()
         {            
             //aTimer.Elapsed += updateQrCodeImageAndRegisterDevice;
-            aTimer.Elapsed += async (sender, e) => await registerDevice();
+            aTimer.Elapsed += async (sender, e) => await registerDeviceViaServer();
          
             aTimer.Start();
-            aTimer.Interval = 15 * 1000;      // This should be like 15 seconds or more      
+            aTimer.Interval = 180 * 1000;      // This should be like 15 seconds or more      
           
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
@@ -93,7 +102,7 @@ namespace InfoBoard.ViewModel
             OnPropertyChanged();
 
         }
-        private async void generateQrCode() 
+        private void generateQrCode() 
         { 
             //Reset the temporary code and handshake URL
             Constants.resetTemporaryCodeAndHandshakeURL();
@@ -111,10 +120,10 @@ namespace InfoBoard.ViewModel
             OnPropertyChanged(nameof(Status));
             
             // Navigate to the specified URL in the system browser.
-            await Launcher.Default.OpenAsync(Constants.HANDSHAKE_URL);            
+            // await Launcher.Default.OpenAsync(Constants.HANDSHAKE_URL);            
         }
 
-        private async Task<string> registerDevice()
+        private async Task<string> registerDeviceViaServer()
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType != NetworkAccess.Internet)
@@ -128,11 +137,11 @@ namespace InfoBoard.ViewModel
            
             //Register Device
             RegisterDevice register = new RegisterDevice();            
-            RegisterationResult registrationResult = await (register.startRegistration());
+            RegisterationResult registrationResult = await (register.attemptToRegister());
             
             if (registrationResult == null)
             {
-                DeviceSettingsService service = new DeviceSettingsService();
+                DeviceSettingsService service = DeviceSettingsService.Instance;
                 DeviceSettings deviceSettings=  service.readSettingsFromLocalJSON();
                 _status = $"Already registered device. \nDevice ID: {deviceSettings.device_key}";
                 aTimer.Stop(); // Timer needs to be stopped after successful registration               

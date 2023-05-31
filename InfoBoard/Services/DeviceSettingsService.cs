@@ -9,8 +9,21 @@ using InfoBoard.ViewModel;
 
 namespace InfoBoard.Services
 {
-    internal class DeviceSettingsService
-    {       
+    public sealed class DeviceSettingsService
+    {
+        private static readonly DeviceSettingsService instance = new DeviceSettingsService();
+        static DeviceSettingsService()
+        {
+        }
+        private DeviceSettingsService()
+        {
+        }
+        public static DeviceSettingsService Instance {
+            get {
+                return instance;
+            }
+        }    
+
         //If not registered, it tries to register if registered reads 
         public DeviceSettings loadDeviceSettings()
         {
@@ -19,7 +32,7 @@ namespace InfoBoard.Services
             //No settings found - register device
             if (deviceSettings == null)
             {
-                RegisterDeviceViewModel registerDeviceViewModel = new RegisterDeviceViewModel();
+                RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
                 registerDeviceViewModel.startRegistration();
             }
             //already registered - get/update settings 

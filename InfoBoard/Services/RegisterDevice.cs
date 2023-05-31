@@ -9,9 +9,9 @@ namespace InfoBoard.Services
 {
     internal class RegisterDevice
     {
-        public async Task<RegisterationResult> startRegistration()
+        public async Task<RegisterationResult> attemptToRegister()
         {
-            DeviceSettingsService settingsService = new DeviceSettingsService();
+            DeviceSettingsService settingsService =  DeviceSettingsService.Instance;
             DeviceSettings localDeviceSettings = settingsService.readSettingsFromLocalJSON();
 
             //Not registered yet
