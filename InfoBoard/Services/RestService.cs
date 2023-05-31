@@ -14,7 +14,8 @@ namespace InfoBoard.Services
         HttpClient _client;
         JsonSerializerOptions _serializerOptions;
 
-        public List<FileInformation> Items { get; private set; }
+        
+        
 
         public RestService()
         {
@@ -40,10 +41,14 @@ namespace InfoBoard.Services
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
-                    //Items = new List<FileInformation>();
+                    List<FileInformation> fileList = null;
                     string content = await response.Content.ReadAsStringAsync();
-                    Items = JsonSerializer.Deserialize<List<FileInformation>>(content, _serializerOptions);
-                    return Items;
+                    if (content.Length < 10) 
+                    {
+                        return null;
+                    }
+                    fileList = JsonSerializer.Deserialize<List<FileInformation>>(content, _serializerOptions);
+                    return fileList;
                 }
             }
             catch (Exception ex)

@@ -102,9 +102,7 @@ namespace InfoBoard.Services
             //If fileListFromServer null just abort the operations
             if (fileListFromServer == null)
                 return;
-
-            if(fileListFromLocal.Equals(fileListFromServer))
-                return;
+                    
 
 
             //Find intersect files - if updated re-download them
@@ -136,7 +134,9 @@ namespace InfoBoard.Services
                 deleteLocalFile(file);
             }
 
-            saveMediaNamesToLocalJSON(fileListFromServer);           
+            //Any - true if the source sequence contains any elements; otherwise, false.
+            if (missingLocalFiles.Any() || filesDeletedFromServer.Any())
+                saveMediaNamesToLocalJSON(fileListFromServer);           
         }
 
 
@@ -191,6 +191,13 @@ namespace InfoBoard.Services
             DirectoryInfo directoryInfo = getMediaFolder();
              
             string localFullFileName = Path.Combine(directoryInfo.FullName, fileInformation.s3key);
+
+            //We are using s3key as the file name and its unique therefore
+            // we don't need to dowload the file
+            if (File.Exists(localFullFileName)) 
+            {
+                return;              
+            }
 
             //Download the file content as byte array from presigned URL
             HttpClient httpClient = new HttpClient();
@@ -251,6 +258,10 @@ namespace InfoBoard.Services
             if(File.Exists(fullPathJsonFileName))
             {
                 string jsonString = File.ReadAllText(fullPathJsonFileName);
+                //Return - If all the pictures removed from the server but file exist in local directory
+                if (jsonString.Length < 10) 
+                    return null; 
+
                 fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
             }
             return fileList;

@@ -70,10 +70,12 @@ namespace InfoBoard.ViewModel
 
             List<FileInformation> fileList = fileDownloadService.getFileList();
             //No files to show
-            if ( fileList.Count == 0)
+            if ( fileList == null)
             {
                 _imageSource = "uploadimage.png";
                 OnPropertyChanged(nameof(ImageSource));
+                await Task.Delay(_refreshInMiliSecond * 5);
+                DisplayAnImageFromLocalFolder();
                 return;
             }
 
