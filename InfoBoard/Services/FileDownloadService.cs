@@ -10,7 +10,7 @@ namespace InfoBoard.Services
     internal class FileDownloadService
     {
         private List<FileInformation> fileList = new List<FileInformation>();
-        DeviceSettingsService settingsService = DeviceSettingsService.Instance;
+       
         DeviceSettings deviceSettings;
 
         public List<FileInformation> getFileList() 
@@ -18,6 +18,7 @@ namespace InfoBoard.Services
 
             //Get Device settings
             //TODO: If device ID is not present synchroniseMediaFiles SHOULD not be started
+            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
             deviceSettings = settingsService.loadDeviceSettings();
             
             //synchronise files 

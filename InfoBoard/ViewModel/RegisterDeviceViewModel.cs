@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using System.Windows.Input;
 using System.Diagnostics.Metrics;
 using InfoBoard.Models;
+using System.Reflection;
 
 namespace InfoBoard.ViewModel
 {
@@ -37,14 +38,18 @@ namespace InfoBoard.ViewModel
         public Command OnQRImageButtonClickedCommand { get; set; }
         private RegisterDeviceViewModel() 
         {
+            counter = 0;
             //Initial Code Generation t
             generateQrCode();
 
             OnQRImageButtonClickedCommand = new Command(
-               execute: () =>
+               execute: async () =>
                {
-                   //generateQrCode();
+                   generateQrCode();
                    startRegistration();
+                   // Navigate to the specified URL in the system browser.
+                   await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Constants.TEMPORARY_CODE}"); 
+
                });
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
@@ -52,7 +57,7 @@ namespace InfoBoard.ViewModel
 
         public void startRegistration()
         {
-            counter = 1;          
+            counter++;
             Task.Run(() => registerDeviceViaServer()).Wait();          
         }
 
@@ -148,7 +153,7 @@ namespace InfoBoard.ViewModel
             }
             else
             {                
-                _status = $"Registration Failed. \nError: {registrationResult.error} \nAttempt {counter++}";                
+                _status = $"Registration Failed. \nError: {registrationResult.error} \nAttempt {counter}";                
             }
             OnPropertyChanged(nameof(Status));
             return _status;
