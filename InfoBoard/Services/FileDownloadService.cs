@@ -1,4 +1,5 @@
 ﻿using InfoBoard.Models;
+using System.Net.NetworkInformation;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
@@ -99,11 +100,23 @@ namespace InfoBoard.Services
             //Get file names from the server - fileListFromServer
             Task.Run(() => fileListFromServer = getFileListFromServer()).Wait();
 
-            //If fileListFromServer null just abort the operations
-            if (fileListFromServer == null)
-                return;
-                    
+            
 
+            //If fileListFromServer null just abort the operations
+            if (fileListFromServer == null) 
+            {
+                if (UtilityServices.isInternetAvailable()) 
+                {
+                    foreach (FileInformation file in fileListFromLocal)
+                    {
+                        deleteLocalFile(file);
+                    }
+                    //EMPTY the local file list 
+                    List<FileInformation> fileList = new List<FileInformation>();
+                    saveMediaNamesToLocalJSON(fileList);
+                }               
+                return;
+            }
 
             //Find intersect files - if updated re-download them
             //https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.intersect?view=net-7.0

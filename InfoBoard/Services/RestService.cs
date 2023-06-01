@@ -29,8 +29,8 @@ namespace InfoBoard.Services
 
         public async Task<List<FileInformation>> retrieveFileList()
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType != NetworkAccess.Internet)
+            
+            if (!UtilityServices.isInternetAvailable())
             {
                 return null;
             }          
@@ -60,8 +60,7 @@ namespace InfoBoard.Services
 
         public async Task<DeviceSettings> retrieveDeviceSettings(string deviceID)
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType != NetworkAccess.Internet)
+            if (!UtilityServices.isInternetAvailable())
             {
                 return null;
             }
@@ -88,8 +87,7 @@ namespace InfoBoard.Services
         
         public async Task<RegisterationResult> registerDevice()
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType != NetworkAccess.Internet)
+            if (!UtilityServices.isInternetAvailable())
             {
                 return null;
             }

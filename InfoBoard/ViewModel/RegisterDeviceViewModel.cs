@@ -130,9 +130,8 @@ namespace InfoBoard.ViewModel
 
         private async Task<string> registerDeviceViaServer()
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType != NetworkAccess.Internet)
-            { 
+            if (!UtilityServices.isInternetAvailable())
+            {             
                 _status = "No Internet Connection";
                 OnPropertyChanged(nameof(Status));
                 return _status;
