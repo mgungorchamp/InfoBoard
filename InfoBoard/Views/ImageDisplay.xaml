@@ -9,10 +9,10 @@
     </ContentPage.BindingContext>
     
     <VerticalStackLayout>
-        <!--<Label 
+        <Label 
             Text="{Binding ImageSource}"
             VerticalOptions="Center" 
-            HorizontalOptions="Center"/>-->
+            HorizontalOptions="Center"/>
 
         <Image 
             x:Name="mainPageImage"
