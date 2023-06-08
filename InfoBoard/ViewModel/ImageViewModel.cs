@@ -1,8 +1,7 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
-using Microsoft.Maui.Storage;
-using Microsoft.Win32;
 using System.ComponentModel;
+using Microsoft.Maui.Controls;
 using System.Runtime.CompilerServices;
 
 
@@ -43,7 +42,7 @@ namespace InfoBoard.ViewModel
 
         public ImageViewModel()
         {
-            _cachingInterval = new TimeSpan(0, 0, 0, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
+            _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
             // Task.Run(() => RetrieveImages()).Wait();
             // DisplayAnImageEachTimelapse();
@@ -85,6 +84,11 @@ namespace InfoBoard.ViewModel
                 if (File.Exists(fileName))
                 {
                     _imageSource = fileName;
+                    /*
+                    var imageStream = await FileSystem.OpenAppPackageFileAsync(fileName);
+                    _imageSource = ImageSource.FromStream(() => imageStream);
+                    _imageSource = Microsoft.Maui.Controls.ImageSource.FromFile(fileName);*/
+
                     OnPropertyChanged(nameof(ImageSource));
                     await Task.Delay(_refreshInMiliSecond);
                 }

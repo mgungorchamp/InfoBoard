@@ -18,12 +18,18 @@ namespace InfoBoard.Services
         {
 
             //Get Device settings
-            //TODO: If device ID is not present synchroniseMediaFiles SHOULD not be started
+           
             DeviceSettingsService settingsService = DeviceSettingsService.Instance;
             deviceSettings = settingsService.loadDeviceSettings();
-            
-            //synchronise files 
-            synchroniseMediaFiles();
+
+            //If registered Device
+            //If device ID is not present synchroniseMediaFiles SHOULD not be started
+            if (deviceSettings != null)
+            {
+                //synchronise files 
+                synchroniseMediaFiles();
+            }
+           
             return readMediaNamesFromLocalJSON(); ;
         }
 

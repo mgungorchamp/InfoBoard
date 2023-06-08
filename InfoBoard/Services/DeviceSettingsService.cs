@@ -42,6 +42,10 @@ namespace InfoBoard.Services
                 Task.Run(() => deviceSettings = retrieveDeviceSettingsFromServer(deviceSettings.device_key)).Wait();
                 saveSettingsToLocalAsJSON(deviceSettings);
             }
+            if (deviceSettings != null)
+            {
+                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+            }
             return deviceSettings;
         }
 

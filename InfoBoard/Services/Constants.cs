@@ -10,9 +10,13 @@
         // Use http cleartext for local deployment. Change to https for production
         //public static string LocalhostUrl = DeviceInfo.Platform == DevicePlatform.Android ? "10.0.2.2" : "localhost";
         public static string HostUrl = "guzelboard.com";
-        public static string Scheme = "https"; // or http
-        public static string UserId = "10";
-        public static string MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/files.php?userid={UserId}";
+        public static string Scheme = "https"; // or http        
+        public static string MEDIA_FILES_URL = "UnSet";
+
+        public static void updateMediaFilesUrl(string device_key)
+        {
+            MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/files.php?device_key={device_key}";
+        }
 
         public static string TEMPORARY_CODE;
 

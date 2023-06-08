@@ -7,10 +7,11 @@
     Shell.FlyoutBehavior="Disabled">
 
     <TabBar>
-        <ShellContent    
-            Title="Welcome"
+        <ShellContent               
+            IsVisible="True"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
-        <ShellContent   
+        <ShellContent
+            IsVisible="False"
             Title="Register Device"
             ContentTemplate="{DataTemplate views:RegisterView}"/>
         
@@ -27,3 +28,5 @@
     </TabBar>
 
 </Shell>
+
+<!--Title="Welcome"-->

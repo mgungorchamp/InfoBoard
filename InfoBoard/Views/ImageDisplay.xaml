@@ -9,16 +9,16 @@
     </ContentPage.BindingContext>
     
     <VerticalStackLayout>
+        <Image 
+            x:Name="mainPageImage"
+            Aspect="AspectFit"            
+            Source="{Binding ImageSource}">            
+        </Image>
         <Label 
             Text="{Binding ImageSource}"
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
-
-        <Image 
-            x:Name="mainPageImage"
-            Aspect="AspectFit" 
-            Source="{Binding ImageSource}">            
-        </Image>
+        
     </VerticalStackLayout>
 </ContentPage>
 

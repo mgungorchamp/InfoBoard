@@ -143,7 +143,7 @@ namespace InfoBoard.ViewModel
             RegisterDevice register = new RegisterDevice();            
             RegisterationResult registrationResult = await (register.attemptToRegister());
             
-            if (registrationResult == null)
+            if (registrationResult.error == null)
             {
                 DeviceSettingsService service = DeviceSettingsService.Instance;
                 DeviceSettings deviceSettings=  service.readSettingsFromLocalJSON();
