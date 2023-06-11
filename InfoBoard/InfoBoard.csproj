@@ -15,7 +15,7 @@
 		<ApplicationTitle>InfoBoard</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.infoboard</ApplicationId>
+		<ApplicationId>com.guzelboard.infoboard</ApplicationId>
 		<ApplicationIdGuid>1865f6a0-a2e2-499e-b742-d4d1137346cd</ApplicationIdGuid>
 
 		<!-- Versions -->

@@ -1,8 +1,8 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
-using System.ComponentModel;
-using Microsoft.Maui.Controls;
+using System.ComponentModel; 
 using System.Runtime.CompilerServices;
+ 
 
 
 namespace InfoBoard.ViewModel
@@ -14,8 +14,9 @@ namespace InfoBoard.ViewModel
         private string _imageSource;
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
+        private INavigation Navigation;
 
-        private FileDownloadService fileDownloadService = new FileDownloadService();
+        private FileDownloadService fileDownloadService;
 
         //I think to be deleted
         List<FileInformation> FileList = new List<FileInformation>();
@@ -40,8 +41,10 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public ImageViewModel()
+        public ImageViewModel(INavigation navigation)
         {
+            this.Navigation = navigation;
+            fileDownloadService = new FileDownloadService(navigation);
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
             // Task.Run(() => RetrieveImages()).Wait();
@@ -67,7 +70,8 @@ namespace InfoBoard.ViewModel
             // TODO: getFileList should be TIMED EVENT not everytime - can be every 10 mins? or more
             // CAN BE PUT INTO SETTINGS TOO  - File Snyc Frequency
 
-            List<FileInformation> fileList = fileDownloadService.getFileList();
+            //List<FileInformation> fileList = fileDownloadService.getFileList();
+            List<FileInformation> fileList = await (fileDownloadService.getFileList());
             //No files to show
             if ( fileList == null)
             {

@@ -1,5 +1,7 @@
 ﻿using InfoBoard.Models;
+using InfoBoard.Views;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
@@ -13,21 +15,34 @@ namespace InfoBoard.Services
         //private List<FileInformation> fileList = new List<FileInformation>();
        
         DeviceSettings deviceSettings;
+        private INavigation Navigation;
+        public FileDownloadService(INavigation navigation)
+        {
+            Navigation = navigation;
+        }
 
-        public List<FileInformation> getFileList() 
+        public async Task<List<FileInformation>> getFileList() 
         {
 
+
+            //TODO:  This should be optimized - it should be called independently
+            // from the file download service - it should be called like a background service in some some interval
             //Get Device settings
-           
             DeviceSettingsService settingsService = DeviceSettingsService.Instance;
             deviceSettings = settingsService.loadDeviceSettings();
 
             //If registered Device
             //If device ID is not present synchroniseMediaFiles SHOULD not be started
-            if (deviceSettings != null)
+            if (deviceSettings != null && deviceSettings.device_key != null)
             {
                 //synchronise files 
                 synchroniseMediaFiles();
+                 
+                await Navigation.PopToRootAsync();
+            }
+            else 
+            {
+                await Navigation.PushAsync(new RegisterView());
             }
            
             return readMediaNamesFromLocalJSON(); ;

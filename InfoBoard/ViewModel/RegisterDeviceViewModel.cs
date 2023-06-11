@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Diagnostics.Metrics;
 using InfoBoard.Models;
 using System.Reflection;
+using InfoBoard.Views;
 
 namespace InfoBoard.ViewModel
 {
@@ -35,30 +36,41 @@ namespace InfoBoard.ViewModel
         private string _status;
         private int counter;
 
-        public Command OnQRImageButtonClickedCommand { get; set; }
+        public Command OnRegenerateQrCodeCommand { get; set; }
+        public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
         private RegisterDeviceViewModel() 
         {
             counter = 0;
             //Initial Code Generation t
             generateQrCode();
 
-            OnQRImageButtonClickedCommand = new Command(
+            OnRegenerateQrCodeCommand = new Command(
                execute: async () =>
                {
                    generateQrCode();
-                   startRegistration();
-                   // Navigate to the specified URL in the system browser.
-                   await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Constants.TEMPORARY_CODE}"); 
-
+                   //startRegistration();
                });
+
+            OnOpenRegisterDeviveWebPageCommand = new Command(
+                 execute: async () =>
+                 {
+                    // Navigate to the specified URL in the system browser.
+                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Constants.TEMPORARY_CODE}");
+
+                 });
+
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
         }
 
-        public void startRegistration()
+        public  void startRegistration()
         {
             counter++;
-            Task.Run(() => registerDeviceViaServer()).Wait();          
+            Task.Run(() => registerDeviceViaServer()).Wait();
+            //await Navigation.PushAsync(new RegisterView());
+            //TODO 
+            //Change the view to RegisterView 
+
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
@@ -105,7 +117,6 @@ namespace InfoBoard.ViewModel
             aTimer.Enabled = true;
             _status = "Timed Registration Event Created";
             OnPropertyChanged();
-
         }
         private void generateQrCode() 
         { 
@@ -143,16 +154,18 @@ namespace InfoBoard.ViewModel
             RegisterDevice register = new RegisterDevice();            
             RegisterationResult registrationResult = await (register.attemptToRegister());
             
+            //Success - no error
             if (registrationResult.error == null)
             {
                 DeviceSettingsService service = DeviceSettingsService.Instance;
-                DeviceSettings deviceSettings=  service.readSettingsFromLocalJSON();
-                _status = $"Already registered device. \nDevice ID: {deviceSettings.device_key}";
-                aTimer.Stop(); // Timer needs to be stopped after successful registration               
+                DeviceSettings deviceSettings = service.readSettingsFromLocalJSON();
+                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
+                aTimer.Stop(); // Timer needs to be stopped after successful registration
+                               // TODO view should be changed to ImageDisplayView
             }
             else
             {                
-                _status = $"Registration Failed. \nError: {registrationResult.error} \nAttempt {counter}";                
+                _status = $"Registration Failed. \nError: {registrationResult.error.message} \nAttempt {counter}";                
             }
             OnPropertyChanged(nameof(Status));
             return _status;

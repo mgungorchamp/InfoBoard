@@ -20,13 +20,19 @@
             FontSize="Medium"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        
+        <Button Text="Add Device via www.guzelboard.com"       
+            Command="{Binding OnOpenRegisterDeviveWebPageCommand}"
+            HorizontalOptions="Center"/>
+
         <ImageButton 
             x:Name="qrImageButton"
-            Source="{Binding QRImageButton}"
-            Command="{Binding OnQRImageButtonClickedCommand}"
+            Source="{Binding QRImageButton}"            
             HorizontalOptions="Center"
             VerticalOptions="Center" />
+
+        <Button Text="Regenerate Temporary Code"       
+            Command="{Binding OnRegenerateQrCodeCommand}"
+            HorizontalOptions="Center"/>
 
         <Label
             x:Name="statusLabel" 

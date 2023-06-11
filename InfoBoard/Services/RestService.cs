@@ -74,6 +74,11 @@ namespace InfoBoard.Services
                     DeviceSettings deviceSettings;
                     string content = await response.Content.ReadAsStringAsync();
                     deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
+                    
+                    //If error is not null, then return null
+                    if (deviceSettings.error != null)
+                        return null;
+
                     return deviceSettings;
                 }
             }

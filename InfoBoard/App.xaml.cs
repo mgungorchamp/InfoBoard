@@ -1,4 +1,6 @@
-﻿namespace InfoBoard;
+﻿using InfoBoard.Views;
+
+namespace InfoBoard;
 
 public partial class App : Application
 {
@@ -6,6 +8,9 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        MainPage = new AppShell();
+        //MainPage = new AppShell(); // SEEMS not NEDED
+
+        // Followin the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
+        MainPage = new NavigationPage(root: new ImageDisplay());        
     }
 }

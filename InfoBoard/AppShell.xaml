@@ -12,6 +12,7 @@
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
         <ShellContent
             IsVisible="False"
+            Route="registerview"
             Title="Register Device"
             ContentTemplate="{DataTemplate views:RegisterView}"/>
         
