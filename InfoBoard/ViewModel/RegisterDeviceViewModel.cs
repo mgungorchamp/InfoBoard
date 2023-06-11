@@ -172,9 +172,11 @@ namespace InfoBoard.ViewModel
         }
 
 
+
+        //Ref https://github.com/JPlenert/QRCoder-ImageSharp
         private void createQrCrCodeImage(string content)
         {
-            var image = generateImage(content, (qr) => qr.GetGraphic(10) as Image<Rgba32>);
+            var image = generateImage(content, (qr) => qr.GetGraphic(11) as Image<Rgba32>);
             saveImageToFile(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE, image);
 
         }
@@ -192,5 +194,10 @@ namespace InfoBoard.ViewModel
 
             image.Save(Path.Combine(path, imageName));
         }
+
+        // SVG you may try 
+        //https://github.com/JPlenert/QRCoder-ImageSharp/blob/master/QRCoderTests/Helpers/HelperFunctions.cs
+        // public static void TestImageToFile(string path, string testName, string svg)
+        //public static string GenerateSvg(string content, Func<SvgQRCode, string> getGraphic)
     }
 }
