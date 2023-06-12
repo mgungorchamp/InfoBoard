@@ -29,7 +29,7 @@ namespace InfoBoard.ViewModel
             }
         }   
         public event PropertyChangedEventHandler PropertyChanged;
-        System.Timers.Timer aTimer = new System.Timers.Timer();
+        System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
 
         private string _registerKeyLabel;
         private string _qrImageButton;
@@ -40,7 +40,7 @@ namespace InfoBoard.ViewModel
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
         private RegisterDeviceViewModel() 
         {
-            counter = 0;
+            counter = 1;
             //Initial Code Generation t
             generateQrCode();
 
@@ -104,43 +104,25 @@ namespace InfoBoard.ViewModel
                 OnPropertyChanged();
             }
         }
+        private ImageViewModel imageViewModel;
 
-        private void startTimedRegisterationEvent()
-        {            
+        public void startTimedRegisterationEvent(ImageViewModel imageViewModel)
+        {
+            this.imageViewModel = imageViewModel;
             //aTimer.Elapsed += updateQrCodeImageAndRegisterDevice;
-            aTimer.Elapsed += async (sender, e) => await registerDeviceViaServer();
-         
-            aTimer.Start();
-            aTimer.Interval = 180 * 1000;      // This should be like 15 seconds or more      
-          
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
+            aRegistrationTimer.Elapsed += (sender, e) => registerDeviceViaServer();           
+            //aRegistrationTimer.Interval = counter * 10 * 1000;      // This should be like 15 seconds or more              
+            aRegistrationTimer.AutoReset = false;
+            aRegistrationTimer.Start();
             _status = "Timed Registration Event Created";
             OnPropertyChanged();
-        }
-        private void generateQrCode() 
-        { 
-            //Reset the temporary code and handshake URL
-            Constants.resetTemporaryCodeAndHandshakeURL();
+        }      
 
-            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;            
-
-            //Give full path to API with QR Code 
-            //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
-            createQrCrCodeImage(Constants.HANDSHAKE_URL);
-            _qrImageButton = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE);
-
-            _status = "New QR Code Generated";
-            OnPropertyChanged(nameof(RegisterationKey));
-            OnPropertyChanged(nameof(QRImageButton));            
-            OnPropertyChanged(nameof(Status));
-            
-            // Navigate to the specified URL in the system browser.
-            // await Launcher.Default.OpenAsync(Constants.HANDSHAKE_URL);            
-        }
-
-        private async Task<string> registerDeviceViaServer()
+        private string registerDeviceViaServer()
         {
+            counter++;
+            aRegistrationTimer.Interval = counter * 10 * 1000;
+
             if (!UtilityServices.isInternetAvailable())
             {             
                 _status = "No Internet Connection";
@@ -148,20 +130,29 @@ namespace InfoBoard.ViewModel
                 return _status;
             }
 
-            _status = "Registering Device";
-           
+            _status = $"Registering Device: Attempt {counter}"; 
+            OnPropertyChanged(nameof(Status));
+
             //Register Device
             RegisterDevice register = new RegisterDevice();            
-            RegisterationResult registrationResult = await (register.attemptToRegister());
+            RegisterationResult registrationResult = register.attemptToRegister();
             
             //Success - no error
-            if (registrationResult.error == null)
+            if (registrationResult != null && registrationResult.error == null)
             {
                 DeviceSettingsService service = DeviceSettingsService.Instance;
                 DeviceSettings deviceSettings = service.readSettingsFromLocalJSON();
-                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
-                aTimer.Stop(); // Timer needs to be stopped after successful registration
-                               // TODO view should be changed to ImageDisplayView
+                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key} \nAttempt {counter}";
+
+                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+
+                aRegistrationTimer.Stop(); // Timer needs to be stopped after successful registration
+                aRegistrationTimer.Dispose();
+                //imageViewModel.Navigation.PopAsync();
+
+                // TODO view should be changed to ImageDisplayView
+                imageViewModel.Navigation.PopToRootAsync();
+                _ = imageViewModel.starTimer4ImageDisplay();
             }
             else
             {                
@@ -171,6 +162,26 @@ namespace InfoBoard.ViewModel
             return _status;
         }
 
+        private void generateQrCode()
+        {
+            //Reset the temporary code and handshake URL
+            Constants.resetTemporaryCodeAndHandshakeURL();
+
+            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;
+
+            //Give full path to API with QR Code 
+            //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
+            createQrCrCodeImage(Constants.HANDSHAKE_URL);
+            _qrImageButton = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE);
+
+            _status = "New QR Code Generated";
+            OnPropertyChanged(nameof(RegisterationKey));
+            OnPropertyChanged(nameof(QRImageButton));
+            OnPropertyChanged(nameof(Status));
+
+            // Navigate to the specified URL in the system browser.
+            // await Launcher.Default.OpenAsync(Constants.HANDSHAKE_URL);            
+        }
 
 
         //Ref https://github.com/JPlenert/QRCoder-ImageSharp

@@ -15,35 +15,29 @@ namespace InfoBoard.Services
         //private List<FileInformation> fileList = new List<FileInformation>();
        
         DeviceSettings deviceSettings;
-        private INavigation Navigation;
-        public FileDownloadService(INavigation navigation)
-        {
-            Navigation = navigation;
-        }
 
-        public async Task<List<FileInformation>> getFileList() 
+        public List<FileInformation> getFileList() 
         {
-
 
             //TODO:  This should be optimized - it should be called independently
             // from the file download service - it should be called like a background service in some some interval
             //Get Device settings
-            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            deviceSettings = settingsService.loadDeviceSettings();
+           // DeviceSettingsService settingsService = DeviceSettingsService.Instance;
+           // deviceSettings = settingsService.loadDeviceSettings();
 
             //If registered Device
             //If device ID is not present synchroniseMediaFiles SHOULD not be started
-            if (deviceSettings != null && deviceSettings.device_key != null)
-            {
+          //  if (deviceSettings != null && deviceSettings.device_key != null)
+          //  {
                 //synchronise files 
-                synchroniseMediaFiles();
+           //     synchroniseMediaFiles();
                  
-                await Navigation.PopToRootAsync();
-            }
-            else 
-            {
-                await Navigation.PushAsync(new RegisterView());
-            }
+           //     await Navigation.PopToRootAsync();
+         //   }
+           // else 
+           // {
+            //    await Navigation.PushAsync(new RegisterView());
+           // }
            
             return readMediaNamesFromLocalJSON(); ;
         }
@@ -71,7 +65,7 @@ namespace InfoBoard.Services
         - and overwrite the content of the local JSON file with the new JSON file   
          */
 
-        private void synchroniseMediaFiles()
+        public void synchroniseMediaFiles()
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
@@ -251,10 +245,13 @@ namespace InfoBoard.Services
 
         public List<FileInformation> getFileListFromServer()
         {
-           // fileListFromServer = new List<FileInformation>();
+      
             RestService restService = new RestService();
-            var task = restService.retrieveFileList();
-            task.Wait();
+
+            Task<List<FileInformation>> task = Task.Run(async () => await restService.retrieveFileList());
+
+            //var task = restService.retrieveFileList();
+            //task.Wait();
             //fileListFromServer = task.Result;
             return task.Result;
             //FileList = await restService.RefreshDataAsync();

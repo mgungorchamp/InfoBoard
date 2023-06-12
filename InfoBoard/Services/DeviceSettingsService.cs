@@ -29,15 +29,9 @@ namespace InfoBoard.Services
         {
             DeviceSettings deviceSettings = readSettingsFromLocalJSON();
 
-            //No settings found - register device and update deviceSettings
-            if (deviceSettings == null)
-            {
-                RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
-                registerDeviceViewModel.startRegistration();   // Updates deviceSettings  - its singleton           
-            }
-            //already registered - get/update settings / or removed from server by user 
-            else
-            {               
+            //Check for updates
+            if (deviceSettings != null)
+            {                       
                 //Get Device settings
                 Task.Run(() => deviceSettings = retrieveDeviceSettingsFromServer(deviceSettings.device_key)).Wait();
                 saveSettingsToLocalAsJSON(deviceSettings);
@@ -99,9 +93,6 @@ namespace InfoBoard.Services
 
         public void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
-            if (deviceSettings == null)
-                return;
-
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {

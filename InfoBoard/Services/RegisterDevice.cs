@@ -1,15 +1,10 @@
-﻿using InfoBoard.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿ using InfoBoard.Models;
 
 namespace InfoBoard.Services
 {
     internal class RegisterDevice
     {
-        public async Task<RegisterationResult> attemptToRegister()
+        public RegisterationResult attemptToRegister()
         {
             DeviceSettingsService settingsService =  DeviceSettingsService.Instance;
             DeviceSettings localDeviceSettings = settingsService.readSettingsFromLocalJSON();
@@ -20,10 +15,10 @@ namespace InfoBoard.Services
                 RegisterationResult registrationResult;
                 //Get Device settings
                 //Task.Run(() => errorInfo = requestDeviceRegisterFromServer()).Wait();
-                registrationResult = await requestDeviceRegistrationFromServer();
+                registrationResult = requestDeviceRegistrationFromServer();
 
                 //Registeration succesful
-                if (registrationResult.error == null)
+                if (registrationResult != null && registrationResult.error == null)
                 {
                     //Registeration succesful and request settings and save it to local
                     localDeviceSettings = settingsService.retrieveDeviceSettingsFromServer(registrationResult.device_key);
@@ -37,11 +32,24 @@ namespace InfoBoard.Services
 
         // HANDSHAKE - Register device and get settings
         // If already registered then just return device id
-        private async Task<RegisterationResult> requestDeviceRegistrationFromServer()
+        private RegisterationResult requestDeviceRegistrationFromServer()
         {
             RestService restService = new RestService();
-            RegisterationResult registerResult = (await restService.registerDevice());            
-            return registerResult;
+
+            var task = Task.Run(() => restService.registerDevice());
+            task.Wait();
+            return task.Result;
+
+            //Task<RegisterationResult> result = restService.registerDevice();
+            //RegisterationResult registerResult = await result;
+            //var registerResult = restService.registerDevice();
+            //registerResult.Start();
+            //registerResult.Wait();
+            //fileListFromServer = task.Result;
+            //return registerResult.Result;
+
+
+            //return registerResult;
         }
     }
 }

@@ -1,20 +1,24 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
-using System.ComponentModel; 
+using InfoBoard.Views;
+using Microsoft.Win32;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
  
 
 
 namespace InfoBoard.ViewModel
 {
-    partial class ImageViewModel : INotifyPropertyChanged
+    public partial class ImageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private RegisterView registerView;
 
         private string _imageSource;
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
-        private INavigation Navigation;
+        public INavigation Navigation;
 
         private FileDownloadService fileDownloadService;
 
@@ -44,21 +48,89 @@ namespace InfoBoard.ViewModel
         public ImageViewModel(INavigation navigation)
         {
             this.Navigation = navigation;
-            fileDownloadService = new FileDownloadService(navigation);
+            registerView = new RegisterView();
+            fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
             // Task.Run(() => RetrieveImages()).Wait();
             // DisplayAnImageEachTimelapse();
-           
-            DisplayAnImageFromLocalFolder();
+
+            //getRandomImageName();
+            //StartDisplayingImagesByIntervalEvent();
+
+            GoTime();
         }
 
-
-        private async void DisplayAnImageFromLocalFolder()
+        private async void GoTime() 
         {
-            // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+            if (aDisplayTimer.Enabled) 
+            {
+                aDisplayTimer.Dispose();
+                aDisplayTimer.Stop();
+            }
+                
+
+            //Load Device Settings
+            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
+            DeviceSettings deviceSettings = settingsService.loadDeviceSettings();
+
+            //No settings found - register device and update deviceSettings
+            if (deviceSettings == null)
+            {
+                await Navigation.PushAsync(registerView);
+                RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
+                //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
+                registerDeviceViewModel.startTimedRegisterationEvent(this);
+                //await Task.Delay(_refreshInMiliSecond * 5);
+                deviceSettings = settingsService.loadDeviceSettings();
+            }
+            else
+            {
+                await starTimer4ImageDisplay();
+            }
+        }
+
+        public async Task starTimer4ImageDisplay()
+        {
+            fileDownloadService.synchroniseMediaFiles();
+            await Navigation.PopToRootAsync(true);
+            StartDisplayingImagesByIntervalEvent();
+        }
+
+        System.Timers.Timer aDisplayTimer = new System.Timers.Timer();
+        private void StartDisplayingImagesByIntervalEvent()
+        {
+            aDisplayTimer.Interval = _refreshInMiliSecond;      // This should be like 15 seconds or more
+            //aDisplayTimer.SynchronizingObject;
+            aDisplayTimer.Elapsed += (sender, e) => DisplayImage();                     
+            aDisplayTimer.AutoReset = true;           
+            aDisplayTimer.Start();
+            //OnPropertyChanged(nameof(ImageSource));
+        }
+         
+
+        private void DisplayImage()
+        {
+            fileDownloadService.synchroniseMediaFiles(); // TODO: This should be done in a timed event - seperate thread
+
+            _imageSource = getRandomImageName();
+            OnPropertyChanged(nameof(ImageSource));
+            //await Task.Delay(_refreshInMiliSecond * 5);
+            //return "Nothing";
+            //Load Device Settings
+            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
+            DeviceSettings deviceSettings = settingsService.loadDeviceSettings();
+
+            //No settings found - register device and update deviceSettings
+            if (deviceSettings == null) 
+            {
+                GoTime();
+            }
+        }
+
+        private static Random random = new Random();
+        private string getRandomImageName()
+        {           
 
             //string fileNames = Directory.GetFiles(directoryName);
 
@@ -71,34 +143,38 @@ namespace InfoBoard.ViewModel
             // CAN BE PUT INTO SETTINGS TOO  - File Snyc Frequency
 
             //List<FileInformation> fileList = fileDownloadService.getFileList();
-            List<FileInformation> fileList = await (fileDownloadService.getFileList());
+            //List<FileInformation> fileList = await (fileDownloadService.getFileList());
+            //var result = fileDownloadService.getFileList();
+            //List<FileInformation> fileList = await result; // wait untile get the return value
+
+           // List<FileInformation> fileList  = await Task.Run(() => fileDownloadService.getFileList());
+
+            List<FileInformation> fileList = fileDownloadService.getFileList();
+
+
             //No files to show
             if ( fileList == null)
             {
-                _imageSource = "uploadimage.png";
-                OnPropertyChanged(nameof(ImageSource));
-                await Task.Delay(_refreshInMiliSecond * 5);
-                DisplayAnImageFromLocalFolder();
-                return;
+                //_imageSource = "uploadimage.png";
+                //OnPropertyChanged(nameof(ImageSource));
+                //await Task.Delay(_refreshInMiliSecond * 5);
+                //DisplayAnImageFromLocalFolder();
+                aDisplayTimer.Stop();
+                return "uploadimage.png";
             }
 
-            foreach (var fileInformation in fileList)
+            // Get the folder where the images are stored.
+            string appDataPath = FileSystem.AppDataDirectory;
+            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+
+            var fileInformation = fileList[random.Next(fileList.Count)];
+            string fileName = Path.Combine(directoryName, fileInformation.s3key);            
+            if (File.Exists(fileName))
             {
-                string fileName = Path.Combine(directoryName, fileInformation.s3key);
-                if (File.Exists(fileName))
-                {
-                    _imageSource = fileName;
-                    /*
-                    var imageStream = await FileSystem.OpenAppPackageFileAsync(fileName);
-                    _imageSource = ImageSource.FromStream(() => imageStream);
-                    _imageSource = Microsoft.Maui.Controls.ImageSource.FromFile(fileName);*/
-
-                    OnPropertyChanged(nameof(ImageSource));
-                    await Task.Delay(_refreshInMiliSecond);
-                }
+                return fileName;
             }
-
-            DisplayAnImageFromLocalFolder();
+            return "uploadimage.png"; // TODO : Missing image - we should not come to this point
+            // Pick some other picture
         }
          
 
