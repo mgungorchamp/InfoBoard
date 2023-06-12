@@ -99,6 +99,9 @@ namespace InfoBoard.Services
 
         public void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
+            if (deviceSettings == null)
+                return;
+
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {
