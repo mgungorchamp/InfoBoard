@@ -154,7 +154,7 @@ namespace InfoBoard.ViewModel
             //List<FileInformation> fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //No files to show
-            if ( fileList == null)
+            if ( fileList == null || fileList.Count == 0)
             {                
                 //timer4ImageShow.Stop();
                 return "uploadimage.png";
@@ -163,6 +163,7 @@ namespace InfoBoard.ViewModel
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+
 
             var fileInformation = fileList[random.Next(fileList.Count)];
             string fileName = Path.Combine(directoryName, fileInformation.s3key);            
