@@ -2,6 +2,7 @@
 using InfoBoard.Views;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
@@ -15,11 +16,6 @@ namespace InfoBoard.Services
         //private List<FileInformation> fileList = new List<FileInformation>();
        
         DeviceSettings deviceSettings;
-
-        public List<FileInformation> getFileList() 
-        {
-            return readMediaNamesFromLocalJSON(); ;
-        }
 
 
         //Getting files from internet 
@@ -44,7 +40,9 @@ namespace InfoBoard.Services
         - and overwrite the content of the local JSON file with the new JSON file   
          */
 
-        public void synchroniseMediaFiles()
+        List<FileInformation> lastSavedFileList;
+
+        public async Task<List<FileInformation>> synchroniseMediaFiles()
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
@@ -52,18 +50,20 @@ namespace InfoBoard.Services
             //If the local JSON file does not exist fileList will be null
             //Then dowload all media files to local directory 
             //And save the JSON file to local directory
+            
             if (fileListFromLocal == null)
             {
-                downloadAllFilesFromServer();
+               return await downloadAllFilesFromServer();
             }
             else
-            {                 
-                oneWaySynchroniseFiles();                
-               // fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
+            {
+                return await oneWaySynchroniseFiles();
+                //return readMediaNamesFromLocalJSON();
+                // fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
             }
         }
 
-        private async void downloadAllFilesFromServer() 
+        private async Task<List<FileInformation>> downloadAllFilesFromServer() 
         {
             List<FileInformation> fileList = null;
 
@@ -76,25 +76,27 @@ namespace InfoBoard.Services
                 downloadFilesToLocalDirectory(fileList);
                 //Save media file names (as JSON) to local folder 
                 saveMediaNamesToLocalJSON(fileList);
+               
             }
+            return fileList;
         }
 
-        private async void oneWaySynchroniseFiles()
+        private async Task<List<FileInformation>> oneWaySynchroniseFiles()
         {
 
             //If any of the local files missing - corrupted - try downloading all files
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJsonCheckDiscrepancy();            
             if (fileListFromLocal == null)
             {
-                downloadAllFilesFromServer();
-                return;
+                return await downloadAllFilesFromServer();                
             }
 
             List<FileInformation> fileListFromServer = null;
             //Get file names from the server - fileListFromServer
             fileListFromServer = await getFileListFromServer();
-            
-            //If fileListFromServer null just abort the operations
+
+            //If fileListFromServer null just abort the operations, delete all the existing files
+            //Since the device unregistered
             if (fileListFromServer == null) 
             {
                 if (UtilityServices.isInternetAvailable()) 
@@ -106,8 +108,8 @@ namespace InfoBoard.Services
                     //EMPTY the local file list 
                     List<FileInformation> fileList = new List<FileInformation>();
                     saveMediaNamesToLocalJSON(fileList);
-                }               
-                return;
+                    return null; // NULL 
+                }                
             }
 
             //Find intersect files - if updated re-download them
@@ -134,14 +136,20 @@ namespace InfoBoard.Services
             // In the local but not at the server delete those files
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
             IEnumerable<FileInformation> filesDeletedFromServer = fileListFromLocal.Except(fileListFromServer);
+       
+            //First update the local JSON before deleting 
+            //Any - true if the source sequence contains any elements; otherwise, false.
+            if (missingLocalFiles.Any() || filesDeletedFromServer.Any())
+                saveMediaNamesToLocalJSON(fileListFromServer);
+
+            //Now we can delete - since if JSON is not updated - it will try to view deleted file 
+            //Delete after updating JSON
             foreach (FileInformation file in filesDeletedFromServer)
             {
                 deleteLocalFile(file);
             }
 
-            //Any - true if the source sequence contains any elements; otherwise, false.
-            if (missingLocalFiles.Any() || filesDeletedFromServer.Any())
-                saveMediaNamesToLocalJSON(fileListFromServer);           
+            return readMediaNamesFromLocalJSON();
         }
 
 
@@ -183,16 +191,22 @@ namespace InfoBoard.Services
 
         private void downloadFilesToLocalDirectory(List<FileInformation> fileList)
         {
-            //All these saving should be ASYNC task list and we can waitall at the end
-            //Download each file from the server to local folder
-            foreach (var file in fileList)
+            try
             {
-                downloadFileToLocalDirectory(file);
+                //All these saving should be ASYNC task list and we can waitall at the end
+                //Download each file from the server to local folder
+                foreach (var file in fileList)
+                {
+                    downloadFileToLocalDirectory(file);
+                }
+            } 
+            catch {
+                Console.WriteLine("Done: Download Exception");
             }
-            //Console.WriteLine("Done: fetchAndSave");
+
         }
 
-        private void downloadFileToLocalDirectory(FileInformation fileInformation)
+        private async void downloadFileToLocalDirectory(FileInformation fileInformation)
         {
             DirectoryInfo directoryInfo = getMediaFolder();
              
@@ -204,13 +218,17 @@ namespace InfoBoard.Services
             {
                 return;              
             }
-
-            //Download the file content as byte array from presigned URL
-            HttpClient httpClient = new HttpClient();
-            Uri uri = new Uri(fileInformation.presignedURL);
-            byte[] fileContent = httpClient.GetByteArrayAsync(uri).Result;
-            //Save it to local folder
-            File.WriteAllBytes(localFullFileName, fileContent);
+            try {
+                //Download the file content as byte array from presigned URL
+                HttpClient httpClient = new HttpClient();
+                Uri uri = new Uri(fileInformation.presignedURL);
+                byte[] fileContent = await httpClient.GetByteArrayAsync(uri);
+                //Save it to local folder
+                await File.WriteAllBytesAsync(localFullFileName, fileContent);
+            }catch 
+            {
+                Console.WriteLine("downloadFileToLocalDirectory  has issues");
+            }
         }
 
         private void deleteLocalFile(FileInformation fileInformation)
@@ -248,12 +266,18 @@ namespace InfoBoard.Services
             string fileName = "FileInformation.json";
             string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
             string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);        
-            File.WriteAllText(fullPathFileName, jsonString);           
+            File.WriteAllText(fullPathFileName, jsonString);
+            lastSavedFileList = fileList;
         }
 
         //Read local JSON file - if exist - if not return empty fileList
-        private List<FileInformation> readMediaNamesFromLocalJSON()
+        public List<FileInformation> readMediaNamesFromLocalJSON()
         {
+            //No need to read from local file, if this saved recently 
+            //If not contine to read from file.
+            if(lastSavedFileList != null)
+                return lastSavedFileList;
+
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {
@@ -274,6 +298,8 @@ namespace InfoBoard.Services
 
                 fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
             }
+            //No need to read again
+            lastSavedFileList = fileList;
             return fileList;
         }
     }

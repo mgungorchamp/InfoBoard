@@ -75,7 +75,7 @@ namespace InfoBoard.Services
 
                 DeviceSettings tempDeviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
                 
-                if (tempDeviceSettings.device_key == null) 
+                if (tempDeviceSettings?.device_key == null) 
                 {
                     return null;
                 }
@@ -93,11 +93,17 @@ namespace InfoBoard.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
+            try
+            {
+                string fileName = "DeviceSettings.json";
+                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
+                File.WriteAllText(fullPathFileName, jsonString);
 
-            string fileName = "DeviceSettings.json";
-            string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
-            string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-            File.WriteAllText(fullPathFileName, jsonString);
+            } catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

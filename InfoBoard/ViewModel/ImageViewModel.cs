@@ -10,8 +10,10 @@ namespace InfoBoard.ViewModel
 {
     public partial class ImageViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private RegisterView registerView;
+        public event PropertyChangedEventHandler PropertyChanged;        
+        private IDispatcherTimer timer4DisplayImage;
+        private IDispatcherTimer timer4FileSync;
+        private IDispatcherTimer timer4DeviceSettingsSync;
 
         private string _imageSource;
         private int _refreshInMiliSecond;
@@ -19,10 +21,7 @@ namespace InfoBoard.ViewModel
         public INavigation Navigation;
 
         private FileDownloadService fileDownloadService;
-
-        //I think to be deleted
-        List<FileInformation> FileList = new List<FileInformation>();
-
+        
         public string ImageSource {
             get => _imageSource;
             set {
@@ -42,41 +41,55 @@ namespace InfoBoard.ViewModel
                 OnPropertyChanged();
             }
         }
-        IDispatcherTimer timer4ImageShow;
+
+        DeviceSettings deviceSettings;
+        
         public ImageViewModel(INavigation navigation)
         {
-            this.Navigation = navigation;
-            registerView = new RegisterView();
+            this.Navigation = navigation;           
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-          
-            timer4ImageShow = Application.Current.Dispatcher.CreateTimer();
-            GoTime();
 
+           
+            timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
+            timer4FileSync = Application.Current.Dispatcher.CreateTimer();
+            timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
+           
+            GoTime();
         }
+
+       
         //[UnsupportedOSPlatform("iOS")]
         private async void GoTime() 
         {
             //Stop timer - if running
-            timer4ImageShow.Stop();
-         
-            //Load Device Settings
-            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
+            timer4DisplayImage.Stop();
+            timer4FileSync.Stop();
+
+            await UpdateDeviceSettings();
+            StartTimer4DeviceSettings();
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                startTimer4RegisteringDevice();
+                NavigateToRegisterViewAndStartTimer4RegisteringDevice();
             }
             else
             {
-                startTimer4ImageDisplay();
+                NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
             }
         }
 
-        public async void startTimer4RegisteringDevice()
+        public void StartTimer4DeviceSettings()
+        {            
+            //Set up the timer for Display Image
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(7);
+            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettings();
+            timer4DeviceSettingsSync.Start();
+        }
+
+        public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
@@ -87,40 +100,39 @@ namespace InfoBoard.ViewModel
             registerDeviceViewModel.startTimedRegisterationEvent(this);
 
             //Load Device Settings - Singleton - it works for all
-            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
-            deviceSettings = await settingsService.loadDeviceSettings();
+            //UpdateDeviceSettings();
         }
 
-        public async void startTimer4ImageDisplay()
+        List<FileInformation> fileList;
+        public async void NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync()
         {
-            fileDownloadService.synchroniseMediaFiles();
+            await fileDownloadService.synchroniseMediaFiles();
+            fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {                
                 await Navigation.PopToRootAsync(true);                
-            });
+            });           
 
             DisplayImage();
-            timer4ImageShow.Interval = TimeSpan.FromSeconds(5);
-            timer4ImageShow.Tick += (sender, e) => DisplayImage();
-            timer4ImageShow.Start();
+            //Set up the timer for Display Image
+            timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
+            timer4DisplayImage.Tick += (sender, e) => DisplayImage();
+            timer4DisplayImage.Start();
+
+            //Set up the timer for Syncronise Media Files             
+            timer4FileSync.Interval = TimeSpan.FromSeconds(15);
+            timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
+            //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
+            timer4FileSync.Start();
         }
          
 
-        private async void DisplayImage()//(object sender, EventArgs e)
+        private void DisplayImage()//(object sender, EventArgs e)
         {
-            // TODO: This should be done in a timed event - seperate thread
-            fileDownloadService.synchroniseMediaFiles(); 
-
             _imageSource = getRandomImageName();
             OnPropertyChanged(nameof(ImageSource));
-            //await Task.Delay(_refreshInMiliSecond * 5);
-            //return "Nothing";
-            //Load Device Settings
-            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
-
+            
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null) 
             {
@@ -128,21 +140,23 @@ namespace InfoBoard.ViewModel
             }
         }
 
+        private async Task UpdateDeviceSettings()
+        {
+            //Load Device Settings
+            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+            deviceSettings = await deviceSettingsService.loadDeviceSettings();
+        }
+
         private static Random random = new Random();
         private string getRandomImageName()
         {           
             //TODO : File list should be a member variable and should be updated in a timed event
-            List<FileInformation> fileList = fileDownloadService.getFileList();
+            //List<FileInformation> fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //No files to show
             if ( fileList == null)
-            {
-                //_imageSource = "uploadimage.png";
-                //OnPropertyChanged(nameof(ImageSource));
-                //await Task.Delay(_refreshInMiliSecond * 5);
-                //DisplayAnImageFromLocalFolder();
-                //*aDisplayTimer.Stop();
-                timer4ImageShow.Stop();
+            {                
+                //timer4ImageShow.Stop();
                 return "uploadimage.png";
             }
 
@@ -159,31 +173,8 @@ namespace InfoBoard.ViewModel
             return "uploadimage.png"; // TODO : Missing image - we should not come to this point
             // Pick some other picture
         }
-          
 
-        public async void RetrieveImages()
-        {
-            RestService restService = new RestService();
-
-            //Get Device settings
-            //Task.Run(() => FileList = restService.downloadMediaFileNames().Result).Wait();
-            FileList = await (restService.retrieveFileList());
-
-            // var task = restService.downloadMediaFileNames();
-            // task.Wait();
-            // FileList = task.Result;
-            //FileList = await restService.RefreshDataAsync();
-        }
-
-        //https://www.labnol.org/embed/google/drive/
-        //https://www.labnol.org/google-drive-image-hosting-220515
-        //https://gdurl.com/
-        /*
-         Google API to get list of shared files
          
-         
-         
-         */
         public async void ChangeImage()
         {
             _imageSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";

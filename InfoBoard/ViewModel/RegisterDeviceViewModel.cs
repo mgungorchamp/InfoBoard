@@ -153,7 +153,7 @@ namespace InfoBoard.ViewModel
                
 
                 //change to ImageDisplayView               
-                imageViewModel.startTimer4ImageDisplay();
+                imageViewModel.NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
                 counter = 1;
                 _status = "Welcome!";
             }
