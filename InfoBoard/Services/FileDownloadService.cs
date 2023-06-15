@@ -18,27 +18,6 @@ namespace InfoBoard.Services
 
         public List<FileInformation> getFileList() 
         {
-
-            //TODO:  This should be optimized - it should be called independently
-            // from the file download service - it should be called like a background service in some some interval
-            //Get Device settings
-           // DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-           // deviceSettings = settingsService.loadDeviceSettings();
-
-            //If registered Device
-            //If device ID is not present synchroniseMediaFiles SHOULD not be started
-          //  if (deviceSettings != null && deviceSettings.device_key != null)
-          //  {
-                //synchronise files 
-           //     synchroniseMediaFiles();
-                 
-           //     await Navigation.PopToRootAsync();
-         //   }
-           // else 
-           // {
-            //    await Navigation.PushAsync(new RegisterView());
-           // }
-           
             return readMediaNamesFromLocalJSON(); ;
         }
 
@@ -204,6 +183,7 @@ namespace InfoBoard.Services
 
         private void downloadFilesToLocalDirectory(List<FileInformation> fileList)
         {
+            //All these saving should be ASYNC task list and we can waitall at the end
             //Download each file from the server to local folder
             foreach (var file in fileList)
             {
@@ -268,13 +248,12 @@ namespace InfoBoard.Services
             string fileName = "FileInformation.json";
             string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
             string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);        
-            File.WriteAllText(fullPathFileName, jsonString);
+            File.WriteAllText(fullPathFileName, jsonString);           
         }
 
         //Read local JSON file - if exist - if not return empty fileList
         private List<FileInformation> readMediaNamesFromLocalJSON()
         {
-            List<FileInformation> fileList = null;
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
             {
@@ -284,7 +263,9 @@ namespace InfoBoard.Services
 
             string fileName = "FileInformation.json";
             string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
-            if(File.Exists(fullPathJsonFileName))
+
+            List<FileInformation> fileList = null;
+            if (File.Exists(fullPathJsonFileName))
             {
                 string jsonString = File.ReadAllText(fullPathJsonFileName);
                 //Return - If all the pictures removed from the server but file exist in local directory

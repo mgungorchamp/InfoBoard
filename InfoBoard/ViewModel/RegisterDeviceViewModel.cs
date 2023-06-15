@@ -1,18 +1,10 @@
-﻿
-
-using InfoBoard.Services;
+﻿using InfoBoard.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
 using QRCoder;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
-using Microsoft.Win32;
-using System.Windows.Input;
-using System.Diagnostics.Metrics;
 using InfoBoard.Models;
-using System.Reflection;
-using InfoBoard.Views;
 
 namespace InfoBoard.ViewModel
 {
@@ -111,18 +103,13 @@ namespace InfoBoard.ViewModel
 
         public void startTimedRegisterationEvent(ImageViewModel imageViewModel)
         {
+            generateQrCode();
             this.imageViewModel = imageViewModel;
-            //aTimer.Elapsed += updateQrCodeImageAndRegisterDevice;
-            //*aRegistrationTimer.Elapsed += (sender, e) => registerDeviceViaServer();           
-            //aRegistrationTimer.Interval = counter * 10 * 1000;      // This should be like 15 seconds or more              
-            //*aRegistrationTimer.AutoReset = false;
-            //*aRegistrationTimer.Start();
-
             timer4Registration.Interval = TimeSpan.FromSeconds(10);
             timer4Registration.Tick += (sender, e) => registerDeviceViaServer();
             timer4Registration.Start();
 
-            _status = "Registrtering device...";
+            _status = "Registering device...";
             OnPropertyChanged();
         }      
 
@@ -162,21 +149,20 @@ namespace InfoBoard.ViewModel
                 //imageViewModel.Navigation.PopAsync();
                
                 OnPropertyChanged(nameof(Status));
-                counter= 0;
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromSeconds(10));        
+               
 
-                // TODO view should be changed to ImageDisplayView
-                //imageViewModel.Navigation.PopToRootAsync();
-                imageViewModel.starTimer4ImageDisplay();
+                //change to ImageDisplayView               
+                imageViewModel.startTimer4ImageDisplay();
+                counter = 1;
                 _status = "Welcome!";
             }
             else if (registrationResult != null && registrationResult.error != null)
             {                
                 _status = $"Registration Failed. \nError: {registrationResult?.error.message} \nAttempt {counter}";  
                 OnPropertyChanged(nameof(Status));
-            }
-           
-            //return _status;
+            }          
+     
         }
 
         private void generateQrCode()

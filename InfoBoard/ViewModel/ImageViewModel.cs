@@ -1,10 +1,9 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
-using Microsoft.Maui.Dispatching;
-using System.ComponentModel; 
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
- 
+
 
 
 namespace InfoBoard.ViewModel
@@ -51,11 +50,7 @@ namespace InfoBoard.ViewModel
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-            // Task.Run(() => RetrieveImages()).Wait();
-            // DisplayAnImageEachTimelapse();
-
-            //getRandomImageName();
-            //StartDisplayingImagesByIntervalEvent();
+          
             timer4ImageShow = Application.Current.Dispatcher.CreateTimer();
             GoTime();
 
@@ -63,12 +58,9 @@ namespace InfoBoard.ViewModel
         //[UnsupportedOSPlatform("iOS")]
         private async void GoTime() 
         {
-            if (timer4ImageShow.IsRunning) 
-            {
-                timer4ImageShow.Stop();
-            }
-                
-
+            //Stop timer - if running
+            timer4ImageShow.Stop();
+         
             //Load Device Settings
             DeviceSettingsService settingsService = DeviceSettingsService.Instance;
             DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
@@ -76,63 +68,50 @@ namespace InfoBoard.ViewModel
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                //pop up register view
-                //Navigation.InsertPageBefore(registerView);
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await Navigation.PushAsync(new RegisterView(), true);
-                    RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
-                    //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
-                    registerDeviceViewModel.startTimedRegisterationEvent(this);
-                    //await Task.Delay(_refreshInMiliSecond * 5);
-                    deviceSettings = await settingsService.loadDeviceSettings();
-                });
-                
+                startTimer4RegisteringDevice();
             }
             else
             {
-                starTimer4ImageDisplay();
+                startTimer4ImageDisplay();
             }
         }
 
-        public async void starTimer4ImageDisplay()
+        public async void startTimer4RegisteringDevice()
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                fileDownloadService.synchroniseMediaFiles();
-                await Navigation.PopToRootAsync(true);
-                //StartDisplayingImagesByIntervalEvent();
-                timer4ImageShow.Interval = TimeSpan.FromSeconds(5);
-                timer4ImageShow.Tick += (sender, e) => DisplayImage();
-                timer4ImageShow.Start();
+                await Navigation.PushAsync(new RegisterView(), true);               
             });
+            RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
+            //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
+            registerDeviceViewModel.startTimedRegisterationEvent(this);
+
+            //Load Device Settings - Singleton - it works for all
+            DeviceSettingsService settingsService = DeviceSettingsService.Instance;
+            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
+            deviceSettings = await settingsService.loadDeviceSettings();
         }
 
-        //System.Timers.Timer aDisplayTimer = new System.Timers.Timer();
-
-      /*  private void StartDisplayingImagesByIntervalEvent()
+        public async void startTimer4ImageDisplay()
         {
-            //Microsoft.Maui.Dispatching.Dispatcher dispatching = Application.Current.Dispatcher.
-            
+            fileDownloadService.synchroniseMediaFiles();
 
-            //IDispatcherTimer timer=  dispatching.CreateTimer(TimeSpan.FromSeconds(1), () => { });    
-            //DispatcherTimer timer = new DispatcherTimer();
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {                
+                await Navigation.PopToRootAsync(true);                
+            });
+
+            DisplayImage();
             timer4ImageShow.Interval = TimeSpan.FromSeconds(5);
             timer4ImageShow.Tick += (sender, e) => DisplayImage();
             timer4ImageShow.Start();
-
-           // aDisplayTimer.Interval = _refreshInMiliSecond;      // This should be like 15 seconds or more
-            //aDisplayTimer.SynchronizingObject;
-            //aDisplayTimer.Elapsed += (sender, e) => DisplayImage();                     
-            //aDisplayTimer.AutoReset = true;           
-            //aDisplayTimer.Start();
-            //OnPropertyChanged(nameof(ImageSource));
         }
-         */
+         
 
         private async void DisplayImage()//(object sender, EventArgs e)
         {
-            fileDownloadService.synchroniseMediaFiles(); // TODO: This should be done in a timed event - seperate thread
+            // TODO: This should be done in a timed event - seperate thread
+            fileDownloadService.synchroniseMediaFiles(); 
 
             _imageSource = getRandomImageName();
             OnPropertyChanged(nameof(ImageSource));
@@ -152,26 +131,8 @@ namespace InfoBoard.ViewModel
         private static Random random = new Random();
         private string getRandomImageName()
         {           
-
-            //string fileNames = Directory.GetFiles(directoryName);
-
-            //fileDownloadService.updateFiles();
-
-            //Task.Run(() => fileDownloadService.getMediaFileNamesFromServer()).Wait();
-            //RetrieveImages();
-
-            // TODO: getFileList should be TIMED EVENT not everytime - can be every 10 mins? or more
-            // CAN BE PUT INTO SETTINGS TOO  - File Snyc Frequency
-
-            //List<FileInformation> fileList = fileDownloadService.getFileList();
-            //List<FileInformation> fileList = await (fileDownloadService.getFileList());
-            //var result = fileDownloadService.getFileList();
-            //List<FileInformation> fileList = await result; // wait untile get the return value
-
-           // List<FileInformation> fileList  = await Task.Run(() => fileDownloadService.getFileList());
-
+            //TODO : File list should be a member variable and should be updated in a timed event
             List<FileInformation> fileList = fileDownloadService.getFileList();
-
 
             //No files to show
             if ( fileList == null)
@@ -198,18 +159,7 @@ namespace InfoBoard.ViewModel
             return "uploadimage.png"; // TODO : Missing image - we should not come to this point
             // Pick some other picture
         }
-         
-
-        private async void DisplayAnImageEachTimelapse()
-        {
-            foreach (var file in FileList)
-            {
-                _imageSource = file.presignedURL;
-                OnPropertyChanged(nameof(ImageSource));
-                await Task.Delay(_refreshInMiliSecond);
-            }
-            DisplayAnImageEachTimelapse();
-        }
+          
 
         public async void RetrieveImages()
         {
@@ -269,9 +219,7 @@ namespace InfoBoard.ViewModel
 
             _imageSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
             OnPropertyChanged(nameof(ImageSource));
-            await Task.Delay(_refreshInMiliSecond);
-
-            ChangeImage();
+            await Task.Delay(_refreshInMiliSecond);            
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
