@@ -8,8 +8,7 @@ public partial class ImageDisplay : ContentPage
     {
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
-        BindingContext = new ImageViewModel(Navigation);
-        
+        BindingContext = new ImageViewModel(Navigation);      
         //DisplayAlert("Downloading Files", "Fetching files and storing them to local folder", "OK");
         //mainPageImage.Aspect = .
     }

@@ -84,23 +84,23 @@ namespace InfoBoard.Services
             }
         }
 
-        private void downloadAllFilesFromServer() 
+        private async void downloadAllFilesFromServer() 
         {
             List<FileInformation> fileList = null;
 
             //Get file names from the server - fileListFromServer
-            Task.Run(() => fileList = getFileListFromServer()).Wait();
+            fileList = await getFileListFromServer();
 
             if (fileList != null)
             {
                 //Save those files to local directory
-                Task.Run(() => downloadFilesToLocalDirectory(fileList)).Wait();
+                downloadFilesToLocalDirectory(fileList);
                 //Save media file names (as JSON) to local folder 
                 saveMediaNamesToLocalJSON(fileList);
             }
         }
 
-        private void oneWaySynchroniseFiles()
+        private async void oneWaySynchroniseFiles()
         {
 
             //If any of the local files missing - corrupted - try downloading all files
@@ -113,10 +113,8 @@ namespace InfoBoard.Services
 
             List<FileInformation> fileListFromServer = null;
             //Get file names from the server - fileListFromServer
-            Task.Run(() => fileListFromServer = getFileListFromServer()).Wait();
-
+            fileListFromServer = await getFileListFromServer();
             
-
             //If fileListFromServer null just abort the operations
             if (fileListFromServer == null) 
             {
@@ -243,17 +241,17 @@ namespace InfoBoard.Services
             File.Delete(localFullFileName);
         }
 
-        public List<FileInformation> getFileListFromServer()
+        public async Task<List<FileInformation>> getFileListFromServer()
         {
       
             RestService restService = new RestService();
 
-            Task<List<FileInformation>> task = Task.Run(async () => await restService.retrieveFileList());
+            var task = await restService.retrieveFileList();
 
             //var task = restService.retrieveFileList();
             //task.Wait();
             //fileListFromServer = task.Result;
-            return task.Result;
+            return task;
             //FileList = await restService.RefreshDataAsync();
         }        
 

@@ -1,9 +1,8 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
-using Microsoft.Win32;
-using System.ComponentModel;
-using System.Linq;
+using Microsoft.Maui.Dispatching;
+using System.ComponentModel; 
 using System.Runtime.CompilerServices;
  
 
@@ -44,7 +43,7 @@ namespace InfoBoard.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        IDispatcherTimer timer4ImageShow;
         public ImageViewModel(INavigation navigation)
         {
             this.Navigation = navigation;
@@ -57,59 +56,81 @@ namespace InfoBoard.ViewModel
 
             //getRandomImageName();
             //StartDisplayingImagesByIntervalEvent();
-
+            timer4ImageShow = Application.Current.Dispatcher.CreateTimer();
             GoTime();
-        }
 
+        }
+        //[UnsupportedOSPlatform("iOS")]
         private async void GoTime() 
         {
-            if (aDisplayTimer.Enabled) 
+            if (timer4ImageShow.IsRunning) 
             {
-                aDisplayTimer.Dispose();
-                aDisplayTimer.Stop();
+                timer4ImageShow.Stop();
             }
                 
 
             //Load Device Settings
             DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            DeviceSettings deviceSettings = settingsService.loadDeviceSettings();
+            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                await Navigation.PushAsync(registerView);
-                RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
-                //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
-                registerDeviceViewModel.startTimedRegisterationEvent(this);
-                //await Task.Delay(_refreshInMiliSecond * 5);
-                deviceSettings = settingsService.loadDeviceSettings();
+                //pop up register view
+                //Navigation.InsertPageBefore(registerView);
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    await Navigation.PushAsync(new RegisterView(), true);
+                    RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
+                    //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
+                    registerDeviceViewModel.startTimedRegisterationEvent(this);
+                    //await Task.Delay(_refreshInMiliSecond * 5);
+                    deviceSettings = await settingsService.loadDeviceSettings();
+                });
+                
             }
             else
             {
-                await starTimer4ImageDisplay();
+                starTimer4ImageDisplay();
             }
         }
 
-        public async Task starTimer4ImageDisplay()
+        public async void starTimer4ImageDisplay()
         {
-            fileDownloadService.synchroniseMediaFiles();
-            await Navigation.PopToRootAsync(true);
-            StartDisplayingImagesByIntervalEvent();
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                fileDownloadService.synchroniseMediaFiles();
+                await Navigation.PopToRootAsync(true);
+                //StartDisplayingImagesByIntervalEvent();
+                timer4ImageShow.Interval = TimeSpan.FromSeconds(5);
+                timer4ImageShow.Tick += (sender, e) => DisplayImage();
+                timer4ImageShow.Start();
+            });
         }
 
-        System.Timers.Timer aDisplayTimer = new System.Timers.Timer();
-        private void StartDisplayingImagesByIntervalEvent()
+        //System.Timers.Timer aDisplayTimer = new System.Timers.Timer();
+
+      /*  private void StartDisplayingImagesByIntervalEvent()
         {
-            aDisplayTimer.Interval = _refreshInMiliSecond;      // This should be like 15 seconds or more
+            //Microsoft.Maui.Dispatching.Dispatcher dispatching = Application.Current.Dispatcher.
+            
+
+            //IDispatcherTimer timer=  dispatching.CreateTimer(TimeSpan.FromSeconds(1), () => { });    
+            //DispatcherTimer timer = new DispatcherTimer();
+            timer4ImageShow.Interval = TimeSpan.FromSeconds(5);
+            timer4ImageShow.Tick += (sender, e) => DisplayImage();
+            timer4ImageShow.Start();
+
+           // aDisplayTimer.Interval = _refreshInMiliSecond;      // This should be like 15 seconds or more
             //aDisplayTimer.SynchronizingObject;
-            aDisplayTimer.Elapsed += (sender, e) => DisplayImage();                     
-            aDisplayTimer.AutoReset = true;           
-            aDisplayTimer.Start();
+            //aDisplayTimer.Elapsed += (sender, e) => DisplayImage();                     
+            //aDisplayTimer.AutoReset = true;           
+            //aDisplayTimer.Start();
             //OnPropertyChanged(nameof(ImageSource));
         }
-         
+         */
 
-        private void DisplayImage()
+        private async void DisplayImage()//(object sender, EventArgs e)
         {
             fileDownloadService.synchroniseMediaFiles(); // TODO: This should be done in a timed event - seperate thread
 
@@ -119,7 +140,7 @@ namespace InfoBoard.ViewModel
             //return "Nothing";
             //Load Device Settings
             DeviceSettingsService settingsService = DeviceSettingsService.Instance;
-            DeviceSettings deviceSettings = settingsService.loadDeviceSettings();
+            DeviceSettings deviceSettings = await settingsService.loadDeviceSettings();
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null) 
@@ -159,7 +180,8 @@ namespace InfoBoard.ViewModel
                 //OnPropertyChanged(nameof(ImageSource));
                 //await Task.Delay(_refreshInMiliSecond * 5);
                 //DisplayAnImageFromLocalFolder();
-                aDisplayTimer.Stop();
+                //*aDisplayTimer.Stop();
+                timer4ImageShow.Stop();
                 return "uploadimage.png";
             }
 

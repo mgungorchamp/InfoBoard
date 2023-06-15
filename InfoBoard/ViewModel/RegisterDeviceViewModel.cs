@@ -29,7 +29,8 @@ namespace InfoBoard.ViewModel
             }
         }   
         public event PropertyChangedEventHandler PropertyChanged;
-        System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
+        //System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
+        IDispatcherTimer timer4Registration;
 
         private string _registerKeyLabel;
         private string _qrImageButton;
@@ -45,7 +46,7 @@ namespace InfoBoard.ViewModel
             generateQrCode();
 
             OnRegenerateQrCodeCommand = new Command(
-               execute: async () =>
+               execute: () =>
                {
                    generateQrCode();
                    //startRegistration();
@@ -59,14 +60,16 @@ namespace InfoBoard.ViewModel
 
                  });
 
+            timer4Registration = Application.Current.Dispatcher.CreateTimer();
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
         }
 
-        public  void startRegistration()
+        public void startRegistration()
         {
             counter++;
-            Task.Run(() => registerDeviceViaServer()).Wait();
+            //Task.Run(() => registerDeviceViaServer()).Wait();
+            registerDeviceViaServer();
             //await Navigation.PushAsync(new RegisterView());
             //TODO 
             //Change the view to RegisterView 
@@ -110,24 +113,29 @@ namespace InfoBoard.ViewModel
         {
             this.imageViewModel = imageViewModel;
             //aTimer.Elapsed += updateQrCodeImageAndRegisterDevice;
-            aRegistrationTimer.Elapsed += (sender, e) => registerDeviceViaServer();           
+            //*aRegistrationTimer.Elapsed += (sender, e) => registerDeviceViaServer();           
             //aRegistrationTimer.Interval = counter * 10 * 1000;      // This should be like 15 seconds or more              
-            aRegistrationTimer.AutoReset = false;
-            aRegistrationTimer.Start();
-            _status = "Timed Registration Event Created";
+            //*aRegistrationTimer.AutoReset = false;
+            //*aRegistrationTimer.Start();
+
+            timer4Registration.Interval = TimeSpan.FromSeconds(10);
+            timer4Registration.Tick += (sender, e) => registerDeviceViaServer();
+            timer4Registration.Start();
+
+            _status = "Registrtering device...";
             OnPropertyChanged();
         }      
 
-        private string registerDeviceViaServer()
+        private async void registerDeviceViaServer()
         {
             counter++;
-            aRegistrationTimer.Interval = counter * 10 * 1000;
+            //aRegistrationTimer.Interval = counter * 10 * 1000;
 
             if (!UtilityServices.isInternetAvailable())
             {             
                 _status = "No Internet Connection";
                 OnPropertyChanged(nameof(Status));
-                return _status;
+                return;
             }
 
             _status = $"Registering Device: Attempt {counter}"; 
@@ -135,31 +143,40 @@ namespace InfoBoard.ViewModel
 
             //Register Device
             RegisterDevice register = new RegisterDevice();            
-            RegisterationResult registrationResult = register.attemptToRegister();
+            RegisterationResult registrationResult = await register.attemptToRegister();
             
             //Success - no error
             if (registrationResult != null && registrationResult.error == null)
-            {
+            {           
+                timer4Registration.Stop();                
+
                 DeviceSettingsService service = DeviceSettingsService.Instance;
                 DeviceSettings deviceSettings = service.readSettingsFromLocalJSON();
-                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key} \nAttempt {counter}";
+                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
+                _status += "\nUpdating Media Files... going back to image page!";
 
                 Constants.updateMediaFilesUrl(deviceSettings.device_key);
 
-                aRegistrationTimer.Stop(); // Timer needs to be stopped after successful registration
-                aRegistrationTimer.Dispose();
+                //*aRegistrationTimer.Stop(); // Timer needs to be stopped after successful registration
+                //*aRegistrationTimer.Dispose();
                 //imageViewModel.Navigation.PopAsync();
+               
+                OnPropertyChanged(nameof(Status));
+                counter= 0;
+                await Task.Delay(TimeSpan.FromSeconds(10));
 
                 // TODO view should be changed to ImageDisplayView
-                imageViewModel.Navigation.PopToRootAsync();
-                _ = imageViewModel.starTimer4ImageDisplay();
+                //imageViewModel.Navigation.PopToRootAsync();
+                imageViewModel.starTimer4ImageDisplay();
+                _status = "Welcome!";
             }
-            else
+            else if (registrationResult != null && registrationResult.error != null)
             {                
-                _status = $"Registration Failed. \nError: {registrationResult.error.message} \nAttempt {counter}";                
+                _status = $"Registration Failed. \nError: {registrationResult?.error.message} \nAttempt {counter}";  
+                OnPropertyChanged(nameof(Status));
             }
-            OnPropertyChanged(nameof(Status));
-            return _status;
+           
+            //return _status;
         }
 
         private void generateQrCode()

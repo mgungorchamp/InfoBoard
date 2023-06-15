@@ -4,7 +4,7 @@ namespace InfoBoard.Services
 {
     internal class RegisterDevice
     {
-        public RegisterationResult attemptToRegister()
+        public async Task<RegisterationResult> attemptToRegister()
         {
             DeviceSettingsService settingsService =  DeviceSettingsService.Instance;
             DeviceSettings localDeviceSettings = settingsService.readSettingsFromLocalJSON();
@@ -15,13 +15,13 @@ namespace InfoBoard.Services
                 RegisterationResult registrationResult;
                 //Get Device settings
                 //Task.Run(() => errorInfo = requestDeviceRegisterFromServer()).Wait();
-                registrationResult = requestDeviceRegistrationFromServer();
+                registrationResult = await requestDeviceRegistrationFromServer();
 
                 //Registeration succesful
                 if (registrationResult != null && registrationResult.error == null)
                 {
                     //Registeration succesful and request settings and save it to local
-                    localDeviceSettings = settingsService.retrieveDeviceSettingsFromServer(registrationResult.device_key);
+                    localDeviceSettings = await settingsService.retrieveDeviceSettingsFromServer(registrationResult.device_key);
                     settingsService.saveSettingsToLocalAsJSON(localDeviceSettings);                 
                 }    
                 return registrationResult;
@@ -32,13 +32,13 @@ namespace InfoBoard.Services
 
         // HANDSHAKE - Register device and get settings
         // If already registered then just return device id
-        private RegisterationResult requestDeviceRegistrationFromServer()
+        private async Task<RegisterationResult> requestDeviceRegistrationFromServer()
         {
             RestService restService = new RestService();
 
-            var task = Task.Run(() => restService.registerDevice());
-            task.Wait();
-            return task.Result;
+            var task = await restService.registerDevice();
+            
+            return task;
 
             //Task<RegisterationResult> result = restService.registerDevice();
             //RegisterationResult registerResult = await result;

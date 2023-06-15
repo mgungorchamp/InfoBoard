@@ -25,7 +25,7 @@ namespace InfoBoard.Services
         }    
 
         //If not registered, it tries to register if registered reads 
-        public DeviceSettings loadDeviceSettings()
+        public async Task<DeviceSettings> loadDeviceSettings()
         {
             DeviceSettings deviceSettings = readSettingsFromLocalJSON();
 
@@ -33,7 +33,7 @@ namespace InfoBoard.Services
             if (deviceSettings != null)
             {                       
                 //Get Device settings
-                Task.Run(() => deviceSettings = retrieveDeviceSettingsFromServer(deviceSettings.device_key)).Wait();
+                deviceSettings = await retrieveDeviceSettingsFromServer(deviceSettings.device_key);
                 saveSettingsToLocalAsJSON(deviceSettings);
             }
 
@@ -47,12 +47,11 @@ namespace InfoBoard.Services
 
         // HANDSHAKE - Register device and get settings
         // If already registered then just get settings
-        public DeviceSettings retrieveDeviceSettingsFromServer(string device_key)
+        public async Task<DeviceSettings> retrieveDeviceSettingsFromServer(string device_key)
         {     
             RestService restService = new RestService();
-            var task = restService.retrieveDeviceSettings(device_key);
-            task.Wait();
-            DeviceSettings retrievedDeviceSettings = task.Result;          
+            var task = restService.retrieveDeviceSettings(device_key);        
+            DeviceSettings retrievedDeviceSettings = await task;          
             return retrievedDeviceSettings;
         }
 
