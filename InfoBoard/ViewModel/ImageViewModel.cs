@@ -110,7 +110,7 @@ namespace InfoBoard.ViewModel
             //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
-            await Task.Delay(TimeSpan.FromSeconds(10));
+            //await Task.Delay(TimeSpan.FromSeconds(10));
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {                

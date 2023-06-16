@@ -70,7 +70,7 @@ namespace InfoBoard.Services
             if (fileList != null)
             {
                 //Save those files to local directory
-                downloadFilesToLocalDirectory(fileList);
+                await downloadFilesToLocalDirectory(fileList);
                 //Save media file names (as JSON) to local folder 
                 saveMediaNamesToLocalJSON(fileList);
                
@@ -126,7 +126,7 @@ namespace InfoBoard.Services
             IEnumerable<FileInformation> missingLocalFiles = fileListFromServer.Except(fileListFromLocal);
             foreach (FileInformation file in missingLocalFiles)
             {
-                downloadFileToLocalDirectory(file);
+                await downloadFileToLocalDirectory(file);
             }
 
             //CASE 2 - DELETE removed files
@@ -186,7 +186,7 @@ namespace InfoBoard.Services
             return directoryInfo;
         }
 
-        private void downloadFilesToLocalDirectory(List<FileInformation> fileList)
+        private async Task downloadFilesToLocalDirectory(List<FileInformation> fileList)
         {
             try
             {
@@ -194,7 +194,7 @@ namespace InfoBoard.Services
                 //Download each file from the server to local folder
                 foreach (var file in fileList)
                 {
-                    downloadFileToLocalDirectory(file);
+                    await downloadFileToLocalDirectory(file);
                 }
             } 
             catch {
@@ -203,7 +203,7 @@ namespace InfoBoard.Services
 
         }
 
-        private async void downloadFileToLocalDirectory(FileInformation fileInformation)
+        private async Task downloadFileToLocalDirectory(FileInformation fileInformation)
         {
             DirectoryInfo directoryInfo = getMediaFolder();
              
@@ -259,12 +259,18 @@ namespace InfoBoard.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
-
-            string fileName = "FileInformation.json";
-            string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
-            string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);        
-            File.WriteAllText(fullPathFileName, jsonString);
-            lastSavedFileList = fileList;
+            try
+            {
+                string fileName = "FileInformation.json";
+                string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
+                string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);
+                File.WriteAllText(fullPathFileName, jsonString);
+                lastSavedFileList = fileList;
+            }
+            catch
+            {
+                Console.WriteLine("saveMediaNamesToLocalJSON  has issues");
+            }
         }
 
         //Read local JSON file - if exist - if not return empty fileList
@@ -281,22 +287,28 @@ namespace InfoBoard.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
-
-            string fileName = "FileInformation.json";
-            string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
-
             List<FileInformation> fileList = null;
-            if (File.Exists(fullPathJsonFileName))
+            try
             {
-                string jsonString = File.ReadAllText(fullPathJsonFileName);
-                //Return - If all the pictures removed from the server but file exist in local directory
-                if (jsonString.Length < 10) 
-                    return null; 
+                string fileName = "FileInformation.json";
+                string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
 
-                fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
+                if (File.Exists(fullPathJsonFileName))
+                {
+                    string jsonString = File.ReadAllText(fullPathJsonFileName);
+                    //Return - If all the pictures removed from the server but file exist in local directory
+                    if (jsonString.Length < 10)
+                        return null;
+
+                    fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
+                }
+                //No need to read again
+                lastSavedFileList = fileList;
             }
-            //No need to read again
-            lastSavedFileList = fileList;
+            catch
+            {
+                Console.WriteLine("readMediaNamesFromLocalJSON  has issues");
+            }
             return fileList;
         }
     }
