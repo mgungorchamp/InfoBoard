@@ -13,10 +13,7 @@ namespace InfoBoard.Services
 {
     internal class FileDownloadService
     {
-        //private List<FileInformation> fileList = new List<FileInformation>();
-       
-        DeviceSettings deviceSettings;
-
+        //private List<FileInformation> fileList = new List<FileInformation>(); 
 
         //Getting files from internet 
         //TODO: This should be optimized

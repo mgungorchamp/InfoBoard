@@ -106,8 +106,8 @@ namespace InfoBoard.ViewModel
         List<FileInformation> fileList;
         public async void NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync()
         {
-            await fileDownloadService.synchroniseMediaFiles();
-            fileList = fileDownloadService.readMediaNamesFromLocalJSON();
+            fileList = await fileDownloadService.synchroniseMediaFiles();
+            //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {                
