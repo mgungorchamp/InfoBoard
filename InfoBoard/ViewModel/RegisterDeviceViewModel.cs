@@ -149,7 +149,7 @@ namespace InfoBoard.ViewModel
                 //imageViewModel.Navigation.PopAsync();
                
                 OnPropertyChanged(nameof(Status));
-                await Task.Delay(TimeSpan.FromSeconds(10));        
+                await Task.Delay(TimeSpan.FromSeconds(5));        
                
 
                 //change to ImageDisplayView               

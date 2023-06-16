@@ -109,6 +109,9 @@ namespace InfoBoard.ViewModel
             fileList = await fileDownloadService.synchroniseMediaFiles();
             //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
+            //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
+            await Task.Delay(TimeSpan.FromSeconds(10));
+
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {                
                 await Navigation.PopToRootAsync(true);                
