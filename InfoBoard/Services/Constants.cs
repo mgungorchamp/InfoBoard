@@ -1,4 +1,6 @@
-﻿namespace InfoBoard.Services
+﻿using System.Text.Json;
+
+namespace InfoBoard.Services
 {
     public static class Constants
     {
@@ -38,10 +40,15 @@
         public static string QR_IMAGE_NAME_4_TEMP_CODE = "qrCodeImageFile.png";
 
 
+        public static JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
 
 
-        // Random alphanumeric string to use as a security key for the handshake
-        public static void resetTemporaryCodeAndHandshakeURL()
+    // Random alphanumeric string to use as a security key for the handshake
+    public static void resetTemporaryCodeAndHandshakeURL()
         {
             Random random = new Random();
 

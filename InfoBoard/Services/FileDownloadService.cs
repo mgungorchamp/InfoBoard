@@ -62,10 +62,9 @@ namespace InfoBoard.Services
 
         private async Task<List<FileInformation>> downloadAllFilesFromServer() 
         {
-            List<FileInformation> fileList = null;
-
             //Get file names from the server - fileListFromServer
-            fileList = await getFileListFromServer();
+            RestService restService = new RestService();
+            List<FileInformation> fileList = await restService.retrieveFileList();            
 
             if (fileList != null)
             {
@@ -87,10 +86,10 @@ namespace InfoBoard.Services
             {
                 return await downloadAllFilesFromServer();                
             }
-
-            List<FileInformation> fileListFromServer = null;
+          
             //Get file names from the server - fileListFromServer
-            fileListFromServer = await getFileListFromServer();
+            RestService restService = new RestService();
+            List<FileInformation> fileListFromServer = await restService.retrieveFileList();
 
             //If fileListFromServer null just abort the operations, delete all the existing files
             //Since the device unregistered
@@ -235,21 +234,7 @@ namespace InfoBoard.Services
             //Save it to local folder
             File.Delete(localFullFileName);
         }
-
-        public async Task<List<FileInformation>> getFileListFromServer()
-        {
-      
-            RestService restService = new RestService();
-
-            var task = await restService.retrieveFileList();
-
-            //var task = restService.retrieveFileList();
-            //task.Wait();
-            //fileListFromServer = task.Result;
-            return task;
-            //FileList = await restService.RefreshDataAsync();
-        }        
-
+         
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
         private void saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
         {
@@ -274,7 +259,7 @@ namespace InfoBoard.Services
         }
 
         //Read local JSON file - if exist - if not return empty fileList
-        public List<FileInformation> readMediaNamesFromLocalJSON()
+        private List<FileInformation> readMediaNamesFromLocalJSON()
         {
             //No need to read from local file, if this saved recently 
             //If not contine to read from file.

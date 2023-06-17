@@ -33,15 +33,14 @@ namespace InfoBoard.ViewModel
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
         private RegisterDeviceViewModel() 
         {
-            counter = 1;
+            counter = 0;
             //Initial Code Generation t
             generateQrCode();
 
             OnRegenerateQrCodeCommand = new Command(
                execute: () =>
                {
-                   generateQrCode();
-                   //startRegistration();
+                   generateQrCode();                   
                });
 
             OnOpenRegisterDeviveWebPageCommand = new Command(
@@ -56,17 +55,7 @@ namespace InfoBoard.ViewModel
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
         }
-
-        public void startRegistration()
-        {
-            counter++;
-            //Task.Run(() => registerDeviceViaServer()).Wait();
-            registerDeviceViaServer();
-            //await Navigation.PushAsync(new RegisterView());
-            //TODO 
-            //Change the view to RegisterView 
-
-        }
+             
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -97,23 +86,26 @@ namespace InfoBoard.ViewModel
                     return;
                 _status = value;
                 OnPropertyChanged();
+                Task.Delay(TimeSpan.FromSeconds(3));
             }
         }
         private ImageViewModel imageViewModel;
 
-        public void startTimedRegisterationEvent(ImageViewModel imageViewModel)
+        public async void StartTimed4DeviceRegisterationEvent(ImageViewModel imageViewModel)
         {
             generateQrCode();
             this.imageViewModel = imageViewModel;
-            timer4Registration.Interval = TimeSpan.FromSeconds(10);
-            timer4Registration.Tick += (sender, e) => registerDeviceViaServer();
+            await StartTimer4DeviceRegistration();
+
+            timer4Registration.Interval = TimeSpan.FromSeconds(20);
+            timer4Registration.Tick += async (sender, e) => await StartTimer4DeviceRegistration();
             timer4Registration.Start();
 
             _status = "Registering device...";
             OnPropertyChanged();
         }      
 
-        private async void registerDeviceViaServer()
+        private async Task StartTimer4DeviceRegistration()
         {
             counter++;
             //aRegistrationTimer.Interval = counter * 10 * 1000;
@@ -126,43 +118,42 @@ namespace InfoBoard.ViewModel
             }
 
             _status = $"Registering Device: Attempt {counter}"; 
-            OnPropertyChanged(nameof(Status));
+            OnPropertyChanged(nameof(Status));            
 
             //Register Device
-            RegisterDevice register = new RegisterDevice();            
-            RegisterationResult registrationResult = await register.attemptToRegister();
+            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+            RegisterationResult registrationResult = await deviceSettingsService.RegisterDeviceViaServer();
             
             //Success - no error
-            if (registrationResult != null && registrationResult.error == null)
-            {           
-                timer4Registration.Stop();                
+            if (registrationResult != null)
+            {
+                //Registeration succesful - no error
+                if (registrationResult.error == null)
+                {
+                    timer4Registration.Stop();
+                    DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
+                    _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
+                    _status += "\nUpdating Media Files... going back to front page!";
 
-                DeviceSettingsService service = DeviceSettingsService.Instance;
-                DeviceSettings deviceSettings = service.readSettingsFromLocalJSON();
-                _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
-                _status += "\nUpdating Media Files... going back to image page!";
+                    OnPropertyChanged(nameof(Status));                   
 
-                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+                    //change to ImageDisplayView               
+                    imageViewModel.NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
+                    counter = 1;
+                    _status = "Welcome!";
 
-                //*aRegistrationTimer.Stop(); // Timer needs to be stopped after successful registration
-                //*aRegistrationTimer.Dispose();
-                //imageViewModel.Navigation.PopAsync();
-               
-                OnPropertyChanged(nameof(Status));
-                await Task.Delay(TimeSpan.FromSeconds(5));        
-               
-
-                //change to ImageDisplayView               
-                imageViewModel.NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
-                counter = 1;
-                _status = "Welcome!";
+                }
+                else // Registration failed - error returned
+                {
+                    _status = $"Attempting... {counter} \nServer says: {registrationResult.error.message}";
+                    OnPropertyChanged(nameof(Status));
+                }               
             }
-            else if (registrationResult != null && registrationResult.error != null)
+            else
             {                
-                _status = $"Registration Failed. \nError: {registrationResult?.error.message} \nAttempt {counter}";  
+                _status = $"Something strange ocurrred... Please restart your device{counter}";  
                 OnPropertyChanged(nameof(Status));
-            }          
-     
+            }         
         }
 
         private void generateQrCode()

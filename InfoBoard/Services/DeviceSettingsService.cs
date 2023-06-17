@@ -7,6 +7,7 @@ namespace InfoBoard.Services
     public sealed class DeviceSettingsService
     {
         private static readonly DeviceSettingsService instance = new DeviceSettingsService();
+      
         static DeviceSettingsService()
         {
         }
@@ -17,75 +18,91 @@ namespace InfoBoard.Services
             get {
                 return instance;
             }
-        }    
-
+        }
+ 
         //If not registered, it tries to register if registered reads 
         public async Task<DeviceSettings> loadDeviceSettings()
         {
-            DeviceSettings deviceSettings = readSettingsFromLocalJSON();
+            DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
 
-            //Check for updates
-            if (deviceSettings != null)
-            {                       
-                //Get Device settings
-                deviceSettings = await retrieveDeviceSettingsFromServer(deviceSettings.device_key);
-                saveSettingsToLocalAsJSON(deviceSettings);
-            }
-
-            //This is needed here - if read from local file - it will not have the correct url or retrieved from web           
-            if (deviceSettings != null)
+            //Not registered yet - register via web
+            if (localDeviceSettings == null)
             {
-                Constants.updateMediaFilesUrl(deviceSettings.device_key);
-            }
-            return deviceSettings;
+                //This is done by the RegisterDeviceViewModel
+                return null;    
+            }                
+            else //Already registered - update settings from web
+            {
+                //Get Device settings
+                RestService restService = new RestService();
+                DeviceSettings updatedDeviceSettings = await restService.retrieveDeviceSettings(localDeviceSettings.device_key);
+                if (updatedDeviceSettings != null && updatedDeviceSettings.error == null)
+                {
+                    await saveSettingsToLocalAsJSON(updatedDeviceSettings);                    
+                }
+                else if (updatedDeviceSettings == null)
+                {
+                    // Device removed from server - unregister device
+                    await resetLocalSettingsFile();
+                }
+                
+            }            
+            return await readSettingsFromLocalJSON();
         }
 
-        // HANDSHAKE - Register device and get settings
-        // If already registered then just get settings
-        public async Task<DeviceSettings> retrieveDeviceSettingsFromServer(string device_key)
-        {     
+        public async Task<RegisterationResult> RegisterDeviceViaServer()
+        {
+            //First time registration
             RestService restService = new RestService();
-            var task = restService.retrieveDeviceSettings(device_key);        
-            DeviceSettings retrievedDeviceSettings = await task;          
-            return retrievedDeviceSettings;
+            RegisterationResult registrationResult = await restService.registerDevice();
+
+            //We get a response from server
+            if (registrationResult != null)                
+            {
+                //Registeration succesful - no error
+                if (registrationResult.error == null)
+                {
+                    //Registeration succesful and request full settings and save it to local settings
+                    DeviceSettings deviceSettings = await restService.retrieveDeviceSettings(registrationResult.device_key);                                     
+                    await saveSettingsToLocalAsJSON(deviceSettings);                    
+                }
+                else // Registration failed - error returned
+                {
+                    //TODO : Handle error here
+                    //if we empty the device_key in local settings, it will try to register again
+                    await resetLocalSettingsFile();
+                }
+            }
+            return registrationResult;
         }
 
-        
-
-        //Read local JSON file - if exist - if not return empty DeviceSettings
-        public DeviceSettings readSettingsFromLocalJSON()
+        //Read local JSON file - if exist - if not return NULL 
+        private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
             string fileName = "DeviceSettings.json";
             string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
             if (File.Exists(fullPathJsonFileName))
             {
-
-                string jsonString = File.ReadAllText(fullPathJsonFileName);
-                if(jsonString.Length < 10)
+                string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
+                if (jsonString.Length < 10)
                 {
                     return null;
-                }
-               
-                JsonSerializerOptions _serializerOptions;
-                _serializerOptions = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = true
-                };
+                }                
 
-                DeviceSettings tempDeviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+                DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
                 
-                if (tempDeviceSettings?.device_key == null) 
+                if (deviceSettings?.device_key == null) 
                 {
                     return null;
                 }
-
-                return tempDeviceSettings;
+                //To update the media files url
+                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+                return deviceSettings;
             }
             return null;
         }
 
-        public void saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
+        private async Task saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
@@ -95,15 +112,45 @@ namespace InfoBoard.Services
             };
             try
             {
+                //To update the media files url
+                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+
                 string fileName = "DeviceSettings.json";
                 string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-                File.WriteAllText(fullPathFileName, jsonString);
+                
+                await File.WriteAllTextAsync(fullPathFileName, jsonString);                
 
             } catch (Exception ex) 
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues");
             }
         }
+        
+        private async Task resetLocalSettingsFile()
+        {
+            JsonSerializerOptions _serializerOptions;
+            _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            try
+            {
+                //To update the media files url
+                Constants.updateMediaFilesUrl("UNREGISTERED");
+
+                string fileName = "DeviceSettings.json";
+                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string jsonString = "RESETED";
+                await File.WriteAllTextAsync(fullPathFileName, jsonString);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues");
+            }
+        }
+
     }
 }

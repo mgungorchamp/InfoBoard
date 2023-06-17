@@ -67,25 +67,33 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Stop();
             timer4FileSync.Stop();
 
-            await UpdateDeviceSettings();
-            StartTimer4DeviceSettings();
+            deviceSettings = await UpdateDeviceSettingsEventAsync();           
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
+                timer4DeviceSettingsSync.Stop();
                 NavigateToRegisterViewAndStartTimer4RegisteringDevice();
             }
-            else
+            else//Registered device - start timer for image display and file/settings sync
             {
+                StartTimer4DeviceSettings();
                 NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
             }
         }
 
+        private async Task<DeviceSettings> UpdateDeviceSettingsEventAsync()
+        {
+            //Load Device Settings
+            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+            deviceSettings = await deviceSettingsService.loadDeviceSettings();
+            return deviceSettings;
+        }
         public void StartTimer4DeviceSettings()
         {            
-            //Set up the timer for Display Image
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(7);
-            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettings();
+            //Get latest settings from server - every 15 seconds
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
+            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             timer4DeviceSettingsSync.Start();
         }
 
@@ -97,7 +105,7 @@ namespace InfoBoard.ViewModel
             });
             RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
             //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
-            registerDeviceViewModel.startTimedRegisterationEvent(this);
+            registerDeviceViewModel.StartTimed4DeviceRegisterationEvent(this);
 
             //Load Device Settings - Singleton - it works for all
             //UpdateDeviceSettings();
@@ -117,10 +125,10 @@ namespace InfoBoard.ViewModel
                 await Navigation.PopToRootAsync(true);                
             });           
 
-            DisplayImage();
+            DisplayImageEvent();
             //Set up the timer for Display Image
             timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
-            timer4DisplayImage.Tick += (sender, e) => DisplayImage();
+            timer4DisplayImage.Tick += (sender, e) => DisplayImageEvent();
             timer4DisplayImage.Start();
 
             //Set up the timer for Syncronise Media Files             
@@ -131,7 +139,7 @@ namespace InfoBoard.ViewModel
         }
          
 
-        private void DisplayImage()//(object sender, EventArgs e)
+        private void DisplayImageEvent()//(object sender, EventArgs e)
         {
             _imageSource = getRandomImageName();
             OnPropertyChanged(nameof(ImageSource));
@@ -143,12 +151,7 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        private async Task UpdateDeviceSettings()
-        {
-            //Load Device Settings
-            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
-            deviceSettings = await deviceSettingsService.loadDeviceSettings();
-        }
+  
 
         private static Random random = new Random();
         private string getRandomImageName()
@@ -159,7 +162,6 @@ namespace InfoBoard.ViewModel
             //No files to show
             if ( fileList == null || fileList.Count == 0)
             {                
-                //timer4ImageShow.Stop();
                 return "uploadimage.png";
             }
 
