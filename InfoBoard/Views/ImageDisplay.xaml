@@ -2,13 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
-             x:Class="InfoBoard.Views.ImageDisplay">
+             x:Class="InfoBoard.Views.ImageDisplay"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
             
     <!--<ContentPage.BindingContext>
         <viewmodel:ImageViewModel/>
     </ContentPage.BindingContext>-->
     
     <VerticalStackLayout>
+        <!--<toolkit:MediaElement 
+            x:Name="mediaElement"                    
+            Source="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            ShouldAutoPlay="True"
+            ShouldShowPlaybackControls="True" />-->        
         <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"            
@@ -18,6 +24,7 @@
             Text="{Binding ImageSource}"
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
+        
         
     </VerticalStackLayout>
 </ContentPage>

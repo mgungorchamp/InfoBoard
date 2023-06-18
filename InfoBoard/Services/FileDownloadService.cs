@@ -43,14 +43,20 @@ namespace InfoBoard.Services
         {
             List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
 
-            //Case 1: First time dowloading all the files 
-            //If the local JSON file does not exist fileList will be null
-            //Then dowload all media files to local directory 
-            //And save the JSON file to local directory
-            
+            //No internet - return existing files
+            if (!UtilityServices.isInternetAvailable())
+            {
+                return fileListFromLocal;
+            }
+
             if (fileListFromLocal == null)
             {
-               return await downloadAllFilesFromServer();
+
+                //Case 1: First time dowloading all the files 
+                //If the local JSON file does not exist fileList will be null
+                //Then dowload all media files to local directory 
+                //And save the JSON file to local directory
+                return await downloadAllFilesFromServer();
             }
             else
             {

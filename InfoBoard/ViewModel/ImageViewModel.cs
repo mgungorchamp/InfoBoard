@@ -1,4 +1,5 @@
-﻿using InfoBoard.Models;
+﻿using CommunityToolkit.Maui.Views;
+using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
 using System.ComponentModel;

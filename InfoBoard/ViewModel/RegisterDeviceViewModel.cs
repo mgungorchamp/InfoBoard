@@ -5,6 +5,7 @@ using QRCoder;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using InfoBoard.Models;
+using CommunityToolkit.Maui.Alerts;
 
 namespace InfoBoard.ViewModel
 {
@@ -134,6 +135,10 @@ namespace InfoBoard.ViewModel
                     DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
                     _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
                     _status += "\nUpdating Media Files... going back to front page!";
+
+                    //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
+                    var toast = Toast.Make("Updating Media Files... going back to front page!");
+                    await toast.Show();
 
                     OnPropertyChanged(nameof(Status));                   
 

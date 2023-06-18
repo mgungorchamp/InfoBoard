@@ -25,13 +25,15 @@ namespace InfoBoard.Services
         {
             DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
 
-            //Not registered yet - register via web
-            if (localDeviceSettings == null)
+            //No internet - return existing settings
+            if (!UtilityServices.isInternetAvailable())
             {
-                //This is done by the RegisterDeviceViewModel
-                return null;    
-            }                
-            else //Already registered - update settings from web
+                return localDeviceSettings;
+            }
+
+            //Already registered - update settings from web
+            //If localDeviceSettings is null. Not registered yet - registering device will be done by GoTime
+            if (localDeviceSettings != null)
             {
                 //Get Device settings
                 RestService restService = new RestService();
@@ -46,7 +48,8 @@ namespace InfoBoard.Services
                     await resetLocalSettingsFile();
                 }
                 
-            }            
+            }
+            
             return await readSettingsFromLocalJSON();
         }
 
