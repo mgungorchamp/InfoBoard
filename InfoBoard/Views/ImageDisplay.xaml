@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
              x:Class="InfoBoard.Views.ImageDisplay"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="Black">
             
     <!--<ContentPage.BindingContext>
         <viewmodel:ImageViewModel/>
@@ -18,14 +19,13 @@
         <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"            
-            Source="{Binding ImageSource}">            
+            Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
         </Image>
         <Label 
             Text="{Binding ImageSource}"
+            TextColor="Grey"            
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
-        
-        
     </VerticalStackLayout>
 </ContentPage>
 
