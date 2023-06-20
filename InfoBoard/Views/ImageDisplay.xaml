@@ -15,17 +15,31 @@
             x:Name="mediaElement"                    
             Source="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             ShouldAutoPlay="True"
-            ShouldShowPlaybackControls="True" />-->        
+            ShouldShowPlaybackControls="True" /
+        Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
+        >-->        
         <Image 
             x:Name="mainPageImage"
-            Aspect="AspectFit"            
-            Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
+            Aspect="AspectFit"
+            Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">
         </Image>
+        
         <Label 
             Text="{Binding ImageSource}"
             TextColor="Grey"            
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
+
+        <Image  x:Name="mainPageImage2"
+            Aspect="AspectFit" >
+            <Image.Source>
+                <FileImageSource File="{Binding ImageSource}" />
+            </Image.Source>
+            
+
+        </Image>
+        
+      
     </VerticalStackLayout>
 </ContentPage>
 

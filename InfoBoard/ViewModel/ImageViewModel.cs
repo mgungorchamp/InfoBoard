@@ -33,7 +33,7 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public TimeSpan Interval {
+        public TimeSpan CachingTime {
             get => _cachingInterval;
             set {
                 if (_cachingInterval == value)
@@ -44,26 +44,66 @@ namespace InfoBoard.ViewModel
         }
 
         DeviceSettings deviceSettings;
-        
-        public ImageViewModel(INavigation navigation)
+
+        public INavigation NNavigation {
+            get => Navigation;
+            set {
+                if (Navigation == value)
+                    return;
+                Navigation = value;
+            }
+        }
+        public ImageViewModel()
         {
-            this.Navigation = navigation;           
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-
-           
-            timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
-            timer4FileSync = Application.Current.Dispatcher.CreateTimer();
-            timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
-           
-            GoTime();
         }
 
-       
-        //[UnsupportedOSPlatform("iOS")]
-        private async void GoTime() 
+
+
+        //public ImageViewModel(INavigation navigation)
+        //{
+        //    this.Navigation = navigation;           
+        //    fileDownloadService = new FileDownloadService();
+        //    _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
+        //    _refreshInMiliSecond = 3000;
+
+           
+        //    timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
+        //    timer4FileSync = Application.Current.Dispatcher.CreateTimer();
+        //    timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
+           
+        //    //GoTime();
+        //}
+
+        public async Task GoTimeNow()
         {
+            if (Application.Current == null) 
+            { 
+                return;
+            }
+            timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
+            timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
+            timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
+
+            await GoTime();
+        }
+
+        public void StopTimeNow()
+        {
+            timer4DisplayImage.Stop();
+            timer4FileSync.Stop();
+            timer4DeviceSettingsSync.Stop();            
+        }
+
+
+
+        //[UnsupportedOSPlatform("iOS")]
+        private async Task GoTime() 
+        {
+            
+
             //Stop timer - if running
             timer4DisplayImage.Stop();
             timer4FileSync.Stop();
@@ -120,16 +160,12 @@ namespace InfoBoard.ViewModel
 
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
             //await Task.Delay(TimeSpan.FromSeconds(10));
+                 
 
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {                
-                await Navigation.PopToRootAsync(true);                
-            });           
-
-            DisplayImageEvent();
+            await DisplayImageEvent();
             //Set up the timer for Display Image
             timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
-            timer4DisplayImage.Tick += (sender, e) => DisplayImageEvent();
+            timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
             timer4DisplayImage.Start();
 
             //Set up the timer for Syncronise Media Files             
@@ -137,18 +173,23 @@ namespace InfoBoard.ViewModel
             timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
             //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
             timer4FileSync.Start();
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Navigation.PopToRootAsync(true);
+            });
         }
          
 
-        private void DisplayImageEvent()//(object sender, EventArgs e)
+        private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
-            _imageSource = getRandomImageName();
+            _imageSource = getRandomImageName();            
             OnPropertyChanged(nameof(ImageSource));
             
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null) 
             {
-                GoTime();
+                await GoTime();
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using InfoBoard.ViewModel;
+using InfoBoard.Views;
 using Microsoft.Extensions.Logging;
 
 namespace InfoBoard;
@@ -19,15 +21,26 @@ public static class MauiProgram
             .UseMauiApp<App>()
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
             .UseMauiCommunityToolkit()
-            .UseMauiCommunityToolkitMediaElement()
+            .UseMauiCommunityToolkitMediaElement() // https://devblogs.microsoft.com/dotnet/announcing-dotnet-maui-communitytoolkit-mediaelement/
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+        
+        builder.Services.AddSingleton<ImageDisplay>();
+        builder.Services.AddSingleton<ImageViewModel>();
+
+
+//#if DEBUG
+//        builder.Logging.AddDebug();
+//#endif
 
 #if DEBUG
-        builder.Logging.AddDebug();
+        builder.Services.AddLogging(configure =>
+        {
+            configure.AddDebug();
+        });
 #endif
 
         return builder.Build();
