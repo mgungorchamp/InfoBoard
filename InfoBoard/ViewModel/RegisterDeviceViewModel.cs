@@ -131,7 +131,9 @@ namespace InfoBoard.ViewModel
                 //Registeration succesful - no error
                 if (registrationResult.error == null)
                 {
+                    timer4Registration.IsRepeating = false;
                     timer4Registration.Stop();
+
                     DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
                     _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
                     _status += "\nUpdating Media Files... going back to front page!";

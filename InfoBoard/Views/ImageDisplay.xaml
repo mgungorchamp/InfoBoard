@@ -30,14 +30,12 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
 
-        <Image  x:Name="mainPageImage2"
+        <!--<Image  x:Name="mainPageImage2"
             Aspect="AspectFit" >
             <Image.Source>
                 <FileImageSource File="{Binding ImageSource}" />
             </Image.Source>
-            
-
-        </Image>
+        </Image>-->
         
       
     </VerticalStackLayout>

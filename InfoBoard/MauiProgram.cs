@@ -28,8 +28,8 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
         
-        builder.Services.AddSingleton<ImageDisplay>();
-        builder.Services.AddSingleton<ImageViewModel>();
+        //builder.Services.AddSingleton<ImageDisplay>();
+        //builder.Services.AddTransient<ImageViewModel>();
 
 
 //#if DEBUG

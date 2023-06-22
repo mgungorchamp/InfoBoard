@@ -19,7 +19,7 @@ namespace InfoBoard.ViewModel
         private string _imageSource;
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
-        public INavigation Navigation;
+        public INavigation _navigation;
 
         private FileDownloadService fileDownloadService;
         
@@ -45,12 +45,12 @@ namespace InfoBoard.ViewModel
 
         DeviceSettings deviceSettings;
 
-        public INavigation NNavigation {
-            get => Navigation;
+        public INavigation NavigationSet {
+            get => _navigation;
             set {
-                if (Navigation == value)
+                if (_navigation == value)
                     return;
-                Navigation = value;
+                _navigation = value;
             }
         }
         public ImageViewModel()
@@ -92,18 +92,20 @@ namespace InfoBoard.ViewModel
 
         public void StopTimeNow()
         {
+            timer4DisplayImage.IsRepeating = false;
             timer4DisplayImage.Stop();
-            timer4FileSync.Stop();
-            timer4DeviceSettingsSync.Stop();            
+
+            timer4FileSync.IsRepeating = false;
+            timer4FileSync.Stop();            
+
+            timer4DeviceSettingsSync.IsRepeating = false;
+            timer4DeviceSettingsSync.Stop();
+            
         }
-
-
 
         //[UnsupportedOSPlatform("iOS")]
         private async Task GoTime() 
         {
-            
-
             //Stop timer - if running
             timer4DisplayImage.Stop();
             timer4FileSync.Stop();
@@ -136,13 +138,15 @@ namespace InfoBoard.ViewModel
             timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             timer4DeviceSettingsSync.Start();
+
+            
         }
 
         public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Navigation.PushAsync(new RegisterView(), true);               
+                await _navigation.PushAsync(new RegisterView(), true);               
             });
             RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
             //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
@@ -176,7 +180,7 @@ namespace InfoBoard.ViewModel
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Navigation.PopToRootAsync(true);
+                await _navigation.PopToRootAsync(true);
             });
         }
          
