@@ -87,7 +87,7 @@ namespace InfoBoard.ViewModel
                     return;
                 _status = value;
                 OnPropertyChanged();
-                Task.Delay(TimeSpan.FromSeconds(3));
+                Task.Delay(TimeSpan.FromSeconds(2));
             }
         }
         private ImageViewModel imageViewModel;
@@ -100,6 +100,7 @@ namespace InfoBoard.ViewModel
 
             timer4Registration.Interval = TimeSpan.FromSeconds(20);
             timer4Registration.Tick += async (sender, e) => await StartTimer4DeviceRegistration();
+            timer4Registration.IsRepeating = true;
             timer4Registration.Start();
 
             _status = "Registering device...";
@@ -142,10 +143,11 @@ namespace InfoBoard.ViewModel
                     var toast = Toast.Make("Updating Media Files... going back to front page!");
                     await toast.Show();
 
-                    OnPropertyChanged(nameof(Status));                   
+                    OnPropertyChanged(nameof(Status));
 
+                    await Task.Delay(TimeSpan.FromSeconds(7));
                     //change to ImageDisplayView               
-                    imageViewModel.NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
+                    await imageViewModel.GoTimeNow();
                     counter = 1;
                     _status = "Welcome!";
 

@@ -56,7 +56,7 @@ public partial class App : Application
             
             Debug.WriteLine($"\n\t**window.Page.Id: {window.Page.Id}");
             Debug.WriteLine($"\n\t**MainPage.Id: {MainPage.Id}");
-
+            Debug.WriteLine($"Creating....");
             MainPage = new NavigationPage(root: new ImageDisplay());
             Debug.WriteLine($"Created:\n\twindow.Id: {window.Id} \n\t App.Current.Id:{App.Current.Id} \n\tMainPage.Id: {MainPage.Id}");
             
@@ -64,11 +64,10 @@ public partial class App : Application
         };
         
         window.Resumed += (s, e) =>
-        {            
+        {
             // Custom logic
             //var toast = Toast.Make($"OnResumed!");
-            //toast.Show();
-            
+            //toast.Show();            
             Debug.WriteLine($"OnResumed:\n\twindow.Id: {window.Id} \n\t App.Current.Id:{App.Current.Id} \n\tMainPage.Id: {MainPage.Id}");
         };
         

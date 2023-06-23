@@ -58,6 +58,11 @@ namespace InfoBoard.ViewModel
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
+
+
+            timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
+            timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
+            timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
         }
 
 
@@ -79,13 +84,19 @@ namespace InfoBoard.ViewModel
 
         public async Task GoTimeNow()
         {
-            if (Application.Current == null) 
-            { 
-                return;
-            }
-            timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
-            timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
-            timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
+            //if (Application.Current == null) 
+            //{ 
+            //    return;
+            //}
+            
+            ////if(timer4DisplayImage != null )
+            //    timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
+            
+            ////if (timer4FileSync != null)
+            //    timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
+            
+            ////if (timer4DeviceSettingsSync != null)
+            //    timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
 
             await GoTime();
         }
@@ -103,25 +114,36 @@ namespace InfoBoard.ViewModel
             
         }
 
+        public void StartTimeNow()
+        {
+            timer4DisplayImage.IsRepeating = true;
+            timer4DisplayImage.Start();
+
+            timer4FileSync.IsRepeating = true;
+            timer4FileSync.Start();
+
+            timer4DeviceSettingsSync.IsRepeating = true;
+            timer4DeviceSettingsSync.Start();
+
+        }
+
         //[UnsupportedOSPlatform("iOS")]
         private async Task GoTime() 
         {
             //Stop timer - if running
-            timer4DisplayImage.Stop();
-            timer4FileSync.Stop();
+            StopTimeNow();
 
             deviceSettings = await UpdateDeviceSettingsEventAsync();           
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                timer4DeviceSettingsSync.Stop();
+                //timer4DeviceSettingsSync.Stop();
                 NavigateToRegisterViewAndStartTimer4RegisteringDevice();
             }
             else//Registered device - start timer for image display and file/settings sync
             {
-                StartTimer4DeviceSettings();
-                NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync();
+                NavigateToMainViewAndStartTimers();              
             }
         }
 
@@ -131,16 +153,7 @@ namespace InfoBoard.ViewModel
             DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
             deviceSettings = await deviceSettingsService.loadDeviceSettings();
             return deviceSettings;
-        }
-        public void StartTimer4DeviceSettings()
-        {            
-            //Get latest settings from server - every 15 seconds
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
-            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
-            timer4DeviceSettingsSync.Start();
-
-            
-        }
+        } 
 
         public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
         {
@@ -157,8 +170,9 @@ namespace InfoBoard.ViewModel
         }
 
         List<FileInformation> fileList;
-        public async void NavigateToMainViewAndStartTimer4ImageDisplayAnd4FileSync()
+        private async void NavigateToMainViewAndStartTimers()
         {
+
             fileList = await fileDownloadService.synchroniseMediaFiles();
             //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
@@ -168,35 +182,52 @@ namespace InfoBoard.ViewModel
 
             await DisplayImageEvent();
             //Set up the timer for Display Image
-            timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
+            timer4DisplayImage.Interval = TimeSpan.FromSeconds(7);
             timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
-            timer4DisplayImage.Start();
+            
 
             //Set up the timer for Syncronise Media Files             
-            timer4FileSync.Interval = TimeSpan.FromSeconds(15);
+            timer4FileSync.Interval = TimeSpan.FromSeconds(60);
             timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
             //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
-            timer4FileSync.Start();
+           
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await _navigation.PopToRootAsync(true);
             });
+
+            //StartTimer4DeviceSettings
+            //Get latest settings from server - every 15 seconds
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(30);
+            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
+            
+            StartTimeNow();
         }
-         
+
 
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
-            _imageSource = getRandomImageName();            
+            _imageSource = getRandomImageName();
             OnPropertyChanged(nameof(ImageSource));
-            
+
             //No settings found - register device and update deviceSettings
-            if (deviceSettings == null) 
+            if (deviceSettings == null)
             {
                 await GoTime();
             }
+            //If internet is not available stop file syncronisation
+            if (!UtilityServices.isInternetAvailable())
+            {
+                timer4FileSync.IsRepeating = false;
+                timer4FileSync.Stop();
+            }
+            else if (!timer4FileSync.IsRunning)
+            {
+                timer4FileSync.IsRepeating = true;
+                timer4FileSync.Start();
+            }
         }
-
   
 
         private static Random random = new Random();

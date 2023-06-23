@@ -66,7 +66,7 @@ public partial class ImageDisplay : ContentPage
 
         var toast = Toast.Make($"OnAppearing!");
         await toast.Show();
-       
+        
         Debug.WriteLine($"OnAppearing:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);

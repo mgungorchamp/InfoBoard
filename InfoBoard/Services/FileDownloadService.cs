@@ -41,7 +41,7 @@ namespace InfoBoard.Services
 
         public async Task<List<FileInformation>> synchroniseMediaFiles()
         {
-            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
+            List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
 
             //No internet - return existing files
             if (!UtilityServices.isInternetAvailable())
@@ -77,7 +77,7 @@ namespace InfoBoard.Services
                 //Save those files to local directory
                 await downloadFilesToLocalDirectory(fileList);
                 //Save media file names (as JSON) to local folder 
-                saveMediaNamesToLocalJSON(fileList);
+                await saveMediaNamesToLocalJSON(fileList);
                
             }
             return fileList;
@@ -87,7 +87,7 @@ namespace InfoBoard.Services
         {
 
             //If any of the local files missing - corrupted - try downloading all files
-            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJsonCheckDiscrepancy();            
+            List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJsonCheckDiscrepancy();            
             if (fileListFromLocal == null)
             {
                 return await downloadAllFilesFromServer();                
@@ -109,7 +109,7 @@ namespace InfoBoard.Services
                     }
                     //EMPTY the local file list 
                     List<FileInformation> fileList = new List<FileInformation>();
-                    saveMediaNamesToLocalJSON(fileList);
+                    await saveMediaNamesToLocalJSON(fileList);
                     return null; // NULL 
                 }                
             }
@@ -142,7 +142,7 @@ namespace InfoBoard.Services
             //First update the local JSON before deleting 
             //Any - true if the source sequence contains any elements; otherwise, false.
             if (missingLocalFiles.Any() || filesDeletedFromServer.Any())
-                saveMediaNamesToLocalJSON(fileListFromServer);
+                await saveMediaNamesToLocalJSON(fileListFromServer);
 
             //Now we can delete - since if JSON is not updated - it will try to view deleted file 
             //Delete after updating JSON
@@ -151,13 +151,13 @@ namespace InfoBoard.Services
                 deleteLocalFile(file);
             }
 
-            return readMediaNamesFromLocalJSON();
+            return await readMediaNamesFromLocalJSON();
         }
 
 
-        private List<FileInformation> readMediaNamesFromLocalJsonCheckDiscrepancy()
+        private async Task<List<FileInformation>> readMediaNamesFromLocalJsonCheckDiscrepancy()
         {
-            List<FileInformation> fileListFromLocal = readMediaNamesFromLocalJSON();
+            List<FileInformation> fileListFromLocal =  await readMediaNamesFromLocalJSON();
             // check if any of the local files missing - corrupted - return null
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.AppDataDirectory;
@@ -203,7 +203,7 @@ namespace InfoBoard.Services
                 }
             } 
             catch {
-                Console.WriteLine("Done: Download Exception");
+                Console.WriteLine("downloadFilesToLocalDirectory Done: Download Exception: MURAT");
             }
 
         }
@@ -229,7 +229,7 @@ namespace InfoBoard.Services
                 await File.WriteAllBytesAsync(localFullFileName, fileContent);
             }catch 
             {
-                Console.WriteLine("downloadFileToLocalDirectory  has issues");
+                Console.WriteLine("downloadFileToLocalDirectory  has issues MURAT");
             }
         }
 
@@ -242,7 +242,7 @@ namespace InfoBoard.Services
         }
          
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
-        private void saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
+        private async Task saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
@@ -255,17 +255,17 @@ namespace InfoBoard.Services
                 string fileName = "FileInformation.json";
                 string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
                 string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);
-                File.WriteAllText(fullPathFileName, jsonString);
+                await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 lastSavedFileList = fileList;
             }
             catch
             {
-                Console.WriteLine("saveMediaNamesToLocalJSON  has issues");
+                Console.WriteLine("saveMediaNamesToLocalJSON  has issues MURAT");
             }
         }
 
         //Read local JSON file - if exist - if not return empty fileList
-        private List<FileInformation> readMediaNamesFromLocalJSON()
+        private async Task<List<FileInformation>> readMediaNamesFromLocalJSON()
         {
             //No need to read from local file, if this saved recently 
             //If not contine to read from file.
@@ -286,7 +286,7 @@ namespace InfoBoard.Services
 
                 if (File.Exists(fullPathJsonFileName))
                 {
-                    string jsonString = File.ReadAllText(fullPathJsonFileName);
+                    string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
                     //Return - If all the pictures removed from the server but file exist in local directory
                     if (jsonString.Length < 10)
                         return null;
@@ -298,7 +298,7 @@ namespace InfoBoard.Services
             }
             catch
             {
-                Console.WriteLine("readMediaNamesFromLocalJSON  has issues");
+                Console.WriteLine("readMediaNamesFromLocalJSON  has issues MURAT");
             }
             return fileList;
         }

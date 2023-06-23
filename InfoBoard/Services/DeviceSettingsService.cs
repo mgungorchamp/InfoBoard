@@ -1,4 +1,5 @@
-﻿ using System.Text.Json; 
+﻿using System.Diagnostics;
+using System.Text.Json; 
 using InfoBoard.Models;
  
 
@@ -28,6 +29,7 @@ namespace InfoBoard.Services
             //No internet - return existing settings
             if (!UtilityServices.isInternetAvailable())
             {
+                Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");  
                 return localDeviceSettings;
             }
 
@@ -45,11 +47,12 @@ namespace InfoBoard.Services
                 else if (updatedDeviceSettings == null)
                 {
                     // Device removed from server - unregister device
+                    Debug.WriteLine("Device removed from server - unregister device");
                     await resetLocalSettingsFile();
                 }
                 
             }
-            
+            await Task.Delay(TimeSpan.FromSeconds(3));
             return await readSettingsFromLocalJSON();
         }
 
@@ -82,25 +85,33 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
-            string fileName = "DeviceSettings.json";
-            string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
-            if (File.Exists(fullPathJsonFileName))
+            try
             {
-                string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
-                if (jsonString.Length < 10)
-                {
-                    return null;
-                }                
+                string fileName = "DeviceSettings.json";
+                string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                if (File.Exists(fullPathJsonFileName))
+                {                    
+                    string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
+                    if (jsonString.Length < 10)
+                    {
+                        return null;
+                    }
 
-                DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
-                
-                if (deviceSettings?.device_key == null) 
-                {
-                    return null;
+                    DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+
+                    //To update the media files url
+                    Constants.updateMediaFilesUrl(deviceSettings.device_key);
+
+                    if (deviceSettings?.device_key == null)
+                    {
+                        return null;
+                    }
+                    
+                    return deviceSettings;
                 }
-                //To update the media files url
-                Constants.updateMediaFilesUrl(deviceSettings.device_key);
-                return deviceSettings;
+            } 
+            catch(Exception ex) {
+                Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
             }
             return null;
         }
@@ -122,11 +133,13 @@ namespace InfoBoard.Services
                 string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
                 
-                await File.WriteAllTextAsync(fullPathFileName, jsonString);                
+                await File.WriteAllTextAsync(fullPathFileName, jsonString);
+
+                await Task.Delay(TimeSpan.FromSeconds(2));
 
             } catch (Exception ex) 
             {
-                Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues");
+                Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
             }
         }
         
@@ -148,10 +161,12 @@ namespace InfoBoard.Services
                 string jsonString = "RESETED";
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
+                await Task.Delay(TimeSpan.FromSeconds(3));
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues");
+                Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
             }
         }
 
