@@ -145,7 +145,7 @@ namespace InfoBoard.ViewModel
 
                     OnPropertyChanged(nameof(Status));
 
-                    await Task.Delay(TimeSpan.FromSeconds(7));
+                    //await Task.Delay(TimeSpan.FromSeconds(7));
                     //change to ImageDisplayView               
                     await imageViewModel.GoTimeNow();
                     counter = 1;

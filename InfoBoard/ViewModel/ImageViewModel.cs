@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Maui.Views;
-using InfoBoard.Models;
+﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 
@@ -101,37 +101,46 @@ namespace InfoBoard.ViewModel
             await GoTime();
         }
 
-        public void StopTimeNow()
+        public void StopTimerNow()
         {
             timer4DisplayImage.IsRepeating = false;
             timer4DisplayImage.Stop();
 
-            timer4FileSync.IsRepeating = false;
-            timer4FileSync.Stop();            
-
-            timer4DeviceSettingsSync.IsRepeating = false;
-            timer4DeviceSettingsSync.Stop();
-            
+            StopTimer4FilesAndDeviceSettings();
         }
-
-        public void StartTimeNow()
+        public void StartTimerNow()
         {
             timer4DisplayImage.IsRepeating = true;
             timer4DisplayImage.Start();
 
+            StartTimer4FilesAndDeviceSettings();
+        }
+
+        private void StopTimer4FilesAndDeviceSettings() 
+        {
+            timer4FileSync.IsRepeating = false;
+            timer4FileSync.Stop();
+
+            timer4DeviceSettingsSync.IsRepeating = false;
+            timer4DeviceSettingsSync.Stop();
+        }
+
+        private void StartTimer4FilesAndDeviceSettings()
+        {
             timer4FileSync.IsRepeating = true;
             timer4FileSync.Start();
 
             timer4DeviceSettingsSync.IsRepeating = true;
             timer4DeviceSettingsSync.Start();
-
         }
+
 
         //[UnsupportedOSPlatform("iOS")]
         private async Task GoTime() 
         {
+            Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
             //Stop timer - if running
-            StopTimeNow();
+            StopTimerNow();
 
             deviceSettings = await UpdateDeviceSettingsEventAsync();           
 
@@ -182,7 +191,7 @@ namespace InfoBoard.ViewModel
 
             await DisplayImageEvent();
             //Set up the timer for Display Image
-            timer4DisplayImage.Interval = TimeSpan.FromSeconds(7);
+            timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
             timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
             
 
@@ -202,7 +211,7 @@ namespace InfoBoard.ViewModel
             timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(30);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             
-            StartTimeNow();
+            StartTimerNow();
         }
 
 
@@ -215,17 +224,16 @@ namespace InfoBoard.ViewModel
             if (deviceSettings == null)
             {
                 await GoTime();
+                return;
             }
             //If internet is not available stop file syncronisation
-            if (!UtilityServices.isInternetAvailable())
+            if (!UtilityServices.isInternetAvailable() && timer4FileSync.IsRunning)
             {
-                timer4FileSync.IsRepeating = false;
-                timer4FileSync.Stop();
+                StopTimer4FilesAndDeviceSettings();  
             }
-            else if (!timer4FileSync.IsRunning)
+            else if (UtilityServices.isInternetAvailable() && !timer4FileSync.IsRunning)
             {
-                timer4FileSync.IsRepeating = true;
-                timer4FileSync.Start();
+                StartTimer4FilesAndDeviceSettings();
             }
         }
   

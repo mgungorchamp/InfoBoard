@@ -78,7 +78,7 @@ public partial class ImageDisplay : ContentPage
     {
         base.OnDisappearing();
      
-        _imageViewModel.StopTimeNow();
+        _imageViewModel.StopTimerNow();
 
         var toast = Toast.Make("OnDisappearing!");
         await toast.Show();
