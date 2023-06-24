@@ -52,7 +52,7 @@ namespace InfoBoard.Services
                 }
                 
             }
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(2));
             return await readSettingsFromLocalJSON();
         }
 
@@ -161,7 +161,7 @@ namespace InfoBoard.Services
                 string jsonString = "RESETED";
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                await Task.Delay(TimeSpan.FromSeconds(2));
 
             }
             catch (Exception ex)

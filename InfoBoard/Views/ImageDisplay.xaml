@@ -21,7 +21,7 @@
         <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"
-            Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">
+            Source="{Binding ImageSource, TargetNullValue='welcome.jpg'}">
         </Image>
         
         <Label 

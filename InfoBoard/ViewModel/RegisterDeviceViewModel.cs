@@ -10,17 +10,7 @@ using CommunityToolkit.Maui.Alerts;
 namespace InfoBoard.ViewModel
 {
     public sealed class RegisterDeviceViewModel : INotifyPropertyChanged
-    {
-        private static readonly RegisterDeviceViewModel instance = new();
-        static RegisterDeviceViewModel()
-        {
-        }
-       
-        public static RegisterDeviceViewModel Instance {
-            get {
-                return instance;
-            }
-        }   
+    {          
         public event PropertyChangedEventHandler PropertyChanged;
         //System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
         IDispatcherTimer timer4Registration;
@@ -32,7 +22,7 @@ namespace InfoBoard.ViewModel
 
         public Command OnRegenerateQrCodeCommand { get; set; }
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
-        private RegisterDeviceViewModel() 
+        public RegisterDeviceViewModel() 
         {
             counter = 0;
             //Initial Code Generation t

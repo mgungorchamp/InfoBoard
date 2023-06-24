@@ -55,7 +55,7 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 //Most likely the device unregistered and we got an error messsage
-                Console.WriteLine(@"\tERROR {0} retrieveFileList MURAT", ex.Message);
+                Console.WriteLine(@"\tImage Unregistered ERROR JSON Received {0} retrieveFileList MURAT", ex.Message);
                 return null;
             }
 

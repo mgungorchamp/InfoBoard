@@ -168,14 +168,8 @@ namespace InfoBoard.ViewModel
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await _navigation.PushAsync(new RegisterView(), true);               
-            });
-            RegisterDeviceViewModel registerDeviceViewModel = RegisterDeviceViewModel.Instance;
-            //registerDeviceViewModel.registerDeviceViaServer();//startTimedRegisterationEvent(); // startRegistration();   // Updates deviceSettings  - its singleton
-            registerDeviceViewModel.StartTimed4DeviceRegisterationEvent(this);
-
-            //Load Device Settings - Singleton - it works for all
-            //UpdateDeviceSettings();
+                await _navigation.PushAsync(new RegisterView(this), true);               
+            }); 
         }
 
         List<FileInformation> fileList;
@@ -251,17 +245,17 @@ namespace InfoBoard.ViewModel
             }
 
             // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+            //string appDataPath = FileSystem.AppDataDirectory;
+            //string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
 
             var fileInformation = fileList[random.Next(fileList.Count)];
-            string fileName = Path.Combine(directoryName, fileInformation.s3key);            
+            string fileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);            
             if (File.Exists(fileName))
             {
                 return fileName;
             }
-            return "uploadimage.png"; // TODO : Missing image - we should not come to this point
+            return "welcome.jpg"; // TODO : Missing image - we should not come to this point
             // Pick some other picture
         }
 

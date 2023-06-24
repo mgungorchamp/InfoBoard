@@ -4,7 +4,7 @@ namespace InfoBoard.Services
 {
     public static class Constants
     {
-        public static string LocalDirectory = "Media";
+        private static string LocalDirectory = "Media";
         // URL of REST service
         //public static string RestUrl = "https://dotnetmauitodorest.azurewebsites.net/api/todoitems/{0}";
 
@@ -48,7 +48,7 @@ namespace InfoBoard.Services
 
 
     // Random alphanumeric string to use as a security key for the handshake
-    public static void resetTemporaryCodeAndHandshakeURL()
+        public static void resetTemporaryCodeAndHandshakeURL()
         {
             Random random = new Random();
 
@@ -75,6 +75,7 @@ namespace InfoBoard.Services
             updateHandshakeUrl(TEMPORARY_CODE);
         }
 
+        // If media folder is not created it creates, if exist it retuns the existing one
         public static DirectoryInfo getMediaDirectoryInformation()
         {
             // Get the folder where the images are stored.
@@ -88,6 +89,6 @@ namespace InfoBoard.Services
             else
                 directoryInfo = new DirectoryInfo(directoryName);
             return directoryInfo;
-        }
+        }        
     }
 }

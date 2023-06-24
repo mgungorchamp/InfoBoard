@@ -160,11 +160,11 @@ namespace InfoBoard.Services
             List<FileInformation> fileListFromLocal =  await readMediaNamesFromLocalJSON();
             // check if any of the local files missing - corrupted - return null
             // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+            //string appDataPath = FileSystem.AppDataDirectory;
+            //string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
             foreach (var fileInformation in fileListFromLocal)
             {
-                string fileName = Path.Combine(directoryName, fileInformation.s3key);
+                string fileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 if (!File.Exists(fileName))
                 {
                     fileListFromLocal = null; // Fresh start, since there is missing files
@@ -173,23 +173,7 @@ namespace InfoBoard.Services
             }
             return fileListFromLocal;
         }
-
-
-        // If media folder is not created it creates, if exist it retuns the existing one
-        private DirectoryInfo getMediaFolder() 
-        {
-            // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
-
-            //create the directory if it doesn't exist
-            DirectoryInfo directoryInfo;
-            if (!Directory.Exists(directoryName))
-                directoryInfo = Directory.CreateDirectory(directoryName);
-            else
-                directoryInfo = new DirectoryInfo(directoryName);
-            return directoryInfo;
-        }
+               
 
         private async Task downloadFilesToLocalDirectory(List<FileInformation> fileList)
         {
@@ -205,14 +189,13 @@ namespace InfoBoard.Services
             catch {
                 Console.WriteLine("downloadFilesToLocalDirectory Done: Download Exception: MURAT");
             }
-
         }
 
         private async Task downloadFileToLocalDirectory(FileInformation fileInformation)
         {
-            DirectoryInfo directoryInfo = getMediaFolder();
+            //DirectoryInfo directoryInfo = getMediaFolder();
              
-            string localFullFileName = Path.Combine(directoryInfo.FullName, fileInformation.s3key);
+            string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
 
             //We are using s3key as the file name and its unique therefore
             // we don't need to dowload the file
@@ -235,8 +218,8 @@ namespace InfoBoard.Services
 
         private void deleteLocalFile(FileInformation fileInformation)
         {
-            DirectoryInfo directoryInfo = getMediaFolder();
-            string localFullFileName = Path.Combine(directoryInfo.FullName, fileInformation.s3key);
+            //DirectoryInfo directoryInfo = getMediaFolder();
+            string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
             //Save it to local folder
             File.Delete(localFullFileName);
         }
@@ -253,7 +236,7 @@ namespace InfoBoard.Services
             try
             {
                 string fileName = "FileInformation.json";
-                string fullPathFileName = Path.Combine(getMediaFolder().FullName, fileName);
+                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 lastSavedFileList = fileList;
@@ -282,7 +265,7 @@ namespace InfoBoard.Services
             try
             {
                 string fileName = "FileInformation.json";
-                string fullPathJsonFileName = Path.Combine(getMediaFolder().FullName, fileName);
+                string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
 
                 if (File.Exists(fullPathJsonFileName))
                 {
