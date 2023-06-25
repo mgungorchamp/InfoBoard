@@ -80,12 +80,12 @@ namespace InfoBoard.ViewModel
                 Task.Delay(TimeSpan.FromSeconds(2));
             }
         }
-        private ImageViewModel imageViewModel;
+        //private ImageViewModel imageViewModel;
 
-        public async void StartTimed4DeviceRegisterationEvent(ImageViewModel imageViewModel)
+        public async void StartTimed4DeviceRegisterationEvent()
         {
             generateQrCode();
-            this.imageViewModel = imageViewModel;
+          //  this.imageViewModel = imageViewModel;
             await StartTimer4DeviceRegistration();
 
             timer4Registration.Interval = TimeSpan.FromSeconds(20);
@@ -95,7 +95,16 @@ namespace InfoBoard.ViewModel
 
             _status = "Registering device...";
             OnPropertyChanged();
-        }      
+        }
+
+        public void StopTimed4DeviceRegisterationEvent()
+        {
+         
+            timer4Registration.IsRepeating = false;
+            timer4Registration.Stop();
+            _status = "Timer stopped...";
+            OnPropertyChanged();
+        }
 
         private async Task StartTimer4DeviceRegistration()
         {
@@ -122,8 +131,8 @@ namespace InfoBoard.ViewModel
                 //Registeration succesful - no error
                 if (registrationResult.error == null)
                 {
-                    timer4Registration.IsRepeating = false;
-                    timer4Registration.Stop();
+                   // timer4Registration.IsRepeating = false;
+                    //timer4Registration.Stop();
 
                     DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
                     _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
@@ -137,7 +146,8 @@ namespace InfoBoard.ViewModel
 
                     //await Task.Delay(TimeSpan.FromSeconds(7));
                     //change to ImageDisplayView               
-                    await imageViewModel.GoTimeNow();
+                    //await imageViewModel.GoTimeNow();
+                    await Shell.Current.GoToAsync("imagedisplay");
                     counter = 1;
                     _status = "Welcome!";
 

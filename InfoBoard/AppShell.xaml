@@ -3,19 +3,21 @@
     x:Class="InfoBoard.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
-    xmlns:views="clr-namespace:InfoBoard.Views"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:views="clr-namespace:InfoBoard.Views"    
+    Shell.NavBarIsVisible="false"
+    Shell.TabBarIsVisible="False">
 
     <TabBar>
-        <ShellContent               
-            IsVisible="True"
+       
+        <ShellContent  
+            x:Name="imageDisplayItem"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
-        <ShellContent
-            IsVisible="False"
-            Route="registerview"
-            Title="Register Device"
+        <ShellContent     
+            x:Name="registerViewItem"
             ContentTemplate="{DataTemplate views:RegisterView}"/>
-        
+        <ShellContent  
+            x:Name="aboutPageItem"
+            ContentTemplate="{DataTemplate views:AboutPage}"/>
         <!--<ShellContent
             Title="Notes"
             ContentTemplate="{DataTemplate views:AllNotesPage}"
@@ -31,3 +33,5 @@
 </Shell>
 
 <!--Title="Welcome"-->
+<!--Route="registerview"
+            Title="Register Device"-->

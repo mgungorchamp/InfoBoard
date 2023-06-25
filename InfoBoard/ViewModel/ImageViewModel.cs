@@ -166,10 +166,12 @@ namespace InfoBoard.ViewModel
 
         public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _navigation.PushAsync(new RegisterView(this), true);               
-            }); 
+            //await MainThread.InvokeOnMainThreadAsync(async () =>
+            //{
+            //    await _navigation.PushAsync(new RegisterView(this), true);               
+            //}); 
+
+            await Shell.Current.GoToAsync("registerdevice");
         }
 
         List<FileInformation> fileList;
@@ -193,12 +195,14 @@ namespace InfoBoard.ViewModel
             timer4FileSync.Interval = TimeSpan.FromSeconds(60);
             timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
             //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
-           
 
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await _navigation.PopToRootAsync(true);
-            });
+
+            //await MainThread.InvokeOnMainThreadAsync(async () =>
+            //{
+            //    await _navigation.PopToRootAsync(true);
+            //});
+
+            //await Shell.Current.GoToAsync("imagedisplay");
 
             //StartTimer4DeviceSettings
             //Get latest settings from server - every 15 seconds

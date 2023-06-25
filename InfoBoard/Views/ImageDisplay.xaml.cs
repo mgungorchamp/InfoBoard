@@ -27,36 +27,20 @@ public partial class ImageDisplay : ContentPage
     //    //mediaElement.Source = FileMediaSource.FromUri("https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4");        
     //}
 
-    ImageViewModel _imageViewModel;
+    //ImageViewModel _imageViewModel;
     public ImageDisplay()
     {
         InitializeComponent();
-        NavigationPage.SetHasNavigationBar(this, false);
-        _imageViewModel = new ImageViewModel();
-        BindingContext = _imageViewModel;
-        _imageViewModel.NavigationSet = this.Navigation;
+        //NavigationPage.SetHasNavigationBar(this, false);
+        
+        BindingContext = new ImageViewModel(); 
+        //_imageViewModel.NavigationSet = this.Navigation;
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");
     }
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
-    }
-
-
-    //Loaded="Image_Loaded"
-    private async void Image_Loaded(object sender, EventArgs e)
-    {
-       
-        var toast = Toast.Make($"Image_Loaded!{e.ToString()}");
-        await toast.Show();
-
-        var res = await mainPageImage.Source.GetPlatformImageAsync(Handler.MauiContext);
-        if (res == null)
-        {
-            mainPageImage.Source = "https://upload.wikimedia.org/wikipedia/commons/d/dd/Achtung.svg";
-        }
-    }
-
+    } 
     protected async override void OnAppearing()
     {
         base.OnAppearing();
@@ -64,23 +48,23 @@ public partial class ImageDisplay : ContentPage
         //await mainPageImage.FadeTo(0, 500);
         //await mainPageImage.FadeTo(1, 500);
 
-        var toast = Toast.Make($"OnAppearing!");
+        var toast = Toast.Make($"Appearing! ImageDisplay");
         await toast.Show();
         
         Debug.WriteLine($"OnAppearing:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
-        await _imageViewModel.GoTimeNow();
+        await ((ImageViewModel)BindingContext).GoTimeNow();
     }
 
      
     protected async override void OnDisappearing()
     {
         base.OnDisappearing();
-     
-        _imageViewModel.StopTimerNow();
 
-        var toast = Toast.Make("OnDisappearing!");
+        ((ImageViewModel)BindingContext).StopTimerNow();
+
+        var toast = Toast.Make("Disappearing! ImageDisplay");
         await toast.Show();
 
         Debug.WriteLine($"OnDisappearing:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");

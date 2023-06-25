@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Alerts;
 using InfoBoard.ViewModel;
+using System.Diagnostics;
 
 namespace InfoBoard.Views;
 
@@ -10,12 +12,26 @@ public partial class RegisterView : ContentPage
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
-        
         RegisterDeviceViewModel registerDeviceViewModel = new();
-        BindingContext = registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
-        registerDeviceViewModel.StartTimed4DeviceRegisterationEvent(imageViewModel);
+        BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
+
 
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
+        Debug.WriteLine($"RegisterView On Appearing");
+    }
+
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        ((RegisterDeviceViewModel)BindingContext).StopTimed4DeviceRegisterationEvent();
+        Debug.WriteLine($"RegisterView On Disappearing");
     }
 }

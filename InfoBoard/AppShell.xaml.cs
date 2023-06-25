@@ -1,4 +1,5 @@
 ﻿using InfoBoard.Services;
+using InfoBoard.Views;
 
 namespace InfoBoard;
 
@@ -7,6 +8,15 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
+
+        //NavigationPage.SetHasNavigationBar(this, false);
+        //NavigationPage.SetHasBackButton(this, false);        
+        Routing.RegisterRoute("aboutPage", typeof(AboutPage));
+        Routing.RegisterRoute("imagedisplay", typeof(ImageDisplay));
+        Routing.RegisterRoute("registerdevice", typeof(RegisterView));
+
+        //Shell.Current.CurrentItem = imageDisplayItem;
+
         //Routing.RegisterRoute(nameof(Views.NotePage), typeof(Views.NotePage));
 
         //Getting files from internet 
@@ -18,7 +28,7 @@ public partial class AppShell : Shell
         // Delete the local one if it's no longer in the JSON
         // Redownload if the pull date is older than the file update date 
         // Download the file if there is no file with that in the local folder  
-        
+
         //FileDownloadService downloader = new FileDownloadService();
         //downloader.updateFiles();
 
