@@ -49,10 +49,8 @@ namespace InfoBoard.Services
                     // Device removed from server - unregister device
                     Debug.WriteLine("Device removed from server - unregister device");
                     await resetLocalSettingsFile();
-                }
-                
-            }
-            
+                }                
+            }            
             return await readSettingsFromLocalJSON();
         }
 
@@ -72,7 +70,7 @@ namespace InfoBoard.Services
                     DeviceSettings deviceSettings = await restService.retrieveDeviceSettings(registrationResult.device_key);                                     
                     await saveSettingsToLocalAsJSON(deviceSettings);                    
                 }
-                else // Registration failed - error returned
+                else // Either user imput is expected or device registered already timer kicked in - ignore error - or key expired
                 {
                     //Maybe device registered but just before it timer kicks in - ignore error
                     Debug.WriteLine("Atempting to register device... Users input expected");                    

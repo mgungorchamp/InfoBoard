@@ -8,7 +8,11 @@
     Shell.TabBarIsVisible="False">
 
     <TabBar>
-       
+
+        <ShellContent  
+            x:Name="webViewItem"
+            ContentTemplate="{DataTemplate views:WebSiteView}"/>
+        
         <ShellContent  
             x:Name="imageDisplayItem"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
