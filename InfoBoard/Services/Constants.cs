@@ -79,7 +79,7 @@ namespace InfoBoard.Services
         public static DirectoryInfo getMediaDirectoryInformation()
         {
             // Get the folder where the images are stored.
-            string appDataPath = FileSystem.AppDataDirectory;
+            string appDataPath = FileSystem.Current.AppDataDirectory;
             string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
 
             //create the directory if it doesn't exist

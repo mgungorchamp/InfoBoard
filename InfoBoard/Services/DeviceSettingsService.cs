@@ -52,7 +52,7 @@ namespace InfoBoard.Services
                 }
                 
             }
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            
             return await readSettingsFromLocalJSON();
         }
 
@@ -74,9 +74,8 @@ namespace InfoBoard.Services
                 }
                 else // Registration failed - error returned
                 {
-                    //TODO : Handle error here
-                    //if we empty the device_key in local settings, it will try to register again
-                    await resetLocalSettingsFile();
+                    //Maybe device registered but just before it timer kicks in - ignore error
+                    Debug.WriteLine("Atempting to register device... Users input expected");                    
                 }
             }
             return registrationResult;
@@ -85,6 +84,7 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
+            await Task.Delay(TimeSpan.FromSeconds(2));
             try
             {
                 string fileName = "DeviceSettings.json";
@@ -132,7 +132,9 @@ namespace InfoBoard.Services
                 string fileName = "DeviceSettings.json";
                 string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-                
+
+               
+
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
                 await Task.Delay(TimeSpan.FromSeconds(2));

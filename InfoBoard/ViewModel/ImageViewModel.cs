@@ -87,14 +87,14 @@ namespace InfoBoard.ViewModel
             await GoTime();
         }
 
-        public void StopTimerNow()
+        public void StopTimersNow()
         {
             timer4DisplayImage.IsRepeating = false;
             timer4DisplayImage.Stop();
 
             StopTimer4FilesAndDeviceSettings();
         }
-        public void StartTimerNow()
+        public void StartTimersNow()
         {
             timer4DisplayImage.IsRepeating = true;
             timer4DisplayImage.Start();
@@ -126,19 +126,18 @@ namespace InfoBoard.ViewModel
         {
             Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
             //Stop timer - if running
-            StopTimerNow();
+            StopTimersNow();
 
             deviceSettings = await UpdateDeviceSettingsEventAsync();           
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                //timer4DeviceSettingsSync.Stop();
-                NavigateToRegisterViewAndStartTimer4RegisteringDevice();
+                await Shell.Current.GoToAsync("registerdevice");
             }
             else//Registered device - start timer for image display and file/settings sync
             {
-                NavigateToMainViewAndStartTimers();              
+                SetupAndStartTimers();              
             }
         }
 
@@ -157,11 +156,11 @@ namespace InfoBoard.ViewModel
             //    await _navigation.PushAsync(new RegisterView(this), true);               
             //}); 
 
-            await Shell.Current.GoToAsync("registerdevice");
+           
         }
 
         List<FileInformation> fileList;
-        private async void NavigateToMainViewAndStartTimers()
+        private async void SetupAndStartTimers()
         {
 
             fileList = await fileDownloadService.synchroniseMediaFiles();
@@ -195,7 +194,7 @@ namespace InfoBoard.ViewModel
             timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             
-            StartTimerNow();
+            StartTimersNow();
         }
 
 
