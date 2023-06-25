@@ -125,7 +125,7 @@ namespace InfoBoard.ViewModel
             DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
             RegisterationResult registrationResult = await deviceSettingsService.RegisterDeviceViaServer();
             
-            //Success - no error
+            //We got response from server
             if (registrationResult != null)
             {
                 //Registeration succesful - no error

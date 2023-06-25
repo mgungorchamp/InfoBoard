@@ -84,20 +84,6 @@ namespace InfoBoard.ViewModel
 
         public async Task GoTimeNow()
         {
-            //if (Application.Current == null) 
-            //{ 
-            //    return;
-            //}
-            
-            ////if(timer4DisplayImage != null )
-            //    timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
-            
-            ////if (timer4FileSync != null)
-            //    timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
-            
-            ////if (timer4DeviceSettingsSync != null)
-            //    timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
-
             await GoTime();
         }
 
@@ -192,7 +178,7 @@ namespace InfoBoard.ViewModel
             
 
             //Set up the timer for Syncronise Media Files             
-            timer4FileSync.Interval = TimeSpan.FromSeconds(60);
+            timer4FileSync.Interval = TimeSpan.FromSeconds(20);
             timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
             //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
@@ -206,7 +192,7 @@ namespace InfoBoard.ViewModel
 
             //StartTimer4DeviceSettings
             //Get latest settings from server - every 15 seconds
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(30);
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             
             StartTimerNow();
@@ -244,7 +230,8 @@ namespace InfoBoard.ViewModel
 
             //No files to show
             if ( fileList == null || fileList.Count == 0)
-            {                
+            {      
+                Debug.WriteLine("No files to show");    
                 return "uploadimage.png";
             }
 

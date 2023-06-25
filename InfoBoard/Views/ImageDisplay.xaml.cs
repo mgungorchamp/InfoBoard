@@ -51,7 +51,7 @@ public partial class ImageDisplay : ContentPage
         var toast = Toast.Make($"Appearing! ImageDisplay");
         await toast.Show();
         
-        Debug.WriteLine($"OnAppearing:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
         await ((ImageViewModel)BindingContext).GoTimeNow();
@@ -67,7 +67,7 @@ public partial class ImageDisplay : ContentPage
         var toast = Toast.Make("Disappearing! ImageDisplay");
         await toast.Show();
 
-        Debug.WriteLine($"OnDisappearing:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
     }
 
