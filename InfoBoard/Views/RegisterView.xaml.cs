@@ -12,6 +12,7 @@ public partial class RegisterView : ContentPage
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
+        
         RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
 
@@ -19,6 +20,12 @@ public partial class RegisterView : ContentPage
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
     }
+
+    //protected override bool OnBackButtonPressed() 
+    //{
+    //    Debug.WriteLine($"RegisterView OnBackButtonPressed");
+    //    return true;    
+    //}
 
     protected override void OnAppearing()
     {

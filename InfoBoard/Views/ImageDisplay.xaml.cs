@@ -40,7 +40,13 @@ public partial class ImageDisplay : ContentPage
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
-    } 
+    }
+
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    Debug.WriteLine($"ImageDisplay OnBackButtonPressed");
+    //    return true;
+    //}
     protected async override void OnAppearing()
     {
         base.OnAppearing();
