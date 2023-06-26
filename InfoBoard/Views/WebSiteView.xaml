@@ -4,6 +4,14 @@
              x:Class="InfoBoard.Views.WebSiteView"
              Title="WebSiteView">
     <VerticalStackLayout>
+
+        <WebView Source="https://learn.microsoft.com/dotnet/maui" />
+        <WebView 
+            x:Name="myWebView" 
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            Source="https://blog.xamarin.com" />
+        
         <Label 
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 

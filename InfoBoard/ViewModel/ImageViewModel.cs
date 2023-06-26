@@ -167,10 +167,10 @@ namespace InfoBoard.ViewModel
             //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
-            //await Task.Delay(TimeSpan.FromSeconds(10));
-                 
+            //await Task.Delay(TimeSpan.FromSeconds(3));
 
             await DisplayImageEvent();
+           
             //Set up the timer for Display Image
             timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
             timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
@@ -202,6 +202,9 @@ namespace InfoBoard.ViewModel
         {
             _imageSource = getRandomImageName();
             OnPropertyChanged(nameof(ImageSource));
+
+            await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
+
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
