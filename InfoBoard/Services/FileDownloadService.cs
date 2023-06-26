@@ -103,6 +103,15 @@ namespace InfoBoard.Services
             {
                 if (UtilityServices.isInternetAvailable()) 
                 {
+                    //Before deleting all the files - check if the device is registered
+                    //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                    //DeviceSettings deviceSettings = await deviceSettingsService.loadDeviceSettings();
+                    //if (deviceSettings != null) 
+                    //{
+                    //    return fileListFromLocal;                    
+                    //}
+
+                    //Delete all the files from local directory
                     foreach (FileInformation file in fileListFromLocal)
                     {
                         deleteLocalFile(file);

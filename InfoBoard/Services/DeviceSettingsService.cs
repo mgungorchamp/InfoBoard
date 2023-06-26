@@ -21,7 +21,7 @@ namespace InfoBoard.Services
             }
         }
  
-        //If not registered, it tries to register if registered reads 
+        
         public async Task<DeviceSettings> loadDeviceSettings()
         {
             DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
@@ -40,11 +40,11 @@ namespace InfoBoard.Services
                 //Get Device settings
                 RestService restService = new RestService();
                 DeviceSettings updatedDeviceSettings = await restService.retrieveDeviceSettings(localDeviceSettings.device_key);
-                if (updatedDeviceSettings != null && updatedDeviceSettings.error == null)
+                if (/*updatedDeviceSettings != null && */updatedDeviceSettings.error == null)
                 {
                     await saveSettingsToLocalAsJSON(updatedDeviceSettings);                    
                 }
-                else if (updatedDeviceSettings == null)
+                else/* if (updatedDeviceSettings == null)*/
                 {
                     // Device removed from server - unregister device
                     Debug.WriteLine("Device removed from server - unregister device");

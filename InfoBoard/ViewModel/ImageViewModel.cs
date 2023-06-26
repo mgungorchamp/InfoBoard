@@ -149,15 +149,15 @@ namespace InfoBoard.ViewModel
             return deviceSettings;
         } 
 
-        public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
-        {
-            //await MainThread.InvokeOnMainThreadAsync(async () =>
-            //{
-            //    await _navigation.PushAsync(new RegisterView(this), true);               
-            //}); 
+        //public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
+        //{
+        //    //await MainThread.InvokeOnMainThreadAsync(async () =>
+        //    //{
+        //    //    await _navigation.PushAsync(new RegisterView(this), true);               
+        //    //}); 
 
            
-        }
+        //}
 
         List<FileInformation> fileList;
         private async void SetupAndStartTimers()

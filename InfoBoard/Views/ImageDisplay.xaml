@@ -19,11 +19,11 @@
             ShouldShowPlaybackControls="True" /
         Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
         >-->        
-        <!--<Image 
+        <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"
             Source="{Binding ImageSource, TargetNullValue='welcome.jpg'}">
-        </Image>-->
+        </Image>
         
         <Label 
             Text="{Binding ImageSource}"
@@ -31,12 +31,12 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center"/>
 
-        <Image  x:Name="mainPageImage"
+        <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
             <Image.Source>
                 <FileImageSource File="{Binding ImageSource, TargetNullValue='welcome.jpg'}" />
             </Image.Source>
-        </Image>
+        </Image>-->
         
       
     </VerticalStackLayout>

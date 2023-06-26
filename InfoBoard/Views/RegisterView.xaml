@@ -7,39 +7,68 @@
     <!--<ContentPage.BindingContext>
         <viewmodel:RegisterDeviceViewModel/>
     </ContentPage.BindingContext>-->
-    
-    <VerticalStackLayout>
-        <Label
-            Text="Register Your Device"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+    <VerticalStackLayout Spacing="10" Margin="10" HorizontalOptions="Center">
 
         <Label
-            x:Name="RegisterKeyLabel"
-            Text="{Binding RegisterationKey}"
-            FontSize="Medium"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Button Text="Add Device via www.guzelboard.com"       
-            Command="{Binding OnOpenRegisterDeviveWebPageCommand}"
-            HorizontalOptions="Center"/>
+                Text="Register Your Device"
+                FontSize="Title"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
 
-        <ImageButton 
-            x:Name="qrImageButton"
-            Source="{Binding QRImageButton}"            
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+        <HorizontalStackLayout Spacing="10">          
 
-        <Button Text="Regenerate Temporary Code"       
-            Command="{Binding OnRegenerateQrCodeCommand}"
-            HorizontalOptions="Center"/>
+            <VerticalStackLayout Spacing="10" Margin="10">
+                <Label
+                x:Name="RegisterKeyLabel"
+                Text="{Binding RegisterationKey}"
+                FontSize="Medium"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+                
+                <Button Text="Add Device via www.guzelboard.com"       
+                Command="{Binding OnOpenRegisterDeviveWebPageCommand}"
+                HorizontalOptions="Center"/>
 
-        <Label
-            x:Name="statusLabel" 
-            Text="{Binding Status}"
-            FontSize="Small"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+                <Label
+                x:Name="statusLabel" 
+                Text="{Binding Status}"
+                FontSize="Small"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+
+                <Image    
+                x:Name="qrImageButton"
+                Source="{Binding QRImageButton}"            
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                MinimumWidthRequest="333"
+                MaximumWidthRequest="333"/>
+                
+                <!--<ImageButton                 
+                x:Name="qrImageButton"
+                Source="{Binding QRImageButton}"            
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                MinimumWidthRequest="20"/>-->
+
+                <Button Text="Regenerate Temporary Code"       
+                Command="{Binding OnRegenerateQrCodeCommand}"
+                HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+
+        </HorizontalStackLayout>
+
+       
 
     </VerticalStackLayout>
+
+
+
+
 </ContentPage>

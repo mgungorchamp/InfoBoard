@@ -63,7 +63,7 @@ namespace InfoBoard.Services
             return await fileDownloadService.synchroniseMediaFiles();
         }
 
-        public async Task<DeviceSettings> retrieveDeviceSettings(string deviceID)
+        public async Task<DeviceSettings> retrieveDeviceSettings(string deviceKey)
         {
             DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
            
@@ -73,7 +73,7 @@ namespace InfoBoard.Services
                 return deviceSettings;
             }
 
-            Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceID));
+            Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceKey));
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
@@ -85,8 +85,8 @@ namespace InfoBoard.Services
                     
                     //If error is not null, there is an error then return null
                     //Device unregistered
-                    if (deviceSettings.error != null) //
-                        return null;
+                    //if (deviceSettings.error != null) //
+                    //   return null;
 
                     return deviceSettings;
                 }
