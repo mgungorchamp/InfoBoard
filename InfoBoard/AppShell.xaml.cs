@@ -1,5 +1,6 @@
 ﻿using InfoBoard.Services;
 using InfoBoard.Views;
+using System.Diagnostics;
 
 namespace InfoBoard;
 
@@ -7,7 +8,7 @@ public partial class AppShell : Shell
 {
     public AppShell()
     {
-        InitializeComponent();
+        InitializeComponent();        
 
         //NavigationPage.SetHasNavigationBar(this, false);
         //NavigationPage.SetHasBackButton(this, false);        
@@ -35,5 +36,11 @@ public partial class AppShell : Shell
         // saveFilesToLocalDirectory.fetchAndSave();
         //Task.Run(() => downloader.downloadMediaFiles()).Wait();
 
+    }
+
+    protected override bool OnBackButtonPressed()
+    {
+        Debug.WriteLine($"AppShell OnBackButtonPressed");
+        return true;
     }
 }
