@@ -133,7 +133,7 @@ namespace InfoBoard.ViewModel
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
-                await Shell.Current.GoToAsync("registerdevice");
+                await Shell.Current.GoToAsync(nameof(RegisterView));
             }
             else//Registered device - start timer for image display and file/settings sync
             {

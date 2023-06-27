@@ -6,6 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using InfoBoard.Models;
 using CommunityToolkit.Maui.Alerts;
+using InfoBoard.Views;
 
 namespace InfoBoard.ViewModel
 {
@@ -147,7 +148,7 @@ namespace InfoBoard.ViewModel
                     //await Task.Delay(TimeSpan.FromSeconds(7));
                     //change to ImageDisplayView               
                     //await imageViewModel.GoTimeNow();
-                    await Shell.Current.GoToAsync("imagedisplay");
+                    await Shell.Current.GoToAsync(nameof(ImageDisplay));
                     counter = 1;
                     _status = "Welcome!";
 

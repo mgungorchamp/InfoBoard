@@ -12,9 +12,9 @@ public partial class AppShell : Shell
 
         //NavigationPage.SetHasNavigationBar(this, false);
         //NavigationPage.SetHasBackButton(this, false);        
-        Routing.RegisterRoute("aboutPage", typeof(AboutPage));
-        Routing.RegisterRoute("imagedisplay", typeof(ImageDisplay));
-        Routing.RegisterRoute("registerdevice", typeof(RegisterView));
+        Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
+        Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
+        Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
 
         //Shell.Current.CurrentItem = imageDisplayItem;
 
@@ -38,6 +38,7 @@ public partial class AppShell : Shell
 
     }
 
+    //To prevent the app from changing view when the back button is pressed via mouse or remote control
     protected override bool OnBackButtonPressed()
     {
         Debug.WriteLine($"AppShell OnBackButtonPressed");
