@@ -227,10 +227,17 @@ namespace InfoBoard.Services
 
         private void deleteLocalFile(FileInformation fileInformation)
         {
-            //DirectoryInfo directoryInfo = getMediaFolder();
-            string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
-            //Save it to local folder
-            File.Delete(localFullFileName);
+            try
+            {
+                //DirectoryInfo directoryInfo = getMediaFolder();
+                string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
+                //Save it to local folder
+                File.Delete(localFullFileName);
+            }
+            catch
+            {
+                Console.WriteLine("File cannot be deleted: deleteLocalFile  has issues MURAT");
+            }
         }
          
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
