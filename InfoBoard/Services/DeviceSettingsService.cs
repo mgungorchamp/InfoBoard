@@ -8,10 +8,7 @@ namespace InfoBoard.Services
     public sealed class DeviceSettingsService
     {
         private static readonly DeviceSettingsService instance = new DeviceSettingsService();
-      
-        static DeviceSettingsService()
-        {
-        }
+              
         private DeviceSettingsService()
         {
         }
@@ -25,59 +22,65 @@ namespace InfoBoard.Services
         public async Task<DeviceSettings> loadDeviceSettings()
         {
             DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
-
             //No internet - return existing settings
             if (!UtilityServices.isInternetAvailable())
-            {
+            {                
                 Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");  
                 return localDeviceSettings;
             }
 
-            //Already registered - update settings from web
-            //If localDeviceSettings is null. Not registered yet - registering device will be done by GoTime
+            //if there is internet and device already registered
+            //update the settings from web and return latest settings
+            //Get latest device settings and update the local settings file
             if (localDeviceSettings != null)
             {
-                //Get Device settings
                 RestService restService = new RestService();
-                DeviceSettings updatedDeviceSettings = await restService.retrieveDeviceSettings(localDeviceSettings.device_key);
-                if (/*updatedDeviceSettings != null && */updatedDeviceSettings.error == null)
-                {
-                    await saveSettingsToLocalAsJSON(updatedDeviceSettings);                    
-                }
-                else/* if (updatedDeviceSettings == null)*/
-                {
-                    // Device removed from server - unregister device
-                    Debug.WriteLine("Device removed from server - unregister device");
-                    await resetLocalSettingsFile();
-                }                
-            }            
-            return await readSettingsFromLocalJSON();
-        }
-
-        public async Task<RegisterationResult> RegisterDeviceViaServer()
-        {
-            //First time registration
-            RestService restService = new RestService();
-            RegisterationResult registrationResult = await restService.registerDevice();
-
-            //We get a response from server
-            if (registrationResult != null)                
-            {
-                //Registeration succesful - no error
-                if (registrationResult.error == null)
-                {
-                    //Registeration succesful and request full settings and save it to local settings
-                    DeviceSettings deviceSettings = await restService.retrieveDeviceSettings(registrationResult.device_key);                                     
-                    await saveSettingsToLocalAsJSON(deviceSettings);                    
-                }
-                else // Either user imput is expected or device registered already timer kicked in - ignore error - or key expired
-                {
-                    //Maybe device registered but just before it timer kicks in - ignore error
-                    Debug.WriteLine("Atempting to register device... Users input expected");                    
-                }
+                await restService.updateDeviceSettings(localDeviceSettings.device_key);
+                //Read the updated settings file and return the latest settings
+                return await readSettingsFromLocalJSON();
             }
-            return registrationResult;
+            return localDeviceSettings;
         }
+
+
+        //public async Task<DeviceSettings> loadDeviceSettingsOLD()
+        //{
+        //    DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
+
+        //    //No internet - return existing settings
+        //    if (!UtilityServices.isInternetAvailable())
+        //    {
+        //        Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");
+        //        return localDeviceSettings;
+        //    }
+
+        //    //Already registered - update settings from web
+        //    //If localDeviceSettings is null. Not registered yet - registering device will be done by GoTime
+        //    if (localDeviceSettings != null)
+        //    {
+        //        //Get Device settings
+        //        RestService restService = new RestService();
+        //        DeviceSettings updatedDeviceSettings = await restService.updateDeviceSettings(localDeviceSettings.device_key);
+        //        if (/*updatedDeviceSettings != null && */updatedDeviceSettings.error == null)
+        //        {
+        //            await saveSettingsToLocalAsJSON(updatedDeviceSettings);
+        //        }
+        //        else/* if (updatedDeviceSettings == null)*/
+        //        {
+        //            // Device removed from server - unregister device
+        //            Debug.WriteLine("Device removed from server - unregister device");
+        //            await resetLocalSettingsFile();
+        //        }
+        //    }
+        //    return await readSettingsFromLocalJSON();
+        //}
+
+        //public async Task RegisterDeviceViaServer()
+        //{
+        //    //First time registration
+        //    RestService restService = new RestService();
+        //    await restService.registerDevice();
+        //}
 
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
@@ -90,7 +93,7 @@ namespace InfoBoard.Services
                 if (File.Exists(fullPathJsonFileName))
                 {                    
                     string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
-                    if (jsonString.Length < 10)
+                    if (jsonString.Length < 20)
                     {
                         return null;
                     }
@@ -114,7 +117,7 @@ namespace InfoBoard.Services
             return null;
         }
 
-        private async Task saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
+        public async Task saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
@@ -143,7 +146,7 @@ namespace InfoBoard.Services
             }
         }
         
-        private async Task resetLocalSettingsFile()
+        public async Task resetLocalSettingsFile()
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions

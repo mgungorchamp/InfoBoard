@@ -110,8 +110,7 @@ namespace InfoBoard.ViewModel
         private async Task StartTimer4DeviceRegistration()
         {
             counter++;
-            //aRegistrationTimer.Interval = counter * 10 * 1000;
-
+            
             if (!UtilityServices.isInternetAvailable())
             {             
                 _status = "No Internet Connection";
@@ -119,51 +118,60 @@ namespace InfoBoard.ViewModel
                 return;
             }
 
-            _status = $"Registering Device: Attempt {counter}"; 
-            OnPropertyChanged(nameof(Status));            
+            _status =   $"Registering Device" +
+                        $"\nAttempt #{counter}"; 
+            OnPropertyChanged(nameof(Status));
 
             //Register Device
-            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
-            RegisterationResult registrationResult = await deviceSettingsService.RegisterDeviceViaServer();
-            
-            //We got response from server
-            if (registrationResult != null)
+            RestService restService = new RestService();
+            string registrationMessage= await restService.registerDevice();
+
+
+            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;            
+            DeviceSettings deviceSettings = await deviceSettingsService.loadDeviceSettings();
+
+            if(deviceSettings == null)
             {
-                //Registeration succesful - no error
-                if (registrationResult.error == null)
-                {
-                   // timer4Registration.IsRepeating = false;
-                    //timer4Registration.Stop();
-
-                    DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
-                    _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
-                    _status += "\nUpdating Media Files... going back to front page!";
-
-                    //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
-                    var toast = Toast.Make("Updating Media Files... going back to front page!");
-                    await toast.Show();
-
-                    OnPropertyChanged(nameof(Status));
-
-                    //await Task.Delay(TimeSpan.FromSeconds(7));
-                    //change to ImageDisplayView               
-                    //await imageViewModel.GoTimeNow();
-                    await Shell.Current.GoToAsync(nameof(ImageDisplay));
-                    counter = 1;
-                    _status = "Welcome!";
-
-                }
-                else // Registration failed - error returned
-                {
-                    _status = $"Attempting... {counter} \nServer says: {registrationResult.error.message}";
-                    OnPropertyChanged(nameof(Status));
-                }               
-            }
-            else
-            {                
-                _status = $"Something strange ocurrred... Please restart your device{counter}";  
+                _status = $"Result of attempt #{counter}" +
+                          $"\n{registrationMessage}"+                    
+                          $"\n\nI'm not about to give up. " +
+                          $"\nI'll keep pushing forward, " +
+                          $"\nno matter how many trials it takes " +
+                          $"\nLet's go!";
                 OnPropertyChanged(nameof(Status));
-            }         
+                return;
+            }            
+
+            _status =   $"\n{registrationMessage}" +                         
+                        $"\n\nDevice ID: {deviceSettings.device_key}" +
+                        $"\nUpdating Media Files... " +
+                        $"\nand going to front page!";
+            OnPropertyChanged(nameof(Status));
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
+            //var toast = Toast.Make("Updating Media Files... going back to front page!");
+            //await toast.Show();
+
+
+            //await Task.Delay(TimeSpan.FromSeconds(7));
+            //change to ImageDisplayView               
+            //await imageViewModel.GoTimeNow();
+            await Shell.Current.GoToAsync(nameof(ImageDisplay));
+            counter = 1;
+            _status = "Welcome!";
+
+            //    }
+            //    else // Registration failed - error returned
+            //    {
+            //        _status = $"Attempting... {counter} \nServer says: {registrationResult.error.message}";
+            //        OnPropertyChanged(nameof(Status));
+            //    }               
+            //}
+            //else
+            //{                
+            //    _status = $"Something strange ocurrred... Please restart your device{counter}";  
+            //    OnPropertyChanged(nameof(Status));
+            //}         
         }
 
         private void generateQrCode()
