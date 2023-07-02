@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using MetroLog.MicrosoftExtensions;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace InfoBoard.Services
 {
-    public static class Constants
+    public static class Utilities
     {
         private static string LocalDirectory = "Media";
         // URL of REST service
@@ -47,7 +49,10 @@ namespace InfoBoard.Services
         };
 
 
-    // Random alphanumeric string to use as a security key for the handshake
+
+
+
+        // Random alphanumeric string to use as a security key for the handshake
         public static void resetTemporaryCodeAndHandshakeURL()
         {
             Random random = new Random();
@@ -80,7 +85,7 @@ namespace InfoBoard.Services
         {
             // Get the folder where the images are stored.
             string appDataPath = FileSystem.Current.AppDataDirectory;
-            string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
+            string directoryName = Path.Combine(appDataPath, Utilities.LocalDirectory);
 
             //create the directory if it doesn't exist
             DirectoryInfo directoryInfo;
@@ -89,6 +94,17 @@ namespace InfoBoard.Services
             else
                 directoryInfo = new DirectoryInfo(directoryName);
             return directoryInfo;
-        }        
+        }
+
+
+        private static ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddStreamingFileLogger(options =>
+        {
+            options.RetainDays = 2;               
+            options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
+        }));
+
+        public static ILogger Logger(string categoryName) {
+            return loggerFactory.CreateLogger(categoryName);
+        }
     }
 }

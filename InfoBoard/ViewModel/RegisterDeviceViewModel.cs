@@ -5,14 +5,15 @@ using QRCoder;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using InfoBoard.Models;
-using CommunityToolkit.Maui.Alerts;
 using InfoBoard.Views;
+using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.ViewModel
 {
     public sealed class RegisterDeviceViewModel : INotifyPropertyChanged
     {          
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ILogger _logger;
         //System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
         IDispatcherTimer timer4Registration;
 
@@ -25,6 +26,7 @@ namespace InfoBoard.ViewModel
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
         public RegisterDeviceViewModel() 
         {
+            _logger = Utilities.Logger(nameof(RegisterDeviceViewModel));
             counter = 0;
             //Initial Code Generation t
             generateQrCode();
@@ -39,13 +41,14 @@ namespace InfoBoard.ViewModel
                  execute: async () =>
                  {
                     // Navigate to the specified URL in the system browser.
-                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Constants.TEMPORARY_CODE}");
+                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
 
                  });
 
             timer4Registration = Application.Current.Dispatcher.CreateTimer();
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
+            _logger.LogInformation($"**RegisterDeviceViewModel** Constructor");
         }
              
 
@@ -95,6 +98,7 @@ namespace InfoBoard.ViewModel
             timer4Registration.Start();
 
             _status = "Registering device...";
+            _logger.LogInformation($"**RegisterDeviceViewModel** StartTimed4DeviceRegisterationEvent");
             OnPropertyChanged();
         }
 
@@ -104,6 +108,7 @@ namespace InfoBoard.ViewModel
             timer4Registration.IsRepeating = false;
             timer4Registration.Stop();
             _status = "Timer stopped...";
+            _logger.LogInformation($"**RegisterDeviceViewModel** StopTimed4DeviceRegisterationEvent");
             OnPropertyChanged();
         }
 
@@ -147,6 +152,7 @@ namespace InfoBoard.ViewModel
                         $"\nUpdating Media Files... " +
                         $"\nand going to front page!";
             OnPropertyChanged(nameof(Status));
+            _logger.LogInformation($"Registration Succesful**RegisterDeviceViewModel**: {registrationMessage}");
             await Task.Delay(TimeSpan.FromSeconds(3));
             //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
             //var toast = Toast.Make("Updating Media Files... going back to front page!");
@@ -177,14 +183,14 @@ namespace InfoBoard.ViewModel
         private void generateQrCode()
         {
             //Reset the temporary code and handshake URL
-            Constants.resetTemporaryCodeAndHandshakeURL();
+            Utilities.resetTemporaryCodeAndHandshakeURL();
 
-            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;
+            _registerKeyLabel = "Temporary Code:" + Utilities.TEMPORARY_CODE;
 
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
-            createQrCrCodeImage(Constants.HANDSHAKE_URL);
-            _qrImageButton = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE);
+            createQrCrCodeImage(Utilities.HANDSHAKE_URL);
+            _qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 
             _status = "New QR Code Generated";
             OnPropertyChanged(nameof(RegisterationKey));
@@ -200,7 +206,7 @@ namespace InfoBoard.ViewModel
         private void createQrCrCodeImage(string content)
         {
             var image = generateImage(content, (qr) => qr.GetGraphic(11) as Image<Rgba32>);
-            saveImageToFile(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE, image);
+            saveImageToFile(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE, image);
 
         }
         private Image<Rgba32> generateImage(string content, Func<QRCode, Image<Rgba32>> getGraphic)

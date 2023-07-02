@@ -34,7 +34,7 @@ namespace InfoBoard.Services
                 return await fileDownloadService.synchroniseMediaFiles(); 
             }          
 
-            Uri uri = new Uri(string.Format(Constants.MEDIA_FILES_URL, string.Empty));
+            Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
@@ -69,7 +69,7 @@ namespace InfoBoard.Services
                 return;
             }
 
-            Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceKey));
+            Uri uri = new Uri(string.Concat(Utilities.DEVICE_SETTINGS_URL, deviceKey));
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
@@ -111,7 +111,7 @@ namespace InfoBoard.Services
             
             try
             {
-                Uri uri = new Uri(Constants.HANDSHAKE_URL);
+                Uri uri = new Uri(Utilities.HANDSHAKE_URL);
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {

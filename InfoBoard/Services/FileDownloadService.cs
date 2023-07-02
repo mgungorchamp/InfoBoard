@@ -173,7 +173,7 @@ namespace InfoBoard.Services
             //string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
             foreach (var fileInformation in fileListFromLocal)
             {
-                string fileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
+                string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 if (!File.Exists(fileName))
                 {
                     fileListFromLocal = null; // Fresh start, since there is missing files
@@ -204,7 +204,7 @@ namespace InfoBoard.Services
         {
             //DirectoryInfo directoryInfo = getMediaFolder();
              
-            string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
+            string localFullFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
 
             //We are using s3key as the file name and its unique therefore
             // we don't need to dowload the file
@@ -230,7 +230,7 @@ namespace InfoBoard.Services
             try
             {
                 //DirectoryInfo directoryInfo = getMediaFolder();
-                string localFullFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
+                string localFullFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 //Save it to local folder
                 File.Delete(localFullFileName);
             }
@@ -252,7 +252,7 @@ namespace InfoBoard.Services
             try
             {
                 string fileName = "FileInformation.json";
-                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 lastSavedFileList = fileList;
@@ -281,7 +281,7 @@ namespace InfoBoard.Services
             try
             {
                 string fileName = "FileInformation.json";
-                string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
 
                 if (File.Exists(fullPathJsonFileName))
                 {

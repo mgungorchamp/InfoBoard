@@ -1,6 +1,7 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -11,7 +12,8 @@ namespace InfoBoard.ViewModel
 {
     public partial class ImageViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;        
+        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ILogger _logger;
         private IDispatcherTimer timer4DisplayImage;
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync;
@@ -55,6 +57,7 @@ namespace InfoBoard.ViewModel
         }
         public ImageViewModel()
         {
+            _logger = Utilities.Logger(nameof(ImageViewModel));
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
@@ -84,6 +87,7 @@ namespace InfoBoard.ViewModel
 
         public async Task GoTimeNow()
         {
+            _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
             await GoTime();
         }
 
@@ -93,6 +97,7 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Stop();
 
             StopTimer4FilesAndDeviceSettings();
+            _logger.LogInformation("\n\n+++ StopTimersNow() is called\n\n");
         }
         public void StartTimersNow()
         {
@@ -100,6 +105,7 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Start();
 
             StartTimer4FilesAndDeviceSettings();
+            _logger.LogInformation("\n\n+++ StartTimersNow() is called\n\n");
         }
 
         private void StopTimer4FilesAndDeviceSettings() 
@@ -133,10 +139,12 @@ namespace InfoBoard.ViewModel
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
+                _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
                 await Shell.Current.GoToAsync(nameof(RegisterView));
             }
             else//Registered device - start timer for image display and file/settings sync
             {
+                _logger.LogInformation("\n\n+++ Registered device - start timer for image display and file/settings sync\n\n"); 
                 SetupAndStartTimers();              
             }
         }
@@ -243,7 +251,7 @@ namespace InfoBoard.ViewModel
 
 
             var fileInformation = fileList[random.Next(fileList.Count)];
-            string fileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileInformation.s3key);            
+            string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);            
             if (File.Exists(fileName))
             {
                 return fileName;

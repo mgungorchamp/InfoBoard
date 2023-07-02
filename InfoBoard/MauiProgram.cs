@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using InfoBoard.ViewModel;
 using InfoBoard.Views;
+using MetroLog.MicrosoftExtensions;
+using MetroLog.Operators;
 using Microsoft.Extensions.Logging;
 
 namespace InfoBoard;
@@ -26,15 +28,15 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
-        
+            });       
+
         //builder.Services.AddSingleton<ImageDisplay>();
         //builder.Services.AddTransient<ImageViewModel>();
 
 
-//#if DEBUG
-//        builder.Logging.AddDebug();
-//#endif
+        //#if DEBUG
+        //        builder.Logging.AddDebug();
+        //#endif
 
 #if DEBUG
         builder.Services.AddLogging(configure =>

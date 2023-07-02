@@ -1,16 +1,17 @@
 ﻿using System.Diagnostics;
 using System.Text.Json; 
 using InfoBoard.Models;
- 
+using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.Services
 {
     public sealed class DeviceSettingsService
     {
         private static readonly DeviceSettingsService instance = new DeviceSettingsService();
-              
+        private readonly ILogger _logger;
         private DeviceSettingsService()
         {
+            _logger = Utilities.Logger(nameof(DeviceSettingsService));
         }
         public static DeviceSettingsService Instance {
             get {
@@ -25,7 +26,8 @@ namespace InfoBoard.Services
             //No internet - return existing settings
             if (!UtilityServices.isInternetAvailable())
             {                
-                Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");  
+                Debug.WriteLine($"**No internet - return existing settings");  
+                _logger.LogInformation($"**No internet - return existing settings");
                 return localDeviceSettings;
             }
 
@@ -36,9 +38,11 @@ namespace InfoBoard.Services
             {
                 RestService restService = new RestService();
                 await restService.updateDeviceSettings(localDeviceSettings.device_key);
+                _logger.LogInformation($"**updateDeviceSettings{localDeviceSettings.device_key}");
                 //Read the updated settings file and return the latest settings
                 return await readSettingsFromLocalJSON();
             }
+            _logger.LogInformation($"**return existing settings loadDeviceSettings");
             return localDeviceSettings;
         }
 
@@ -89,31 +93,40 @@ namespace InfoBoard.Services
             try
             {
                 string fileName = "DeviceSettings.json";
-                string fullPathJsonFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 if (File.Exists(fullPathJsonFileName))
                 {                    
                     string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
                     if (jsonString.Length < 20)
                     {
+                        _logger.LogWarning($"4 **return null readSettingsFromLocalJSON");
                         return null;
                     }
 
                     DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
 
                     //To update the media files url
-                    Constants.updateMediaFilesUrl(deviceSettings.device_key);
+                    Utilities.updateMediaFilesUrl(deviceSettings.device_key);
 
                     if (deviceSettings?.device_key == null)
                     {
+                        _logger.LogWarning($"6 **return null readSettingsFromLocalJSON");
                         return null;
                     }
-                    
+                    _logger.LogInformation($"8 **return deviceSettings readSettingsFromLocalJSON");    
                     return deviceSettings;
+                }
+                else
+                {
+                    _logger.LogWarning($"10 **return null readSettingsFromLocalJSON - most likely file does not exist");
+                    return null;
                 }
             } 
             catch(Exception ex) {
                 Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
+                _logger.LogError($"9 {ex.Message} readSettingsFromLocalJSON  MURAT");
             }
+            _logger.LogWarning($"11 **return null readSettingsFromLocalJSON - MURAT ");
             return null;
         }
 
@@ -128,13 +141,11 @@ namespace InfoBoard.Services
             try
             {
                 //To update the media files url
-                Constants.updateMediaFilesUrl(deviceSettings.device_key);
+                Utilities.updateMediaFilesUrl(deviceSettings.device_key);
 
                 string fileName = "DeviceSettings.json";
-                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-
-               
 
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
@@ -142,7 +153,9 @@ namespace InfoBoard.Services
 
             } catch (Exception ex) 
             {
+                
                 Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
+                _logger.LogError(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
             }
         }
         
@@ -157,19 +170,21 @@ namespace InfoBoard.Services
             try
             {
                 //To update the media files url
-                Constants.updateMediaFilesUrl("UNREGISTERED");
+                Utilities.updateMediaFilesUrl("UNREGISTERED");
 
                 string fileName = "DeviceSettings.json";
-                string fullPathFileName = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, fileName);
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = "RESETED";
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
                 await Task.Delay(TimeSpan.FromSeconds(2));
+                _logger.LogCritical("Log file has resetted resetLocalSettingsFile");
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
+                _logger.LogError(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
             }
         }
 
