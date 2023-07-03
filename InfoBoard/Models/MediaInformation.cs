@@ -9,6 +9,8 @@
         public string s3key { get; set; }
         public int size { get; set; }
         public string uploaded_at { get; set; }
+        public string type { get; set; }
+        public List<string> file_categories { get; set; }
         public string presignedURL { get; set; }
 
         public bool Equals(FileInformation other)

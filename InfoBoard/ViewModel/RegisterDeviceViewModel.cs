@@ -97,7 +97,7 @@ namespace InfoBoard.ViewModel
             timer4Registration.IsRepeating = true;
             timer4Registration.Start();
 
-            _status = "Registering device...";
+            _status = "Activating device...";
             _logger.LogInformation($"**RegisterDeviceViewModel** StartTimed4DeviceRegisterationEvent");
             OnPropertyChanged();
         }
@@ -123,7 +123,7 @@ namespace InfoBoard.ViewModel
                 return;
             }
 
-            _status =   $"Registering Device" +
+            _status =   $"Activating" +
                         $"\nAttempt #{counter}"; 
             OnPropertyChanged(nameof(Status));
 
@@ -137,7 +137,7 @@ namespace InfoBoard.ViewModel
 
             if(deviceSettings == null)
             {
-                _status = $"Result of attempt #{counter}" +
+                _status = $"Attempt #{counter}" +
                           $"\n{registrationMessage}"+                    
                           $"\n\nI'm not about to give up. " +
                           $"\nI'll keep pushing forward, " +
@@ -185,14 +185,14 @@ namespace InfoBoard.ViewModel
             //Reset the temporary code and handshake URL
             Utilities.resetTemporaryCodeAndHandshakeURL();
 
-            _registerKeyLabel = "Temporary Code:" + Utilities.TEMPORARY_CODE;
+            _registerKeyLabel = Utilities.TEMPORARY_CODE;
 
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
             createQrCrCodeImage(Utilities.HANDSHAKE_URL);
             _qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 
-            _status = "New QR Code Generated";
+            _status = "New activation code generated";
             OnPropertyChanged(nameof(RegisterationKey));
             OnPropertyChanged(nameof(QRImageButton));
             OnPropertyChanged(nameof(Status));
