@@ -90,7 +90,7 @@ namespace InfoBoard.Services
                     //If error is null, there is no error then update the settings
                     if (deviceSettings.error == null)
                     {
-                        _logger.LogInformation("Device settings updated");
+                        _logger.LogInformation("#33RS Device settings updated!");
                         await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);
                     }
                     else

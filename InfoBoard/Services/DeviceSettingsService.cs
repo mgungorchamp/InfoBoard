@@ -38,7 +38,7 @@ namespace InfoBoard.Services
             {
                 RestService restService = new RestService();
                 await restService.updateDeviceSettings(localDeviceSettings.device_key);
-                _logger.LogInformation($"LD-01 **updateDeviceSettings \n{localDeviceSettings.name}");
+                //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
                 //Read the updated settings file and return the latest settings
                 return await readSettingsFromLocalJSON();
             }
@@ -110,10 +110,10 @@ namespace InfoBoard.Services
 
                     if (deviceSettings?.device_key == null)
                     {
-                        _logger.LogWarning($"6 **return null readSettingsFromLocalJSON");
+                        _logger.LogWarning($"66 **return null readSettingsFromLocalJSON");
                         return null;
                     }
-                    _logger.LogInformation($"8 **return deviceSettings readSettingsFromLocalJSON");    
+                    _logger.LogInformation($"88 **return deviceSettings readSettingsFromLocalJSON");    
                     return deviceSettings;
                 }
                 else
@@ -124,7 +124,7 @@ namespace InfoBoard.Services
             } 
             catch(Exception ex) {
                 Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
-                _logger.LogError($"9 {ex.Message} readSettingsFromLocalJSON  MURAT");
+                _logger.LogError($"99 {ex.Message} readSettingsFromLocalJSON  MURAT");
             }
             _logger.LogWarning($"11 **return null readSettingsFromLocalJSON - MURAT ");
             return null;
