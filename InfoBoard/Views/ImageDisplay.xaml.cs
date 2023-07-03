@@ -62,8 +62,8 @@ public partial class ImageDisplay : ContentPage
         //await mainPageImage.FadeTo(0, 500);
         //await mainPageImage.FadeTo(1, 500);
 
-        var toast = Toast.Make($"Appearing! ImageDisplay");
-        await toast.Show();
+        //var toast = Toast.Make($"Appearing! ImageDisplay");
+        //await toast.Show();
         
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
@@ -73,14 +73,14 @@ public partial class ImageDisplay : ContentPage
     }
 
      
-    protected async override void OnDisappearing()
+    protected override void OnDisappearing()
     {
         base.OnDisappearing();
 
         ((ImageViewModel)BindingContext).StopTimersNow();
 
-        var toast = Toast.Make("Disappearing! ImageDisplay");
-        await toast.Show();
+        //var toast = Toast.Make("Disappearing! ImageDisplay");
+        //await toast.Show();
 
         Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        

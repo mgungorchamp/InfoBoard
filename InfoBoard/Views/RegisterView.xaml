@@ -27,7 +27,8 @@
                 <Label
                 x:Name="RegisterKeyLabel"
                 Text="{Binding RegisterationKey}"
-                FontSize="Medium"
+                FontSize="Large"
+                FontAttributes="Bold"                
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />
 
@@ -36,7 +37,8 @@
 
                 <Label               
                 Text="METHOD 1"
-                FontSize="Default"                
+                FontSize="Default"      
+                FontAttributes="Bold"   
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />
                 <Label               
@@ -54,6 +56,7 @@
                 <Label               
                 Text="METHOD 2"
                 FontSize="Default"
+                FontAttributes="Bold"
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />
                 <Label               
@@ -68,6 +71,7 @@
                 <Label               
                 Text="ACTIVATION STATUS"
                 FontSize="Default"
+                FontAttributes="Bold"
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />
 
