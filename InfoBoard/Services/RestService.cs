@@ -24,10 +24,14 @@ namespace InfoBoard.Services
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
                 WriteIndented = true
             };
         }
 
+        //Below code works but messy since it cannot parse the error message
+        //For now know issue and might be fixed later - IT WORKS... but why not parsing 
+        //During category rewrite I might address this issue
         public async Task<List<FileInformation>> retrieveFileList()
         {
             FileDownloadService fileDownloadService = new FileDownloadService();
@@ -38,31 +42,49 @@ namespace InfoBoard.Services
             }          
 
             Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
+            Stream content = null;
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
                     List<FileInformation> fileList = null;
-                    string content = await response.Content.ReadAsStringAsync();
-                    if (content.Length < 20) 
+                    content = await response.Content.ReadAsStreamAsync();                    
+                    
+                    if (content.Length < 100) 
                     {
-                        _logger.LogInformation($"02# Content is empty retrieveFileList MURAT{uri}");
+                        try
+                        {
+                            //{"error":{"code":3,"message":"couldn't find device for that device key"}}
+                            ErrorWrapper errorWrapper = await JsonSerializer.DeserializeAsync<ErrorWrapper>(content, _serializerOptions);
+
+                            if (errorWrapper?.error?.code == 3)
+                            {
+                                _logger.LogInformation($"55# DEVICE REMOVED \nMessage from server: {errorWrapper.error.message} ");
+                                return null;
+                            }
+                        }
+                        catch (Exception ex2)
+                        {
+                            _logger.LogError($"06# could not Deserialize \n " +
+                                            $"Exception: {ex2.Message}");
+                        }
                         return null;
                     }
-                    fileList = JsonSerializer.Deserialize<List<FileInformation>>(content, _serializerOptions);
-                    return fileList;
+                    
+                    fileList = await JsonSerializer.DeserializeAsync<List<FileInformation>>(content, _serializerOptions);
+                    return fileList;                    
                 }
             }
-            catch (Exception ex)
-            {
-                //Most likely the device unregistered and we got an error messsage
-                Console.WriteLine(@"\tDevice Unregistered ERROR JSON Received {0} retrieveFileList MURAT", ex.Message);
-                _logger.LogError(@"\t 04# Posibiliy Device Unregistered ERROR JSON Received {0} retrieveFileList MURAT\n", ex.Message);
-                return null;
+            catch (Exception ex3)
+            {        
+                Console.WriteLine($"\t 22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
+                _logger.LogError($"\t 22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
             }
-            _logger.LogError("03# Posible ERROR retrieveFileList MURAT");
-            //return existing files - it should not come here
+            //Two reasons to be here
+            //1. Server having a bad moment - return existing files
+            //2. Device might be unregistered but in this case we should return null before this point                           
+            _logger.LogError($"\t 11#FILES Should not be here - server having a bad day?\n URI : {uri.ToString()}\n");
             return await fileDownloadService.synchroniseMediaFiles();
         }
 

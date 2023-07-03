@@ -113,7 +113,7 @@ namespace InfoBoard.Services
                         _logger.LogWarning($"66 **return null readSettingsFromLocalJSON");
                         return null;
                     }
-                    _logger.LogInformation($"88 **return deviceSettings readSettingsFromLocalJSON");    
+                    _logger.LogInformation($"88 **return deviceSettings readSettingsFromLocalJSON\n");    
                     return deviceSettings;
                 }
                 else

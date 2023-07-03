@@ -12,7 +12,7 @@
         public string? last_handshake_temporary_code { get; set; }
         public string? last_heard_from { get; set; }
         public string? device_key { get; set; } 
-        public ErrorInfo? error { get; set; }
+        public Error? error { get; set; }
 
 #nullable disable
     }
