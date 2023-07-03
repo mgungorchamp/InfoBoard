@@ -221,11 +221,11 @@ namespace InfoBoard.ViewModel
                 return;
             }
             //If internet is not available stop file syncronisation
-            if (!UtilityServices.isInternetAvailable() && timer4FileSync.IsRunning)
+            if (!Utilities.isInternetAvailable() && timer4FileSync.IsRunning)
             {
                 StopTimer4FilesAndDeviceSettings();  
             }
-            else if (UtilityServices.isInternetAvailable() && !timer4FileSync.IsRunning)
+            else if (Utilities.isInternetAvailable() && !timer4FileSync.IsRunning)
             {
                 StartTimer4FilesAndDeviceSettings();
             }

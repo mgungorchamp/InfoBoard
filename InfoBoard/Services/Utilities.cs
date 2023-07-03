@@ -1,5 +1,6 @@
 ﻿using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using System.Net.NetworkInformation;
 using System.Text.Json;
 
 namespace InfoBoard.Services
@@ -105,6 +106,33 @@ namespace InfoBoard.Services
 
         public static ILogger Logger(string categoryName) {
             return loggerFactory.CreateLogger(categoryName);
+        }
+
+
+        public static bool isInternetAvailable()
+        {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                return true;
+            }
+            else
+            {
+                Ping ping = new Ping();
+                try
+                {
+                    PingReply reply = ping.Send("8.8.8.8", 3000);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    ; // Do nothing
+                }
+            }
+            return false;
         }
     }
 }

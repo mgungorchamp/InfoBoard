@@ -1,4 +1,5 @@
 ﻿using InfoBoard.Models;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -14,9 +15,11 @@ namespace InfoBoard.Services
     {
         HttpClient _client;
         JsonSerializerOptions _serializerOptions;
+        private readonly ILogger _logger;
 
         public RestService()
         {
+            _logger = Utilities.Logger(nameof(RestService));
             _client = new HttpClient();
             _serializerOptions = new JsonSerializerOptions
             {
@@ -28,7 +31,7 @@ namespace InfoBoard.Services
         public async Task<List<FileInformation>> retrieveFileList()
         {
             FileDownloadService fileDownloadService = new FileDownloadService();
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {
                 //No internet - return existing files
                 return await fileDownloadService.synchroniseMediaFiles(); 
@@ -42,8 +45,9 @@ namespace InfoBoard.Services
                 {
                     List<FileInformation> fileList = null;
                     string content = await response.Content.ReadAsStringAsync();
-                    if (content.Length < 10) 
+                    if (content.Length < 20) 
                     {
+                        _logger.LogInformation($"02# Content is empty retrieveFileList MURAT{uri}");
                         return null;
                     }
                     fileList = JsonSerializer.Deserialize<List<FileInformation>>(content, _serializerOptions);
@@ -53,10 +57,11 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 //Most likely the device unregistered and we got an error messsage
-                Console.WriteLine(@"\tImage Unregistered ERROR JSON Received {0} retrieveFileList MURAT", ex.Message);
+                Console.WriteLine(@"\tDevice Unregistered ERROR JSON Received {0} retrieveFileList MURAT", ex.Message);
+                _logger.LogError(@"\t 04# Posibiliy Device Unregistered ERROR JSON Received {0} retrieveFileList MURAT\n", ex.Message);
                 return null;
             }
-
+            _logger.LogError("03# Posible ERROR retrieveFileList MURAT");
             //return existing files - it should not come here
             return await fileDownloadService.synchroniseMediaFiles();
         }
@@ -64,7 +69,7 @@ namespace InfoBoard.Services
         public async Task updateDeviceSettings(string deviceKey)
         {  
             //No internet - return 
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {                 
                 return;
             }
@@ -85,12 +90,14 @@ namespace InfoBoard.Services
                     //If error is null, there is no error then update the settings
                     if (deviceSettings.error == null)
                     {
+                        _logger.LogInformation("Device settings updated");
                         await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);
                     }
                     else
                     {
                         // Device removed from server - unregister device
                         Debug.WriteLine("Device removed from server - unregister device");
+                        _logger.LogWarning("\n\n\t\t@@@@@ Device removed from server - reset device settings unregister device\n\n");
                         await deviceSettingsService.resetLocalSettingsFile();
                     }
                 }
@@ -98,13 +105,14 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0} retrieveDeviceSettings MURAT", ex.Message);
+                _logger.LogError($"ERROR {ex.Message} retrieveDeviceSettings MURAT");
             }
         }
 
 
         public async Task<string> registerDevice()
         {
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {
                 return "No internet";// No internet - return
             }
@@ -124,12 +132,14 @@ namespace InfoBoard.Services
                     {
                         //Registeration succesful and request full settings and save it to local settings
                         await updateDeviceSettings(registerationResult.device_key);
+                        _logger.LogInformation("Registration succesfully completed!");
                         return "Registration succesfully completed!";
                     }
                     else // Either user imput is expected or device registered already timer kicked in - ignore error - or key expired
                     {
                         //Maybe device registered but just before it timer kicks in - ignore error
                         Debug.WriteLine("Atempting to register device... Users input expected");
+                        _logger.LogWarning("Atempting to register device... Users input expected");
                         return  $"\nUser input expected!" +                                
                                 $"\n\nServer says: {registerationResult.error.message}";
                     }
@@ -138,8 +148,10 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0} registerDevice MURAT", ex.Message);
+                _logger.LogError($"Device Registration Exception:ERROR {ex.Message} registerDevice MURAT");
                 return $"Device Registration Exception: ERROR {ex.Message} registerDevice MURAT";
             }
+            _logger.LogError($"Another registration message waiting to be more informative");
             return "Another registration message waiting to be more informative";
         }
     }

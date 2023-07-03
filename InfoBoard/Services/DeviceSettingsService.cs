@@ -24,7 +24,7 @@ namespace InfoBoard.Services
         {
             DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
             //No internet - return existing settings
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {                
                 Debug.WriteLine($"**No internet - return existing settings");  
                 _logger.LogInformation($"**No internet - return existing settings");
@@ -38,7 +38,7 @@ namespace InfoBoard.Services
             {
                 RestService restService = new RestService();
                 await restService.updateDeviceSettings(localDeviceSettings.device_key);
-                _logger.LogInformation($"**updateDeviceSettings{localDeviceSettings.device_key}");
+                _logger.LogInformation($"LD-01 **updateDeviceSettings \n{localDeviceSettings.name}");
                 //Read the updated settings file and return the latest settings
                 return await readSettingsFromLocalJSON();
             }

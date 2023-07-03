@@ -1,8 +1,5 @@
 ﻿using InfoBoard.Models;
-using InfoBoard.Views;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
@@ -38,13 +35,19 @@ namespace InfoBoard.Services
          */
 
         List<FileInformation> lastSavedFileList;
+        private readonly ILogger _logger;
+
+        public FileDownloadService()
+        {
+            _logger = Utilities.Logger(nameof(FileDownloadService));
+        }
 
         public async Task<List<FileInformation>> synchroniseMediaFiles()
         {
             List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
 
             //No internet - return existing files
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {
                 return fileListFromLocal;
             }
@@ -56,10 +59,12 @@ namespace InfoBoard.Services
                 //If the local JSON file does not exist fileList will be null
                 //Then dowload all media files to local directory 
                 //And save the JSON file to local directory
+                _logger.LogInformation($"**Case 1: First time dowloading all the files");
                 return await downloadAllFilesFromServer();
             }
             else
             {
+                _logger.LogInformation("--Case 2: Synchronise files");
                 return await oneWaySynchroniseFiles();
                 //return readMediaNamesFromLocalJSON();
                 // fileList = readMediaNamesFromLocalJsonCheckDiscrepancy();
@@ -101,7 +106,7 @@ namespace InfoBoard.Services
             //Since the device unregistered
             if (fileListFromServer == null) 
             {
-                if (UtilityServices.isInternetAvailable()) 
+                if (Utilities.isInternetAvailable()) 
                 {
                     //Before deleting all the files - check if the device is registered
                     //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
@@ -113,9 +118,10 @@ namespace InfoBoard.Services
 
                     //Delete all the files from local directory
                     foreach (FileInformation file in fileListFromLocal)
-                    {
+                    {                        
                         deleteLocalFile(file);
                     }
+                    _logger.LogInformation($"# 88D All the files deleted");
                     //EMPTY the local file list 
                     List<FileInformation> fileList = new List<FileInformation>();
                     await saveMediaNamesToLocalJSON(fileList);
@@ -139,7 +145,7 @@ namespace InfoBoard.Services
             //CASE 2 - Download NEW files
             IEnumerable<FileInformation> missingLocalFiles = fileListFromServer.Except(fileListFromLocal);
             foreach (FileInformation file in missingLocalFiles)
-            {
+            {               
                 await downloadFileToLocalDirectory(file);
             }
 
@@ -156,7 +162,7 @@ namespace InfoBoard.Services
             //Now we can delete - since if JSON is not updated - it will try to view deleted file 
             //Delete after updating JSON
             foreach (FileInformation file in filesDeletedFromServer)
-            {
+            {                
                 deleteLocalFile(file);
             }
 
@@ -176,6 +182,7 @@ namespace InfoBoard.Services
                 string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 if (!File.Exists(fileName))
                 {
+                    _logger.LogError($"#E2: Discrepancy  resetting the files - missing file {fileName}");
                     fileListFromLocal = null; // Fresh start, since there is missing files
                     break;
                 }
@@ -195,8 +202,9 @@ namespace InfoBoard.Services
                     await downloadFileToLocalDirectory(file);
                 }
             } 
-            catch {
+            catch(Exception ex) {
                 Console.WriteLine("downloadFilesToLocalDirectory Done: Download Exception: MURAT");
+                _logger.LogError($"#77 downloadFilesToLocalDirectory Download Exception: MURAT\n {ex.Message}");
             }
         }
 
@@ -219,9 +227,12 @@ namespace InfoBoard.Services
                 byte[] fileContent = await httpClient.GetByteArrayAsync(uri);
                 //Save it to local folder
                 await File.WriteAllBytesAsync(localFullFileName, fileContent);
-            }catch 
+                _logger.LogInformation($"Downloading file: {fileInformation.name}");
+            }
+            catch (Exception ex) 
             {
-                Console.WriteLine("downloadFileToLocalDirectory  has issues MURAT");
+                Console.WriteLine($"downloadFileToLocalDirectory  has issues MURAT\n {ex.Message}");
+                _logger.LogError($"#66 Exception downloadFileToLocalDirectory\n {ex.Message}");
             }
         }
 
@@ -229,14 +240,16 @@ namespace InfoBoard.Services
         {
             try
             {
+                _logger.LogInformation($"#D1: Deleting local file: {fileInformation.name}");
                 //DirectoryInfo directoryInfo = getMediaFolder();
                 string localFullFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 //Save it to local folder
                 File.Delete(localFullFileName);
             }
-            catch
+            catch(Exception ex)
             {
                 Console.WriteLine("File cannot be deleted: deleteLocalFile  has issues MURAT");
+                _logger.LogError($"#33 File cannot be deleted: deleteLocalFile  has issues MURAT\n {ex.Message}");
             }
         }
          
@@ -257,9 +270,10 @@ namespace InfoBoard.Services
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 lastSavedFileList = fileList;
             }
-            catch
+            catch(Exception ex)
             {
                 Console.WriteLine("saveMediaNamesToLocalJSON  has issues MURAT");
+                _logger.LogError($"#11 saveMediaNamesToLocalJSON  has issues MURAT\n {ex.Message}");
             }
         }
 
@@ -287,7 +301,7 @@ namespace InfoBoard.Services
                 {
                     string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
                     //Return - If all the pictures removed from the server but file exist in local directory
-                    if (jsonString.Length < 10)
+                    if (jsonString.Length < 20)
                         return null;
 
                     fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
@@ -295,9 +309,10 @@ namespace InfoBoard.Services
                 //No need to read again
                 lastSavedFileList = fileList;
             }
-            catch
+            catch(Exception ex)
             {
                 Console.WriteLine("readMediaNamesFromLocalJSON  has issues MURAT");
+                _logger.LogError($"#22 readMediaNamesFromLocalJSON  has issues MURAT\n {ex.Message}");
             }
             return fileList;
         }

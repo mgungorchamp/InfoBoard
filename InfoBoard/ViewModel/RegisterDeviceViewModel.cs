@@ -116,7 +116,7 @@ namespace InfoBoard.ViewModel
         {
             counter++;
             
-            if (!UtilityServices.isInternetAvailable())
+            if (!Utilities.isInternetAvailable())
             {             
                 _status = "No Internet Connection";
                 OnPropertyChanged(nameof(Status));
