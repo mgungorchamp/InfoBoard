@@ -115,6 +115,7 @@ namespace InfoBoard.ViewModel
 
             timer4DeviceSettingsSync.IsRepeating = false;
             timer4DeviceSettingsSync.Stop();
+            _logger.LogInformation("\n\n+++ STOP Timer 4 Files And DeviceSettings is called\n\n");
         }
 
         private void StartTimer4FilesAndDeviceSettings()
@@ -124,6 +125,7 @@ namespace InfoBoard.ViewModel
 
             timer4DeviceSettingsSync.IsRepeating = true;
             timer4DeviceSettingsSync.Start();
+            _logger.LogInformation("\n\n+++ START Timer 4 Files And DeviceSettings is called\n\n");
         }
 
 
@@ -139,6 +141,10 @@ namespace InfoBoard.ViewModel
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
             {
+                //Reset all the files - if the device activated before
+                _logger.LogInformation("\nReset local media files if the device used before to clean start\n");
+                await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
+                //Navigate to RegisterView
                 _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
                 await Shell.Current.GoToAsync(nameof(RegisterView));
             }

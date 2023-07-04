@@ -178,7 +178,7 @@ namespace InfoBoard.Services
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
                 await Task.Delay(TimeSpan.FromSeconds(2));
-                _logger.LogCritical("Log file has resetted resetLocalSettingsFile");
+                _logger.LogCritical("Local file has resetted resetLocalSettingsFile");
 
             }
             catch (Exception ex)

@@ -1,6 +1,8 @@
 ﻿using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection.PortableExecutable;
 using System.Text.Json;
 
 
@@ -32,60 +34,69 @@ namespace InfoBoard.Services
         //Below code works but messy since it cannot parse the error message
         //For now know issue and might be fixed later - IT WORKS... but why not parsing 
         //During category rewrite I might address this issue
-        public async Task<List<FileInformation>> retrieveFileList()
+        public async Task updateMediaList()
         {
-            FileDownloadService fileDownloadService = new FileDownloadService();
             if (!Utilities.isInternetAvailable())
             {
-                //No internet - return existing files
-                return await fileDownloadService.synchroniseMediaFiles(); 
+                //No internet - don't do anything
+                return; 
             }          
 
             Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
-            Stream content = null;
+            Stream mediaStream = null;
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
+                FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
                 {
-                    List<FileInformation> fileList = null;
-                    content = await response.Content.ReadAsStreamAsync();                    
                     
-                    if (content.Length < 100) 
+                    mediaStream = await response.Content.ReadAsStreamAsync();                    
+                    
+                    if (mediaStream.Length < 100) 
                     {
                         try
                         {
                             //{"error":{"code":3,"message":"couldn't find device for that device key"}}
-                            ErrorWrapper errorWrapper = await JsonSerializer.DeserializeAsync<ErrorWrapper>(content, _serializerOptions);
+                            ErrorWrapper errorWrapper = await JsonSerializer.DeserializeAsync<ErrorWrapper>(mediaStream, _serializerOptions);
 
                             if (errorWrapper?.error?.code == 3)
                             {
                                 _logger.LogInformation($"55# DEVICE REMOVED \nMessage from server: {errorWrapper.error.message} ");
-                                return null;
+                                await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
+                                return;
                             }
                         }
                         catch (Exception ex2)
                         {
-                            _logger.LogError($"06# could not Deserialize \n " +
-                                            $"Exception: {ex2.Message}");
+                            StreamReader streamReader = new StreamReader(mediaStream);
+                            string apiResponse = streamReader.ReadToEnd();
+                            _logger.LogError($"06# could not Deserialize\n" +
+                                            $"Exception: {ex2.Message}\n" +
+                                            $"API Response : {apiResponse}\n");
                         }
-                        return null;
+                        await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
+                        return;
                     }
-                    
-                    fileList = await JsonSerializer.DeserializeAsync<List<FileInformation>>(content, _serializerOptions);
-                    return fileList;                    
+                    List<FileInformation> fileList = await JsonSerializer.DeserializeAsync<List<FileInformation>>(mediaStream, _serializerOptions);
+                    await fileDownloadService.saveMediaNamesToLocalJSON(fileList);
+                    return;                    
                 }
             }
             catch (Exception ex3)
-            {        
-                Console.WriteLine($"\t 22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
-                _logger.LogError($"\t 22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
+            {                
+                Console.WriteLine($"22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
+                _logger.LogError($"\n22#FILES Posibiliy Server is having a bad day\n" +
+                                 $"Exception: {ex3.Message}");
             }
             //Two reasons to be here
             //1. Server having a bad moment - return existing files
-            //2. Device might be unregistered but in this case we should return null before this point                           
-            _logger.LogError($"\t 11#FILES Should not be here - server having a bad day?\n URI : {uri.ToString()}\n");
-            return await fileDownloadService.synchroniseMediaFiles();
+            //2. Device might be unregistered but in this case we should return before this point
+            StreamReader reader = new StreamReader(mediaStream);
+            string content = reader.ReadToEnd();
+            _logger.LogError($"\t 11#FILES Should not be here - server having a bad day?\n" +
+                             $"URI : {uri.ToString()}\n" +
+                             $"API Response : {content}"); 
         }
 
         public async Task updateDeviceSettings(string deviceKey)
