@@ -43,7 +43,7 @@ namespace InfoBoard.Services
             }          
 
             Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
-            Stream mediaStream = null;
+            String mediaContent = null;
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
@@ -51,34 +51,34 @@ namespace InfoBoard.Services
                 if (response.IsSuccessStatusCode)
                 {
                     
-                    mediaStream = await response.Content.ReadAsStreamAsync();                    
+                    mediaContent = await response.Content.ReadAsStringAsync();                    
                     
-                    if (mediaStream.Length < 100) 
+                    if (mediaContent.Length < 100) 
                     {
                         try
                         {
                             //{"error":{"code":3,"message":"couldn't find device for that device key"}}
-                            ErrorWrapper errorWrapper = await JsonSerializer.DeserializeAsync<ErrorWrapper>(mediaStream, _serializerOptions);
+                            ErrorWrapper errorWrapper = JsonSerializer.Deserialize<ErrorWrapper>(mediaContent, _serializerOptions);
 
                             if (errorWrapper?.error?.code == 3)
                             {
-                                _logger.LogInformation($"55# DEVICE REMOVED \nMessage from server: {errorWrapper.error.message} ");
+                                _logger.LogInformation( $"55# DEVICE REMOVED \n" +
+                                                        $"Message from server: {errorWrapper.error.message} " +
+                                                        $"Server Response: {mediaContent}");
                                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                                 return;
                             }
                         }
                         catch (Exception ex2)
-                        {
-                            StreamReader streamReader = new StreamReader(mediaStream);
-                            string apiResponse = streamReader.ReadToEnd();
+                        {                          
                             _logger.LogError($"06# could not Deserialize\n" +
                                             $"Exception: {ex2.Message}\n" +
-                                            $"API Response : {apiResponse}\n");
+                                            $"API Response : {mediaContent}\n");
                         }
                         await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                         return;
                     }
-                    List<FileInformation> fileList = await JsonSerializer.DeserializeAsync<List<FileInformation>>(mediaStream, _serializerOptions);
+                    List<FileInformation> fileList = JsonSerializer.Deserialize<List<FileInformation>>(mediaContent, _serializerOptions);
                     await fileDownloadService.saveMediaNamesToLocalJSON(fileList);
                     return;                    
                 }
@@ -87,16 +87,15 @@ namespace InfoBoard.Services
             {                
                 Console.WriteLine($"22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
                 _logger.LogError($"\n22#FILES Posibiliy Server is having a bad day\n" +
-                                 $"Exception: {ex3.Message}");
+                                 $"Exception: {ex3.Message}\n" +
+                                 $"API Response : {mediaContent}\n");
             }
             //Two reasons to be here
             //1. Server having a bad moment - return existing files
-            //2. Device might be unregistered but in this case we should return before this point
-            StreamReader reader = new StreamReader(mediaStream);
-            string content = reader.ReadToEnd();
+            //2. Device might be unregistered but in this case we should return before this point        
             _logger.LogError($"\t 11#FILES Should not be here - server having a bad day?\n" +
                              $"URI : {uri.ToString()}\n" +
-                             $"API Response : {content}"); 
+                             $"API Response : {mediaContent}\n");
         }
 
         public async Task updateDeviceSettings(string deviceKey)
@@ -130,7 +129,7 @@ namespace InfoBoard.Services
                     {
                         // Device removed from server - unregister device
                         Debug.WriteLine("Device removed from server - unregister device");
-                        _logger.LogWarning("\n\n\t\t@@@@@ Device removed from server - reset device settings unregister device\n\n");
+                        _logger.LogWarning("\n\n\t\t#89-SETTTINGS Device removed from server - reset device settings unregister device\n\n");
                         await deviceSettingsService.resetLocalSettingsFile();
                     }
                 }
@@ -138,7 +137,7 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0} retrieveDeviceSettings MURAT", ex.Message);
-                _logger.LogError($"ERROR {ex.Message} retrieveDeviceSettings MURAT");
+                _logger.LogError($"#77-SETTTINGS Exception: {ex.Message} retrieveDeviceSettings MURAT");
             }
         }
 
