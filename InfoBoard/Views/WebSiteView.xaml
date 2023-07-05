@@ -3,18 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InfoBoard.Views.WebSiteView"
              Title="WebSiteView">
-    <VerticalStackLayout>
+    <Grid>
 
-        <WebView Source="https://learn.microsoft.com/dotnet/maui" />
         <WebView 
-            x:Name="myWebView" 
+            x:Name="webView"             
             VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            Source="https://blog.xamarin.com" />
-        
+            HorizontalOptions="FillAndExpand"/>
+
         <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            Text="GuzelBoard TESTING"
+            FontAttributes="Bold"
+            TextColor="Orange"
+            FontSize="Large"
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="StartAndExpand" />
+    </Grid>
 </ContentPage>

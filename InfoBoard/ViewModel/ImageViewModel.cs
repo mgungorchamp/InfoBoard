@@ -173,7 +173,7 @@ namespace InfoBoard.ViewModel
            
         //}
 
-        List<FileInformation> fileList;
+        List<MediaInformation> fileList;
         private async void SetupAndStartTimers()
         {
 
@@ -211,11 +211,36 @@ namespace InfoBoard.ViewModel
             StartTimersNow();
         }
 
+        public async Task GoToWebView()
+        {
+            MediaInformation mediaInfo = new MediaInformation();
+            mediaInfo.presignedURL = "https://vermontic.com/";
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "MediaInformationParam", mediaInfo }
+            };
+            //await Shell.Current.GoToAsync($"beardetails", navigationParameter);
+            await Shell.Current.GoToAsync(nameof(WebSiteView), navigationParameter);
+        }
+
+        //bool showImage = true; 
 
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
-            _imageSource = getRandomImageName();
-            OnPropertyChanged(nameof(ImageSource));
+            //if (showImage)
+           // {
+                _imageSource = getRandomImageName();
+                OnPropertyChanged(nameof(ImageSource));
+           //     showImage = false;
+            //}
+            //else
+           // {
+           //     timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
+            //    await GoToWebView();                
+             //   await Task.Delay(TimeSpan.FromSeconds(10));
+            //    showImage = true;
+              //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
+           // }
 
             await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
 

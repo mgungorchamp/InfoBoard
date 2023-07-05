@@ -42,9 +42,9 @@ namespace InfoBoard.Services
             _logger = Utilities.Logger(nameof(FileDownloadService));
         }
 
-        public async Task<List<FileInformation>> synchroniseMediaFiles()
+        public async Task<List<MediaInformation>> synchroniseMediaFiles()
         {
-            List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
+            List<MediaInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
 
             //No internet - return existing files
             if (!Utilities.isInternetAvailable())
@@ -71,9 +71,9 @@ namespace InfoBoard.Services
             }
         }
 
-        private async Task<List<FileInformation>> downloadAllFilesFromServer()
+        private async Task<List<MediaInformation>> downloadAllFilesFromServer()
         {
-            List<FileInformation> fileList = await getLatestMediaNamesFromServer();
+            List<MediaInformation> fileList = await getLatestMediaNamesFromServer();
 
             //Save those files to local directory
             await downloadFilesToLocalDirectory(fileList);
@@ -83,27 +83,27 @@ namespace InfoBoard.Services
 
         //Gets the latest media file names from the server(if there is internet) and saves to local file and reads it and returns the list
         //If no internet returns the local file
-        private async Task<List<FileInformation>> getLatestMediaNamesFromServer()
+        private async Task<List<MediaInformation>> getLatestMediaNamesFromServer()
         {
             //Get file names from the server - fileListFromServer
             RestService restService = new RestService();
             await restService.updateMediaList();
 
-            List<FileInformation> fileList = await readMediaNamesFromLocalJSON();
+            List<MediaInformation> fileList = await readMediaNamesFromLocalJSON();
             return fileList;
         }
 
-        private async Task<List<FileInformation>> oneWaySynchroniseFiles()
+        private async Task<List<MediaInformation>> oneWaySynchroniseFiles()
         {
 
             //If any of the local files missing - corrupted - try downloading all files
-            List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJsonCheckDiscrepancy();            
+            List<MediaInformation> fileListFromLocal = await readMediaNamesFromLocalJsonCheckDiscrepancy();            
             if (fileListFromLocal == null)
             {
                 return await downloadAllFilesFromServer();                
             }
 
-            List<FileInformation> fileListFromServer = await getLatestMediaNamesFromServer();
+            List<MediaInformation> fileListFromServer = await getLatestMediaNamesFromServer();
 
             //If fileListFromServer null just abort the operations
             //Since the device unregistered, and files has been deleted from local folder
@@ -126,8 +126,8 @@ namespace InfoBoard.Services
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
 
             //CASE 2 - Download NEW files
-            IEnumerable<FileInformation> missingLocalFiles = fileListFromServer.Except(fileListFromLocal);
-            foreach (FileInformation file in missingLocalFiles)
+            IEnumerable<MediaInformation> missingLocalFiles = fileListFromServer.Except(fileListFromLocal);
+            foreach (MediaInformation file in missingLocalFiles)
             {               
                 await downloadFileToLocalDirectory(file);
             }
@@ -135,7 +135,7 @@ namespace InfoBoard.Services
             //CASE 2 - DELETE removed files
             // In the local but not at the server delete those files
             // ref: https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-find-the-set-difference-between-two-lists-linq
-            IEnumerable<FileInformation> filesDeletedFromServer = fileListFromLocal.Except(fileListFromServer);
+            IEnumerable<MediaInformation> filesDeletedFromServer = fileListFromLocal.Except(fileListFromServer);
        
             //First update the local JSON before deleting 
             //Any - true if the source sequence contains any elements; otherwise, false.
@@ -144,7 +144,7 @@ namespace InfoBoard.Services
 
             //Now we can delete - since if JSON is not updated - it will try to view deleted file 
             //Delete after updating JSON
-            foreach (FileInformation file in filesDeletedFromServer)
+            foreach (MediaInformation file in filesDeletedFromServer)
             {                
                 deleteLocalFile(file);
             }
@@ -153,14 +153,14 @@ namespace InfoBoard.Services
         }
 
 
-        private async Task<List<FileInformation>> readMediaNamesFromLocalJsonCheckDiscrepancy()
+        private async Task<List<MediaInformation>> readMediaNamesFromLocalJsonCheckDiscrepancy()
         {
-            List<FileInformation> fileListFromLocal =  await readMediaNamesFromLocalJSON();
+            List<MediaInformation> fileListFromLocal =  await readMediaNamesFromLocalJSON();
             // check if any of the local files missing - corrupted - return null
             // Get the folder where the images are stored.
             //string appDataPath = FileSystem.AppDataDirectory;
             //string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
-            foreach (var fileInformation in fileListFromLocal ?? Enumerable.Empty<FileInformation>())
+            foreach (var fileInformation in fileListFromLocal ?? Enumerable.Empty<MediaInformation>())
             {
                 string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);
                 if (!File.Exists(fileName))
@@ -174,13 +174,13 @@ namespace InfoBoard.Services
         }
                
 
-        private async Task downloadFilesToLocalDirectory(List<FileInformation> fileList)
+        private async Task downloadFilesToLocalDirectory(List<MediaInformation> fileList)
         {
             try
             {
                 //All these saving should be ASYNC task list and we can waitall at the end
                 //Download each file from the server to local folder
-                foreach (var file in fileList ?? Enumerable.Empty<FileInformation>())
+                foreach (var file in fileList ?? Enumerable.Empty<MediaInformation>())
                 {
                     await downloadFileToLocalDirectory(file);
                 }
@@ -191,7 +191,7 @@ namespace InfoBoard.Services
             }
         }
 
-        private async Task downloadFileToLocalDirectory(FileInformation fileInformation)
+        private async Task downloadFileToLocalDirectory(MediaInformation fileInformation)
         {
             //DirectoryInfo directoryInfo = getMediaFolder();
              
@@ -219,7 +219,7 @@ namespace InfoBoard.Services
             }
         }
 
-        private void deleteLocalFile(FileInformation fileInformation)
+        private void deleteLocalFile(MediaInformation fileInformation)
         {
             try
             {
@@ -237,7 +237,7 @@ namespace InfoBoard.Services
         }
          
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
-        public async Task saveMediaNamesToLocalJSON(List<FileInformation> fileList) 
+        public async Task saveMediaNamesToLocalJSON(List<MediaInformation> fileList) 
         {
             JsonSerializerOptions _serializerOptions;
             _serializerOptions = new JsonSerializerOptions
@@ -249,7 +249,7 @@ namespace InfoBoard.Services
             {
                 string fileName = "FileInformation.json";
                 string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                string jsonString = JsonSerializer.Serialize<List<FileInformation>>(fileList);
+                string jsonString = JsonSerializer.Serialize<List<MediaInformation>>(fileList);
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 //lastSavedFileList = fileList;
             }
@@ -265,8 +265,8 @@ namespace InfoBoard.Services
             try
             {
                 //Delete all the files from local directory
-                List<FileInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
-                foreach (FileInformation file in fileListFromLocal ?? Enumerable.Empty<FileInformation>()) //https://blog.jonschneider.com/2014/09/c-shorten-null-check-around-foreach.html?lr=1
+                List<MediaInformation> fileListFromLocal = await readMediaNamesFromLocalJSON();
+                foreach (MediaInformation file in fileListFromLocal ?? Enumerable.Empty<MediaInformation>()) //https://blog.jonschneider.com/2014/09/c-shorten-null-check-around-foreach.html?lr=1
                 {
                     deleteLocalFile(file);
                 }
@@ -289,7 +289,7 @@ namespace InfoBoard.Services
         }
 
         //Read local JSON file - if exist - if not return empty fileList
-        private async Task<List<FileInformation>> readMediaNamesFromLocalJSON()
+        private async Task<List<MediaInformation>> readMediaNamesFromLocalJSON()
         {
             //No need to read from local file, if this saved recently 
             //If not contine to read from file.
@@ -302,7 +302,7 @@ namespace InfoBoard.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
-            List<FileInformation> fileList = null;
+            List<MediaInformation> fileList = null;
             try
             {
                 string fileName = "FileInformation.json";
@@ -315,7 +315,7 @@ namespace InfoBoard.Services
                     if (jsonString.Length < 30)
                         return null;
 
-                    fileList = JsonSerializer.Deserialize<List<FileInformation>>(jsonString);
+                    fileList = JsonSerializer.Deserialize<List<MediaInformation>>(jsonString);
                 }
                 //No need to read again
                 //lastSavedFileList = fileList;

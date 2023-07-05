@@ -13,6 +13,6 @@ namespace InfoBoard.Models
         public int user_id { get; set; }
         public string color { get; set; }
         public int random_order { get; set; }
-        public List<FileInformation> files { get; set; }         
+        public List<MediaInformation> files { get; set; }         
     }
 }

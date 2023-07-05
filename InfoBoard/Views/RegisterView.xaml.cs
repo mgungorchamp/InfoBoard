@@ -31,7 +31,7 @@ public partial class RegisterView : ContentPage
 
     protected override void OnAppearing()
     {
-        _logger.LogInformation($"RegisterView On Appearing");
+        _logger.LogInformation($"\n\tRegisterView On Appearing\n");
         base.OnAppearing();
         ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
     }
@@ -39,7 +39,7 @@ public partial class RegisterView : ContentPage
 
     protected override void OnDisappearing()
     {
-        _logger.LogInformation($"RegisterView On Disappearing");
+        _logger.LogInformation($"\n\tRegisterView On Disappearing\n");
         base.OnDisappearing();
         ((RegisterDeviceViewModel)BindingContext).StopTimed4DeviceRegisterationEvent();
     }
