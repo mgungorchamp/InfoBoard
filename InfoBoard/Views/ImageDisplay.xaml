@@ -11,25 +11,28 @@
         <viewmodel:ImageViewModel/>
     </ContentPage.BindingContext>-->
     
-    <VerticalStackLayout>
+    <Grid>
         <!--<toolkit:MediaElement 
             x:Name="mediaElement"                    
             Source="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             ShouldAutoPlay="True"
             ShouldShowPlaybackControls="True" /
         Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
-        >-->        
+        >-->
         <Image 
             x:Name="mainPageImage"
-            Aspect="AspectFit"
+            Aspect="AspectFit"            
+            IsVisible="True"  
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
             Source="{Binding ImageSource, TargetNullValue='welcome.jpg'}">
         </Image>
         
         <Label 
             Text="{Binding ImageSource}"
-            TextColor="Grey"            
-            VerticalOptions="Center" 
-            HorizontalOptions="Center"/>
+            TextColor="Orange"            
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="StartAndExpand"/>
 
         <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
@@ -39,7 +42,7 @@
         </Image>-->
         
       
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>
 
 <!-- <Image.Source>-->
@@ -48,3 +51,10 @@
                 <!--   <UriImageSource Uri="{Binding ImageSource}"-->
         <!-- CacheValidity="{Binding Interval}" />-->
 <!-- </Image.Source>  -->
+
+<!--<Image.Shadow>
+    <Shadow Brush="Orange"
+                Offset="5,5"
+                Radius="40"
+                Opacity="0.8" />
+</Image.Shadow>-->
