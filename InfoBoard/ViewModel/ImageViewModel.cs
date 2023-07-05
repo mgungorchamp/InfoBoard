@@ -18,19 +18,40 @@ namespace InfoBoard.ViewModel
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync;
 
-        private string _imageSource;
+        private string mediaSource;
+        private bool imageSourceVisible;
+        private bool webViewVisible;
         private int _refreshInMiliSecond;
         private TimeSpan _cachingInterval; //caching interval
         public INavigation _navigation;
 
         private FileDownloadService fileDownloadService;
         
-        public string ImageSource {
-            get => _imageSource;
+        public string MediaSource {
+            get => mediaSource;
             set {
-                if (_imageSource == value)
+                if (mediaSource == value)
                     return;
-                _imageSource = value;
+                mediaSource = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ImageSourceVisible {
+            get => imageSourceVisible;
+            set {
+                if (imageSourceVisible == value)
+                    return;
+                imageSourceVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool WebViewVisible {
+            get => webViewVisible;
+            set {
+                if (webViewVisible == value)
+                    return;
+                webViewVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -61,7 +82,9 @@ namespace InfoBoard.ViewModel
             fileDownloadService = new FileDownloadService();
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
-
+            
+            imageSourceVisible = true;
+            webViewVisible = false;
 
             timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
@@ -223,24 +246,31 @@ namespace InfoBoard.ViewModel
             await Shell.Current.GoToAsync(nameof(WebSiteView), navigationParameter);
         }
 
-        //bool showImage = true; 
+        bool showImage = true; 
 
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
-            //if (showImage)
-           // {
-                _imageSource = getRandomImageName();
-                OnPropertyChanged(nameof(ImageSource));
-           //     showImage = false;
-            //}
-            //else
-           // {
-           //     timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
-            //    await GoToWebView();                
-             //   await Task.Delay(TimeSpan.FromSeconds(10));
-            //    showImage = true;
-              //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
-           // }
+            mediaSource = getRandomImageName();
+            if (showImage)
+            {                
+                imageSourceVisible = true;
+                webViewVisible = false;                
+                showImage = false;
+            }
+            else
+            {
+                imageSourceVisible = false;
+                webViewVisible = true;
+                showImage = true;
+                //  timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
+                //  await GoToWebView();                
+                //  await Task.Delay(TimeSpan.FromSeconds(10));
+                //  showImage = true;
+                //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
+            }
+            OnPropertyChanged(nameof(MediaSource));
+            OnPropertyChanged(nameof(ImageSourceVisible));
+            OnPropertyChanged(nameof(WebViewVisible));
 
             await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
 
@@ -294,16 +324,16 @@ namespace InfoBoard.ViewModel
          
         public async void ChangeImage()
         {
-            _imageSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
+            mediaSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
             //"https://innovation.wustl.edu/wp-content/uploads/2022/07/WashU-startup-wall-in-Cortex-Innovation-Community-768x512.jpg"; //https://picsum.photos/200/300
-            OnPropertyChanged(nameof(ImageSource));
+            OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
 
             //_imageSource = "https://drive.google.com/file/d/1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8/view";
 
             //_imageSource = "https://gdurl.com/R-59";
-            _imageSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
-            OnPropertyChanged(nameof(ImageSource));
+            mediaSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
+            OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
             /*
                         _imageSource = "https://aka.ms/campus.jpg"; //https://picsum.photos/200/300
@@ -320,13 +350,13 @@ namespace InfoBoard.ViewModel
                         await Task.Delay(_refreshInMiliSecond);
                     */
 
-            _imageSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
-            OnPropertyChanged(nameof(ImageSource));
+            mediaSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
+            OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
 
 
-            _imageSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
-            OnPropertyChanged(nameof(ImageSource));
+            mediaSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
+            OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);            
         }
 

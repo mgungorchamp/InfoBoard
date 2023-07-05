@@ -21,16 +21,24 @@
         >-->
         <Image 
             x:Name="mainPageImage"
-            Aspect="AspectFit"            
-            IsVisible="True"  
+            Aspect="AspectFit"                        
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
-            Source="{Binding ImageSource, TargetNullValue='welcome.jpg'}">
+            BackgroundColor="DarkSlateBlue"
+            IsVisible="{Binding ImageSourceVisible}"
+            Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
         </Image>
-        
+
+        <WebView 
+            x:Name="webView"              
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"                        
+            IsVisible="{Binding WebViewVisible}"
+            Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}"/>
+
         <Label 
-            Text="{Binding ImageSource}"
-            TextColor="Orange"            
+            Text="{Binding MediaSource}"
+            TextColor="Orange"                 
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="StartAndExpand"/>
 
@@ -47,8 +55,8 @@
 
 <!-- <Image.Source>-->
   <!--   <FileImageSource File="{Binding ImageSource}"-->
-
-                <!--   <UriImageSource Uri="{Binding ImageSource}"-->
+<!--IsVisible="{Binding WebViewVisible}"-->
+<!--   <UriImageSource Uri="{Binding ImageSource}"-->
         <!-- CacheValidity="{Binding Interval}" />-->
 <!-- </Image.Source>  -->
 
