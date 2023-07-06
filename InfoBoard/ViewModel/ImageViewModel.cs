@@ -296,23 +296,33 @@ namespace InfoBoard.ViewModel
 
         private static Random random = new Random();
         private Media getRandomMedia()
-        {           
+        {
             //TODO : File list should be a member variable and should be updated in a timed event
             //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
 
+            List<Media> allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
+
+
             //No files to show
-            if ( categoryList == null || categoryList.Count == 0)
+            if (allMedia == null || allMedia.Count == 0)
             {      
                 Debug.WriteLine("No files to show");
                 _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
                 Media noMedia = new Media();                
                 return noMedia;
-            } 
+            }
 
-            MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
-            Media randomMedia = randomCategory.media[random.Next(randomCategory.media.Count)];
-            
+            Media randomMedia = allMedia[random.Next(allMedia.Count)];
             return randomMedia;
+
+            //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
+            //Media randomMedia;
+            //if (randomCategory.media.Count > 0)
+            //    return randomCategory.media[random.Next(randomCategory.media.Count)];
+            //else 
+            //    return getRandomMedia();
+
+            //return randomMedia;
             // Pick some other picture
         }
 

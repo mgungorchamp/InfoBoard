@@ -96,7 +96,7 @@ namespace InfoBoard.Services
             return fileList;
         }
 
-        private List<Media> combineAllMediItemsFromCategory(List<MediaCategory> category)
+        public List<Media> combineAllMediItemsFromCategory(List<MediaCategory> category)
         {
             List<Media> medias = new List<Media>();
 
