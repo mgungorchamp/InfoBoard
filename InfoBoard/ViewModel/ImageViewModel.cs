@@ -165,7 +165,7 @@ namespace InfoBoard.ViewModel
             if (deviceSettings == null)
             {
                 //Reset all the files - if the device activated before
-                _logger.LogInformation("\nReset local media files if the device used before to clean start\n");
+                _logger.LogInformation("\nReset local current files if the device used before to clean start\n");
                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                 //Navigate to RegisterView
                 _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
@@ -197,6 +197,7 @@ namespace InfoBoard.ViewModel
         //}
 
         List<MediaCategory> categoryList;
+        Media current, next;
         private async void SetupAndStartTimers()
         {
 
@@ -206,8 +207,10 @@ namespace InfoBoard.ViewModel
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
             //await Task.Delay(TimeSpan.FromSeconds(3));
 
+            current = getRandomMedia();
             await DisplayImageEvent();
-           
+            
+
             //Set up the timer for Display Image
             timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
             timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
@@ -248,11 +251,16 @@ namespace InfoBoard.ViewModel
 
         //bool showImage = true; 
 
+        //int timing;
+        
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
-        {
-            Media media = getRandomMedia();
-            mediaSource = getMediaPath(media);
-            if (media.type == "file")
+        {           
+            next = getRandomMedia();            
+            timer4DisplayImage.Interval = TimeSpan.FromSeconds(next.timing);
+
+            mediaSource = getMediaPath(current);
+
+            if (current.type == "file")
             {                
                 imageSourceVisible = true;
                 webViewVisible = false;                
@@ -273,7 +281,10 @@ namespace InfoBoard.ViewModel
             OnPropertyChanged(nameof(ImageSourceVisible));
             OnPropertyChanged(nameof(WebViewVisible));
 
-            await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
+            current = next;
+            
+
+            //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
 
 
             //No settings found - register device and update deviceSettings
@@ -295,6 +306,7 @@ namespace InfoBoard.ViewModel
   
 
         private static Random random = new Random();
+        int index = 0;
         private Media getRandomMedia()
         {
             //TODO : File list should be a member variable and should be updated in a timed event
@@ -311,14 +323,15 @@ namespace InfoBoard.ViewModel
                 Media noMedia = new Media();                
                 return noMedia;
             }
-
-            Media randomMedia = allMedia[random.Next(allMedia.Count)];
+            if(index == allMedia.Count)
+                index = 0;
+            Media randomMedia = allMedia[index++]; ;// allMedia[random.Next(allMedia.Count)];
             return randomMedia;
 
             //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
             //Media randomMedia;
-            //if (randomCategory.media.Count > 0)
-            //    return randomCategory.media[random.Next(randomCategory.media.Count)];
+            //if (randomCategory.current.Count > 0)
+            //    return randomCategory.current[random.Next(randomCategory.current.Count)];
             //else 
             //    return getRandomMedia();
 
@@ -364,7 +377,7 @@ namespace InfoBoard.ViewModel
                         OnPropertyChanged(nameof(ImageSource));
                         await Task.Delay(_refreshInMiliSecond);
 
-                        _imageSource = "https://media.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
+                        _imageSource = "https://current.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
                         OnPropertyChanged(nameof(ImageSource));
                         await Task.Delay(_refreshInMiliSecond);
                     */
