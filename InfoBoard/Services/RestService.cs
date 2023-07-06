@@ -78,8 +78,8 @@ namespace InfoBoard.Services
                         await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                         return;
                     }
-                    List<MediaInformation> fileList = JsonSerializer.Deserialize<List<MediaInformation>>(mediaContent, _serializerOptions);
-                    await fileDownloadService.saveMediaNamesToLocalJSON(fileList);
+                    List<MediaCategory> fileList = JsonSerializer.Deserialize<List<MediaCategory>>(mediaContent, _serializerOptions);
+                    await fileDownloadService.saveCategoryListToLocalJSON(fileList);
                     return;                    
                 }
             }

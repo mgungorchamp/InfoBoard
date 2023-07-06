@@ -18,9 +18,11 @@ namespace InfoBoard.Services
         public static string Scheme = "https"; // or http        
         public static string MEDIA_FILES_URL = "UnSet";
 
+
+        //https://guzelboard.com/api/categories.php?device_key=DEVICE_KEY
         public static void updateMediaFilesUrl(string device_key)
         {
-            MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/files.php?device_key={device_key}";
+            MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/categories.php?device_key={device_key}";
         }
 
         public static string TEMPORARY_CODE;

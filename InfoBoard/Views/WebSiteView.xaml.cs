@@ -17,13 +17,13 @@ public partial class WebSiteView : ContentPage
 		InitializeComponent();      
     }
 
-    MediaInformation mediaInfo;
-    public MediaInformation MediaInformation {
+    Media mediaInfo;
+    public Media MediaInformation {
         get => mediaInfo;
         set {
             mediaInfo = value;
             //Url = mediaInfo.presignedURL;
-            showWebSite(mediaInfo.presignedURL);
+            showWebSite(mediaInfo.path);
             OnPropertyChanged();           
         }
     }

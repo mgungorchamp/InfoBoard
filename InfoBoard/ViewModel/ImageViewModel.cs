@@ -196,12 +196,12 @@ namespace InfoBoard.ViewModel
            
         //}
 
-        List<MediaInformation> fileList;
+        List<MediaCategory> categoryList;
         private async void SetupAndStartTimers()
         {
 
-            fileList = await fileDownloadService.synchroniseMediaFiles();
-            //fileList = fileDownloadService.readMediaNamesFromLocalJSON();
+            categoryList = await fileDownloadService.synchroniseMediaFiles();
+            //categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
             //await Task.Delay(TimeSpan.FromSeconds(3));
@@ -215,8 +215,8 @@ namespace InfoBoard.ViewModel
 
             //Set up the timer for Syncronise Media Files             
             timer4FileSync.Interval = TimeSpan.FromSeconds(20);
-            timer4FileSync.Tick += async (sender, e) => fileList = await fileDownloadService.synchroniseMediaFiles();
-            //timer4FileSync.Tick += (sender, e) => fileList = fileDownloadService.readMediaNamesFromLocalJSON();
+            timer4FileSync.Tick += async (sender, e) => categoryList = await fileDownloadService.synchroniseMediaFiles();
+            //timer4FileSync.Tick += (sender, e) => categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
 
 
             //await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -236,8 +236,8 @@ namespace InfoBoard.ViewModel
 
         public async Task GoToWebView()
         {
-            MediaInformation mediaInfo = new MediaInformation();
-            mediaInfo.presignedURL = "https://vermontic.com/";
+            Media mediaInfo = new Media();
+            mediaInfo.path = "https://vermontic.com/";
             var navigationParameter = new Dictionary<string, object>
             {
                 { "MediaInformationParam", mediaInfo }
@@ -246,22 +246,23 @@ namespace InfoBoard.ViewModel
             await Shell.Current.GoToAsync(nameof(WebSiteView), navigationParameter);
         }
 
-        bool showImage = true; 
+        //bool showImage = true; 
 
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
-            mediaSource = getRandomImageName();
-            if (showImage)
+            Media media = getRandomMedia();
+            mediaSource = getMediaPath(media);
+            if (media.type == "file")
             {                
                 imageSourceVisible = true;
                 webViewVisible = false;                
-                showImage = false;
+                //showImage = false;
             }
             else
             {
                 imageSourceVisible = false;
                 webViewVisible = true;
-                showImage = true;
+                //showImage = true;
                 //  timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
                 //  await GoToWebView();                
                 //  await Task.Delay(TimeSpan.FromSeconds(10));
@@ -294,31 +295,39 @@ namespace InfoBoard.ViewModel
   
 
         private static Random random = new Random();
-        private string getRandomImageName()
+        private Media getRandomMedia()
         {           
             //TODO : File list should be a member variable and should be updated in a timed event
-            //List<FileInformation> fileList = fileDownloadService.readMediaNamesFromLocalJSON();
+            //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
 
             //No files to show
-            if ( fileList == null || fileList.Count == 0)
+            if ( categoryList == null || categoryList.Count == 0)
             {      
-                Debug.WriteLine("No files to show");    
-                return "uploadimage.png";
-            }
+                Debug.WriteLine("No files to show");
+                _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
+                Media noMedia = new Media();                
+                return noMedia;
+            } 
 
-            // Get the folder where the images are stored.
-            //string appDataPath = FileSystem.AppDataDirectory;
-            //string directoryName = Path.Combine(appDataPath, Constants.LocalDirectory);
-
-
-            var fileInformation = fileList[random.Next(fileList.Count)];
-            string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileInformation.s3key);            
-            if (File.Exists(fileName))
-            {
-                return fileName;
-            }
-            return "welcome.jpg"; // TODO : Missing image - we should not come to this point
+            MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
+            Media randomMedia = randomCategory.media[random.Next(randomCategory.media.Count)];
+            
+            return randomMedia;
             // Pick some other picture
+        }
+
+        private string getMediaPath(Media media) 
+        {
+            if (media.type == "file")
+            {
+                string fileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, media.s3key);
+                if (File.Exists(fileName))
+                {
+                    return fileName;
+                }
+                return "welcome.jpg"; // TODO : Missing image - we should not come to this point
+            }
+            return media.path;
         }
 
          
