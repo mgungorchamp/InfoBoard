@@ -7,6 +7,7 @@
             path = "uploadimage.png";            
             s3key = "uploadimage.png";
             type = "file";
+            timing = 10;
         }
         public int id { get; set; }
         public int user_id { get; set; }
