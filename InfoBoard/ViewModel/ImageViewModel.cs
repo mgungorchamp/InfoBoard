@@ -289,15 +289,19 @@ namespace InfoBoard.ViewModel
             }
             else//IF WEBSITE
             {
-                //Give some time website load
-                await Task.Delay(TimeSpan.FromSeconds(2));
-                imageSourceVisible = false;
-                OnPropertyChanged(nameof(ImageSourceVisible));
-                
-                //OnPropertyChanged(nameof(MediaSource));
+                //If not internet, don't try to show websites.
+                if (Utilities.isInternetAvailable())
+                {
+                    //Give some time website load
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    imageSourceVisible = false;
+                    OnPropertyChanged(nameof(ImageSourceVisible));
 
-                webViewVisible = true;
-                OnPropertyChanged(nameof(WebViewVisible));      
+                    //OnPropertyChanged(nameof(MediaSource));
+
+                    webViewVisible = true;
+                    OnPropertyChanged(nameof(WebViewVisible));
+                }
                 
                 //showImage = true;
                 //  timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
