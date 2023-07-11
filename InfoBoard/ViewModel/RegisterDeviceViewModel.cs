@@ -189,7 +189,8 @@ namespace InfoBoard.ViewModel
 
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
-            createQrCrCodeImage(Utilities.HANDSHAKE_URL);
+            //createQrCrCodeImage(Utilities.HANDSHAKE_URL);
+            createQrCrCodeImage($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
             _qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 
             _status = "New activation code generated";
