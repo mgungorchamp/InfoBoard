@@ -357,7 +357,7 @@ namespace InfoBoard.ViewModel
                     Media noMedia = new Media();
                     return noMedia;
                 }
-                if (index == allMedia.Count)
+                if (index >= allMedia.Count)
                     index = 0;
                 Media randomMedia = allMedia[index]; ;// allMedia[random.Next(allMedia.Count)];
                 index++;
