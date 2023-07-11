@@ -353,6 +353,7 @@ namespace InfoBoard.ViewModel
                 {
                     Debug.WriteLine("No files to show");
                     _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
+                    index = 0;
                     Media noMedia = new Media();
                     return noMedia;
                 }
