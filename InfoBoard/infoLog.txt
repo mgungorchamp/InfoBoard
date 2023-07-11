@@ -13314,3 +13314,544 @@
 07-11 17:38:54.124 13428 13553 I OpenGLRenderer: Davey! duration=700ms; Flags=0, IntendedVsync=5079341720818, Vsync=5080009054138, OldestInputEvent=9223372036854775807, NewestInputEvent=0, HandleInputStart=5080016382212, AnimationStart=5080016391087, PerformTraversalsStart=5080018085629, DrawStart=5080019794296, SyncQueued=5080039551671, SyncStart=5080039992504, IssueDrawCommandsStart=5080040239504, SwapBuffers=5080041467421, FrameCompleted=5080042667587, DequeueBufferDuration=252333, QueueBufferDuration=525125, GpuCompleted=4294967295, 
 07-11 17:38:55.098   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
 07-11 17:38:57.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=243200000
+07-11 17:38:58.109   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:38:58.530  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:38:58.623  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:38:58.817  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:38:58.817  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:38:58.906  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=2
+07-11 17:38:58.906  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Query.Cast.Count=1
+07-11 17:38:58.906  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:39:00.001   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:00.003   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:01.123   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:02.492   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=243456000
+07-11 17:39:04.139   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:07.155   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:07.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=243712000
+07-11 17:39:10.170   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:11.669   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:11.675   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:11.689   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:11.713   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:11.720   342   342 D memtrack_aml: sysfs path
+07-11 17:39:11.721     0     0 I         : [ 5067.606457@2]  show_ctx_mem_pool_size
+07-11 17:39:13.157   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=243968000
+07-11 17:39:13.185   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:14.485  3598  3680 D updateSystemSession : 1
+07-11 17:39:14.485  3598  3680 D updateSystemSession : null != cursor && number > 0
+07-11 17:39:16.198   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:18.490   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=244224000
+07-11 17:39:19.209   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:21.475  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3154)] MdnsAppFilter: responses sent in 97 seconds: 2
+07-11 17:39:22.226   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:23.823   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=244480000
+07-11 17:39:25.242   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:28.257   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:29.157   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=244736000
+07-11 17:39:31.273   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:34.286   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:34.492   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=244992000
+07-11 17:39:37.299   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:39.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=245248000
+07-11 17:39:40.314   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:41.700   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:41.707   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:41.723   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:41.747   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:41.753     0     0 I         : [ 5097.640331@2]  show_ctx_mem_pool_size
+07-11 17:39:41.752   342   342 D memtrack_aml: sysfs path
+07-11 17:39:43.331   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:45.158   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=245504000
+07-11 17:39:46.347   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:46.841  6356  6387 I katniss_interactor_MirrorSearchSettingsTask: Kicking off MirrorSearchSettingsTask. Retries Left=30
+07-11 17:39:46.854  6356  6387 I katniss_interactor_MirrorSearchSettingsTask: Binding to SearchSettingsService.
+07-11 17:39:46.864  6462  6462 I katniss_search_SearchSettingsServicePeer: Binding to SearchSettingsService
+07-11 17:39:46.868  6356  6356 I katniss_interactor_MirrorSearchSettingsTask: SearchSettingsService Connected.
+07-11 17:39:46.944  6356 14124 I katniss_interactor_MirrorSearchSettingsTask: Successfully mirrored necessary settings from SearchSettings.
+07-11 17:39:46.950  6462  6479 I katniss_search_SearchSettingsServicePeer: One-time Experiment Config loaded.
+07-11 17:39:46.952  6356 14124 I katniss_interactor_MirrorSearchSettingsTask: Experiment flags loaded.
+07-11 17:39:46.957  6356  6386 I katniss_interactor_KatnissVoiceInteractionServicePeer: #startPeriodicMirrorTask succeeded
+07-11 17:39:47.139  6356  6455 W chromium: [FTL:6356:6455:WARNING:publisher.cc(34)] No subscribers for event
+07-11 17:39:47.139  6356  6455 W chromium: "assistant.api.events.MetricEvent" from publisher "UmaMetricsForwarder"
+07-11 17:39:48.021 13428 13428 I board.infoboar: Explicit concurrent copying GC freed 6720(378KB) AllocSpace objects, 10(1232KB) LOS objects, 49% free, 4554KB/9108KB, paused 126us total 61.748ms
+07-11 17:39:48.050  6356 14131 I katniss_interactor_TokenRetrievalTask: Kicking off TokenRetrievalTask
+07-11 17:39:48.282  1123  1796 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+07-11 17:39:48.292  1123  1796 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@232414112@23.24.14 (180306-544099984):2)
+07-11 17:39:48.292  1123  1796 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@232414112@23.24.14 (180306-544099984):0)
+07-11 17:39:48.338  1123  1796 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+07-11 17:39:48.338  1123  1796 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@232414112@23.24.14 (180306-544099984):2)
+07-11 17:39:48.339  1123  1796 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@232414112@23.24.14 (180306-544099984):0)
+07-11 17:39:48.449   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.571  6356 14131 I katniss_interactor_AssistantWrapperImpl: In state[RUNNING] received signal[TOKEN_REFRESHED].
+07-11 17:39:48.597  6356 14131 I assistant: [INFO:assistant_manager_native.cc(158)] Setting Assistant access tokens.
+07-11 17:39:48.623  1123  1123 D BoundBrokerSvc: onBind: Intent { act=com.google.android.contextmanager.service.ContextManagerLogsUploadBoundService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentInternalBoundBrokerService }
+07-11 17:39:48.623  1123  1123 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.contextmanager.service.ContextManagerLogsUploadBoundService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentInternalBoundBrokerService }
+07-11 17:39:48.601   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.634   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.664  1123 14146 I NetworkScheduler.Stats: (REDACTED) Task %s/%s started execution. cause:%s exec_start_elapsed_seconds: %s
+07-11 17:39:48.666   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.688  6356  6418 I katniss_interactor_AssistantWrapperImpl: LibAssistant received Auth Token in sign-in mode.
+07-11 17:39:48.688  6356  6418 W chromium: [FTL:6356:6418:WARNING:publisher.cc(34)] No subscribers for event
+07-11 17:39:48.688  6356  6418 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "InitializeInternal"
+07-11 17:39:48.691  1123  1123 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.contextmanager.service.ContextManagerLogsUploadBoundService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.PersistentInternalBoundBrokerService }
+07-11 17:39:48.695  1123 12132 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+07-11 17:39:48.686   569  1870 I chatty  : uid=1000(system) Binder:569_13 identical 2 lines
+07-11 17:39:48.694   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.708   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.709  1123 12132 I NetworkScheduler.Stats: (REDACTED) Task %s/%s started execution. cause:%s exec_start_elapsed_seconds: %s
+07-11 17:39:48.752  1266  1266 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.smartdevice.logging.CleanBufferedLogsService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsInternalBoundBrokerService }
+07-11 17:39:48.752  1266  1266 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.smartdevice.logging.CleanBufferedLogsService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsInternalBoundBrokerService }
+07-11 17:39:48.739   569  1403 I chatty  : uid=1000(system) Binder:569_E identical 2 lines
+07-11 17:39:48.743   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.755   569  1902 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.789  1123  9785 I NetworkScheduler.Stats: (REDACTED) Task %s/%s started execution. cause:%s exec_start_elapsed_seconds: %s
+07-11 17:39:48.794  1266  1324 I SmartDevice: [CleanBufferedLogsService] Running task upload_buffered_logs_periodic
+07-11 17:39:48.807  1266  1324 I ConsentLogging: [LoggingStore] No events available for subdirectory
+07-11 17:39:48.807  1266  1324 W SmartDevice: [SmartDeviceBufferedLogs] No buffered logs for source SMART_SETUP after SUW is complete
+07-11 17:39:48.810  1266  1324 I ConsentLogging: [LoggingStore] No events available for subdirectory
+07-11 17:39:48.810  1266  1324 W SmartDevice: [SmartDeviceBufferedLogs] No buffered logs for source ANDROID_AUTH after SUW is complete
+07-11 17:39:48.817  1123 11562 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+07-11 17:39:48.817  1266  1266 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.smartdevice.logging.CleanBufferedLogsService.ACTION_TASK_READY dat=chimera-action: cmp=com.google.android.gms/.chimera.GmsInternalBoundBrokerService }
+07-11 17:39:48.813   569  1902 I chatty  : uid=1000(system) Binder:569_21 identical 1 line
+07-11 17:39:48.815   569  1902 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:48.824   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:49.362   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:49.922  1123  1135 I .gms.persisten: Background concurrent copying GC freed 176416(8021KB) AllocSpace objects, 106(2504KB) LOS objects, 49% free, 10MB/20MB, paused 106us total 197.578ms
+07-11 17:39:48.826   569  1403 I chatty  : uid=1000(system) Binder:569_E identical 1 line
+07-11 17:39:48.842   569  1403 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:49.950   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:49.952   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:49.954  1123 14149 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+07-11 17:39:49.958   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:49.960   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:39:49.967   569   806 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:39:50.491   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=245760000
+07-11 17:39:52.375   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:54.266 13428 13607 E AndroidProtocolHandler: Unable to open asset URL: file:///android_asset/uploadimage.png
+07-11 17:39:55.392   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:55.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=246016000
+07-11 17:39:58.407   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:39:58.495  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=localhost:10042]: num_pending_calls=0, num_active_handlers=1, num_free_handlers=0
+07-11 17:39:58.500  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=localhost:10042]: num_pending_calls=0, num_active_handlers=1, num_free_handlers=0
+07-11 17:39:58.531  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:39:58.573  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.584  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.623  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:39:58.644  2020  2925 I chromium: [2020:2925:INFO:grpc_manager_impl.cc(852)] GRPC[uri=]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.694  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=[::]:0]: num_pending_calls=0, num_active_handlers=3, num_free_handlers=0
+07-11 17:39:58.791  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.791  2020  2020 I chatty  : uid=10043(com.google.android.apps.mediashell) identical 2 lines
+07-11 17:39:58.793  2020  2020 I chromium: [2020:2020:INFO:grpc_manager_impl.cc(852)] GRPC[uri=]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.800  2020  2939 I chromium: [2020:2939:INFO:grpc_manager_impl.cc(852)] GRPC[uri=binder:com.google.android.apps.mediashell:usonia-ipc-socket]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:58.817  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:39:58.818  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:39:58.906  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=3
+07-11 17:39:58.906  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Request.In=1
+07-11 17:39:58.906  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Response.Out=1
+07-11 17:39:58.906  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:39:59.038  2020  2939 I chromium: [2020:2939:INFO:grpc_manager_impl.cc(852)] GRPC[uri=[::]:8012]: num_pending_calls=0, num_active_handlers=0, num_free_handlers=0
+07-11 17:39:59.757  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3338)] Mdns cast queries recently sent: queries=1
+07-11 17:40:00.003   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:40:00.004   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:40:01.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=246272000
+07-11 17:40:01.423   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:04.439   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:06.491   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=246528000
+07-11 17:40:07.454   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:11.730   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:40:11.737   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:40:11.750   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:40:11.773   569  1902 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:40:10.471   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:11.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=246784000
+07-11 17:40:13.490   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:16.508   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:17.157   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=247040000
+07-11 17:40:19.525   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:19.713 14313 14313 W ls      : type=1400 audit(0.0:1750): avc: denied { getattr } for path="/cache" dev="dm-6" ino=16 scontext=u:r:shell:s0 tcontext=u:object_r:cache_file:s0 tclass=lnk_file permissive=0
+07-11 17:40:19.715     0     0 I         : [ 5127.672333@1]  show_ctx_mem_pool_size
+07-11 17:40:19.713 14313 14313 W ls      : type=1400 audit(0.0:1751): avc: denied { getattr } for path="/data_mirror" dev="tmpfs" ino=609 scontext=u:r:shell:s0 tcontext=u:object_r:mirror_data_file:s0 tclass=dir permissive=0
+07-11 17:40:19.713 14313 14313 W ls      : type=1400 audit(0.0:1752): avc: denied { getattr } for path="/init" dev="dm-6" ino=25 scontext=u:r:shell:s0 tcontext=u:object_r:init_exec:s0 tclass=lnk_file permissive=0
+07-11 17:40:19.713 14313 14313 W ls      : type=1400 audit(0.0:1753): avc: denied { getattr } for path="/postinstall" dev="dm-6" ino=43 scontext=u:r:shell:s0 tcontext=u:object_r:postinstall_mnt_dir:s0 tclass=dir permissive=0
+07-11 17:40:19.713 14313 14313 W ls      : type=1400 audit(0.0:1754): avc: denied { getattr } for path="/linkerconfig" dev="tmpfs" ino=338 scontext=u:r:shell:s0 tcontext=u:object_r:linkerconfig_file:s0 tclass=dir permissive=0
+07-11 17:40:22.491   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=247296000
+07-11 17:40:22.541   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:25.558   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:27.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=247552000
+07-11 17:40:28.574   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:28.873  2020  2878 I chromium: [2020:2878:INFO:wifi_frame_histogram_capturer.cc(405)] No histogram or IOCTL data
+07-11 17:40:28.876  2020  2878 I chromium: [2020:2878:INFO:wifi_util.cc(197)] Current wifi TDLS peers:
+07-11 17:40:28.876  2020  2878 I chromium: [2020:2878:INFO:wifi_util.cc(199)] 	No peers:
+07-11 17:40:28.900  2020  2020 I chromium: [2020:2020:INFO:metrics_recorder.cc(188)] Record action: Cast.CecHdmiInputState.Unknown
+07-11 17:40:28.901  2020  2020 I chromium: [2020:2020:INFO:metrics_recorder.cc(188)] Record action: Cast.CecStandby.Unknown
+07-11 17:40:31.591   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:33.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=247808000
+07-11 17:40:34.607   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:37.619   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:38.491   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=248064000
+07-11 17:40:40.631   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:41.760   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:40:41.766   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:40:41.792   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:40:41.829   569  1902 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:40:43.646   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:43.825   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=248320000
+07-11 17:40:46.664   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:49.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=248576000
+07-11 17:40:49.679   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:52.694   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:53.630  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:40:53.634  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:40:53.635  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:40:53.635  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:40:53.638  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:40:54.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=248832000
+07-11 17:40:55.706   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:57.878  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3154)] MdnsAppFilter: responses sent in 96 seconds: 1
+07-11 17:40:58.531  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:40:58.624  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:40:58.691  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:40:58.692  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:40:58.693  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:40:58.693  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:40:58.694  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:40:58.723   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:40:58.818  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:40:58.819  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:40:58.907  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=12
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] AppRunning=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.CecHdmiInputState.Unknown=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.CecStandby.Unknown=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.ConnectionType.Wifi=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Query.Cast.Count=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Request.In=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.ResponderPing=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Response.Out=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.SocketPing=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Network.CheckIn=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.System.Time.Heartbeat=1
+07-11 17:40:58.907  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:40:59.758  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3338)] Mdns cast queries recently sent: queries=1
+07-11 17:40:59.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=249088000
+07-11 17:41:00.001   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:41:00.003   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:41:01.737   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:03.884   569   583 I ActivityManager: Killing 3302:com.google.android.gms.unstable/u0a45 (adj 965): empty for 1811s
+07-11 17:41:03.930   569  1632 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(NetworkRequest [ TRACK_DEFAULT id=29, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10045 AdministratorUids: [] RequestorUid: 10045 RequestorPackageName: com.google.android.gms] ], android.os.BinderProxy@42ddc0c)
+07-11 17:41:03.931   569   646 D ConnectivityService: releasing NetworkRequest [ TRACK_DEFAULT id=29, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10045 AdministratorUids: [] RequestorUid: 10045 RequestorPackageName: com.google.android.gms] ] (release request)
+07-11 17:41:03.932   297   297 I Zygote  : Process 3302 exited due to signal 9 (Killed)
+07-11 17:41:03.933   569  1870 D ConnectivityService: ConnectivityService NetworkRequestInfo binderDied(NetworkRequest [ LISTEN id=30, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED Uid: 10045 AdministratorUids: [] RequestorUid: 10045 RequestorPackageName: com.google.android.gms] ], android.os.BinderProxy@dda8955)
+07-11 17:41:03.970   569   595 I libprocessgroup: Successfully killed process cgroup uid 10045 pid 3302 in 84ms
+07-11 17:41:04.750   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:05.157   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=249344000
+07-11 17:41:07.767   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:10.492   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=249600000
+07-11 17:41:10.767  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:10.769  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:10.770  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:10.770  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:10.772  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:10.782   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:11.810   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:41:11.814   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:41:11.827   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:41:11.845   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:41:11.850   342   342 D memtrack_aml: sysfs path
+07-11 17:41:13.798   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:15.825  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:15.827  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:15.827   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=249856000
+07-11 17:41:15.829  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:15.829  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:15.831  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:16.816   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:19.827   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:21.160   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=250112000
+07-11 17:41:22.838   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:25.851   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:26.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=250368000
+07-11 17:41:27.915  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:27.915  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:27.916  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:27.916  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:27.917  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:28.862   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:31.825   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=250624000
+07-11 17:41:31.875   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:32.980  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:32.981  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:32.982  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:32.982  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:32.984  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:34.883   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:37.161   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=250880000
+07-11 17:41:37.894   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:41.834   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:41:41.840   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:41:41.856   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:41:41.879   569  1876 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:41:40.902   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:42.491   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=251136000
+07-11 17:41:43.912   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:45.065  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:45.066  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:45.067  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:45.068  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:45.070  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:46.922   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:47.824   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=251392000
+07-11 17:41:49.932   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:50.116  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:41:50.119  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:41:50.119  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:41:50.120  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:41:50.120  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:41:52.942   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:53.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=251648000
+07-11 17:41:55.955   569   578 I system_server: Background young concurrent copying GC freed 272279(11MB) AllocSpace objects, 46(2384KB) LOS objects, 48% free, 15MB/29MB, paused 262us total 191.263ms
+07-11 17:41:55.957   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:41:55.961   569   580 W System  : A resource failed to call release. 
+07-11 17:41:55.961   569   580 W System  : A resource failed to call release. 
+07-11 17:41:58.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=251904000
+07-11 17:41:58.532  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:41:58.624  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:41:58.819  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:41:58.819  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:41:58.907  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=2
+07-11 17:41:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Query.Cast.Count=1
+07-11 17:41:58.907  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:41:58.966   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:00.000   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:42:00.002   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:42:01.978   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:02.194  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:02.195  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:02.196  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:02.196  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:02.197  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:03.826   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=252160000
+07-11 17:42:04.990   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:07.266  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:07.269  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:07.269  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:07.269  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:07.271  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:07.998   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:09.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=252416000
+07-11 17:42:11.009   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:11.867   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:42:11.871   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:42:11.885   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:42:11.909   569  1876 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:42:14.020   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:14.492   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=252672000
+07-11 17:42:17.030   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:19.337  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:19.339  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:19.340  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:19.340  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:19.340  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:19.827   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=252928000
+07-11 17:42:20.040   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:23.051   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:24.396  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:24.399  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:24.399  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:24.399  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:24.402  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:25.158   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=253184000
+07-11 17:42:26.062   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:29.072   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:30.494   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=253440000
+07-11 17:42:32.083   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:34.736  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3154)] MdnsAppFilter: responses sent in 96 seconds: 3
+07-11 17:42:35.094   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:35.827   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=253696000
+07-11 17:42:36.466  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:36.469  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:36.469  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:36.470  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:36.471  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:38.103   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:41.113   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:41.158   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=253952000
+07-11 17:42:41.541  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:41.542  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:41.542  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:41.543  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:41.548  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:41.894   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:42:41.898   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:42:41.914   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:42:41.935   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:42:44.124   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:46.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=254208000
+07-11 17:42:47.134   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:49.613 13428 13428 I board.infoboar: Explicit concurrent copying GC freed 32280(1645KB) AllocSpace objects, 30(3896KB) LOS objects, 49% free, 6924KB/13MB, paused 93us total 77.585ms
+07-11 17:42:50.146   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:51.825   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=254464000
+07-11 17:42:53.155   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:56.167   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:57.158   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=254720000
+07-11 17:42:58.532  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:42:58.625  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:42:58.724  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:42:58.725  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:42:58.726  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:42:58.726  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:42:58.727  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:42:58.819  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:42:58.819  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:42:58.907  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=3
+07-11 17:42:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Request.In=1
+07-11 17:42:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Response.Out=1
+07-11 17:42:58.907  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:42:59.179   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:42:59.794  2020  2956 I chromium: [2020:2956:INFO:mdns_app_filter.cc(3338)] Mdns cast queries recently sent: queries=1
+07-11 17:43:00.000   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:00.002   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:02.190   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:02.492   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=254976000
+07-11 17:43:05.199   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:07.354   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:07.359   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:07.382   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:07.384  2059  2059 D RecommendChannelJobSvc: Starting channel creation job
+07-11 17:43:07.385  2059  2363 D MitvSystem: isTvProduct productCategory 2
+07-11 17:43:07.386   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:07.803  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:43:07.804  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:43:07.805  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:43:07.805  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:43:07.805  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:43:07.828   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=255232000
+07-11 17:43:08.210   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:11.927   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:11.933   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:11.951   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:11.973   569   896 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:11.222   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:13.161   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=255488000
+07-11 17:43:14.231   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:17.243   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:18.494   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=255744000
+07-11 17:43:20.232  6356  6445 D BindingManager: with
+07-11 17:43:20.234  2020  2020 D cr_GrpcIpcUidPolicy: [AndroidIpcUidPolicy.java:147] Valid access from com.google.android.katniss
+07-11 17:43:20.234  2020  2020 E cr_GrpcIpcSocketService: Native code not initialized yet.
+07-11 17:43:20.235  6356  6356 E GrpcIpcSocketClientImpl: invalid message
+07-11 17:43:20.235  6356  6445 E native  : E0000 00:00:1689111800.235656    6445 grpc_ipc_socket_client.cc:77] Error for usonia-ipc-socket
+07-11 17:43:20.235  6356  6445 E native  : E0000 00:00:1689111800.235822    6445 android_grpc_builder.cc:149] Could not get a socket for binder:com.google.android.apps.mediashell:usonia-ipc-socket
+07-11 17:43:20.235  6356  6445 E native  : E0000 00:00:1689111800.235887    6445 grpc_manager_impl.cc:640] GRPC[uri=]: Grpc cannot connect to host {UNDEFINED}
+07-11 17:43:20.235  6356  6445 E native  : E0000 00:00:1689111800.235941    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.235987    6445 grpc_auth_manager_with_grpc_ipc.cc:65] IPC for Auth.AuthReadyStreaming closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236029    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236065    6445 distributed_service_discovery_with_grpc_ipc.cc:150] IPC for DistributedServiceDiscovery.AddService closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236108    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236143    6445 distributed_service_discovery_with_grpc_ipc.cc:64] IPC for DistributedServiceDiscovery.UpdateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236184    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236218    6445 distributed_service_discovery_with_grpc_ipc.cc:251] IPC for DistributedServiceDiscovery.GetIamMode closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236262    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236296    6445 metrics_recorder_with_grpc_ipc.cc:164] IPC for MetricsRecorder.RecordMetrics closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236341    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236376    6445 synchronous_sound_player_with_grpc_ipc.cc:173] IPC for SynchronousSoundPlayer.UpdateSound closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236417    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236451    6445 ipc_common.h:485] Error in fetching local device info: [error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236495    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236531    6445 directory_service_with_grpc_ipc.cc:129] IPC for DirectoryService.ObserveCommonTime closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236574    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236608    6445 directory_service_with_grpc_ipc.cc:283] IPC for DirectoryService.UpdateStateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236653    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236688    6445 directory_service_with_grpc_ipc.cc:384] IPC for DirectoryService.UpdateMessageObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 E native  : E0000 00:00:1689111800.236728    6445 grpc_manager_impl.cc:788] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.236  6356  6445 W native  : W0000 00:00:1689111800.236765    6445 state_manager_with_grpc_ipc.cc:74] IPC for StateManager.ReceiveStateUpdates closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:20.254   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:23.266   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:23.827   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=256000000
+07-11 17:43:24.877  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:43:24.880  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:43:24.881  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:43:24.881  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:43:24.883  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:43:26.276   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:27.041   342   342 D memtrack_aml: sysfs path
+07-11 17:43:27.045     0     0 I         : [ 5217.770652@0]  show_ctx_mem_pool_size
+07-11 17:43:29.161   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=256256000
+07-11 17:43:29.289   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:32.300   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:32.312  2020  2925 I chromium: [2020:2925:INFO:grpc_auth_manager_with_grpc_ipc.cc(63)] Connecting IPC for Auth.AuthReadyStreaming.
+07-11 17:43:32.312  2020  2925 D BindingManager: with
+07-11 17:43:32.313  2020  2925 I chromium: [2020:2925:INFO:distributed_service_discovery_with_grpc_ipc.cc(152)] Connecting IPC for DistributedServiceDiscovery.AddService.
+07-11 17:43:32.313  2020  2925 I chromium: [2020:2925:INFO:distributed_service_discovery_with_grpc_ipc.cc(66)] Connecting IPC for DistributedServiceDiscovery.UpdateObservers.
+07-11 17:43:32.313  2020  2925 I chromium: [2020:2925:INFO:metrics_recorder_with_grpc_ipc.cc(156)] Connecting IPC for MetricsRecorder.RecordMetrics: num_attempts=28
+07-11 17:43:32.313  2020  2925 I chromium: [2020:2925:INFO:synchronous_sound_player_with_grpc_ipc.cc(176)] Connecting IPC for SynchronousSoundPlayer.UpdateSound.
+07-11 17:43:32.314  2020  2925 I chromium: [2020:2925:INFO:directory_service_with_grpc_ipc.cc(66)] Connecting IPC for DirectoryService.LocalDeviceInfo.
+07-11 17:43:32.314  2020  2925 I chromium: [2020:2925:INFO:directory_service_with_grpc_ipc.cc(123)] Connecting IPC for DirectoryService.ObserveCommonTime.
+07-11 17:43:32.314  2020  2925 I chromium: [2020:2925:INFO:directory_service_with_grpc_ipc.cc(279)] Connecting IPC for DirectoryService.UpdateStateObservers.
+07-11 17:43:32.314  2020  2020 D cr_GrpcIpcUidPolicy: [AndroidIpcUidPolicy.java:147] Valid access from com.google.android.apps.mediashell
+07-11 17:43:32.314  2020  2925 I chromium: [2020:2925:INFO:directory_service_with_grpc_ipc.cc(381)] Connecting IPC for DirectoryService.UpdateMessageObservers.
+07-11 17:43:32.314  2020  2020 E cr_GrpcIpcSocketService: Native code not initialized yet.
+07-11 17:43:32.314  2020  2925 I chromium: [2020:2925:INFO:state_manager_with_grpc_ipc.cc(78)] Connecting IPC for StateManager.ReceiveStateUpdates.
+07-11 17:43:32.314  2020  2020 E GrpcIpcSocketClientImpl: invalid message
+07-11 17:43:32.314  2020  2925 E chromium: [2020:2925:ERROR:grpc_ipc_socket_client.cc(76)] Error for usonia-ipc-socket
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:android_grpc_builder.cc(86)] Could not get a socket for binder:com.google.android.apps.mediashell:usonia-ipc-socket
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(618)] GRPC[uri=]: Grpc cannot connect to host {UNDEFINED}
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:grpc_auth_manager_with_grpc_ipc.cc(59)] IPC for Auth.AuthReadyStreaming closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:distributed_service_discovery_with_grpc_ipc.cc(147)] IPC for DistributedServiceDiscovery.AddService closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:distributed_service_discovery_with_grpc_ipc.cc(60)] IPC for DistributedServiceDiscovery.UpdateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:metrics_recorder_with_grpc_ipc.cc(142)] IPC for MetricsRecorder.RecordMetrics closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:synchronous_sound_player_with_grpc_ipc.cc(171)] IPC for SynchronousSoundPlayer.UpdateSound closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:ipc_common.h(444)] Error in fetching local device info: [error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.315  2020  2925 W chromium: [2020:2925:WARNING:directory_service_with_grpc_ipc.cc(118)] IPC for DirectoryService.ObserveCommonTime closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 E chromium: [2020:2925:ERROR:directory_service_with_grpc_ipc.cc(274)] IPC for DirectoryService.UpdateStateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 E chromium: [2020:2925:ERROR:directory_service_with_grpc_ipc.cc(376)] IPC for DirectoryService.UpdateMessageObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 E chromium: [2020:2925:ERROR:grpc_manager_impl.cc(767)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:32.316  2020  2925 W chromium: [2020:2925:WARNING:state_manager_with_grpc_ipc.cc(73)] IPC for StateManager.ReceiveStateUpdates closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+07-11 17:43:34.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=256512000
+07-11 17:43:35.311   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:38.322   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:38.953  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:43:38.954  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:43:38.955  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:43:38.955  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:43:38.956  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:43:39.828   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=256768000
+07-11 17:43:41.329   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:41.960   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:41.964   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:41.980   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:43:42.003   569  1870 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:43:44.339   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:45.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=257024000
+07-11 17:43:47.351   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:50.364   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:50.493   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1536 total frames=257280000
+07-11 17:43:53.378   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:55.826   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=257536000
+07-11 17:43:56.035  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3264 
+07-11 17:43:56.037  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 0, locked = false
+07-11 17:43:56.037  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1899 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.guzelboard.infoboard fieldId=-1 fieldName=null extras=null hintLocales=[]}, false)
+07-11 17:43:56.037  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4091 ShouldHideHeaderOnInitialState = false
+07-11 17:43:56.038  1225  1225 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2111 repeatCheckTimes = 1, locked = false
+07-11 17:43:56.386   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:43:58.533  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+07-11 17:43:58.625  2020  2020 I chromium: [2020:2020:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+07-11 17:43:58.820  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+07-11 17:43:58.820  2020  2020 I chromium: [2020:2020:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+07-11 17:43:58.907  2020  2020 I chromium: [2020:2020:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=2
+07-11 17:43:58.907  2020  2020 I chromium: [metrics_stat_logger] Cast.Discovery.Mdns.Query.Cast.Count=1
+07-11 17:43:58.907  2020  2020 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+07-11 17:43:59.397   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}
+07-11 17:44:00.000   569   629 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=true
+07-11 17:44:00.002   569   569 D PowerManagerService: updateSuspendBlockerLocked mWakefulness=1,needWakeLockSuspendBlocker=false
+07-11 17:44:01.159   325   538 I audio_hw_primary: alsa format =0x1 delay frames =1664 total frames=257792000
+07-11 17:44:02.409   569   642 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.978) failed {.code = ERROR_UNKNOWN, .description = unknown}

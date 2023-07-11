@@ -344,22 +344,32 @@ namespace InfoBoard.ViewModel
         {
             //TODO : File list should be a member variable and should be updated in a timed event
             //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
+            try
+            {
+                List<Media> allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
 
-            List<Media> allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
-
-            //No files to show
-            if (allMedia == null || allMedia.Count == 0)
-            {      
-                Debug.WriteLine("No files to show");
-                _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
-                Media noMedia = new Media();                
+                //No files to show
+                if (allMedia == null || allMedia.Count == 0)
+                {
+                    Debug.WriteLine("No files to show");
+                    _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
+                    Media noMedia = new Media();
+                    return noMedia;
+                }
+                if (index == allMedia.Count)
+                    index = 0;
+                Media randomMedia = allMedia[index]; ;// allMedia[random.Next(allMedia.Count)];
+                index++;
+                return randomMedia;
+            } 
+            catch (Exception ex) 
+            {
+                _logger.LogError($"\n\t #411 Index exception ocurred {nameof(ImageViewModel)}\n " +
+                                $"\tException {ex.Message}\n");
+                Media noMedia = new Media();
                 return noMedia;
             }
-            if(index == allMedia.Count)
-                index = 0;
-            Media randomMedia = allMedia[index]; ;// allMedia[random.Next(allMedia.Count)];
-            index++;
-            return randomMedia;
+            
 
             //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
             //Media randomMedia;
@@ -385,7 +395,7 @@ namespace InfoBoard.ViewModel
                 {
                     return "uploadimage.png";
                 }
-                return "welcomeQQQ.jpg"; // TODO : Missing image - we should not come to this point
+                return "welcome.jpg"; // TODO : Missing image - image must have deleted from the local file
             }
             return media.path;
         }
