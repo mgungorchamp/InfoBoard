@@ -34,7 +34,7 @@
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"                        
             IsVisible="{Binding WebViewVisible}"
-            Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}"/>
+            Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
 
         <Label 
             Text="{Binding MediaInformation}"
