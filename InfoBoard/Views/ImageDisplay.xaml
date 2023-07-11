@@ -37,7 +37,7 @@
             Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}"/>
 
         <Label 
-            Text="{Binding MediaSource}"
+            Text="{Binding MediaInformation}"
             TextColor="Orange"                 
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="StartAndExpand"/>

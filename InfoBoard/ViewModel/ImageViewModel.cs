@@ -19,6 +19,7 @@ namespace InfoBoard.ViewModel
         private IDispatcherTimer timer4DeviceSettingsSync;
 
         private string mediaSource;
+        private string mediaInformation;
         private bool imageSourceVisible;
         private bool webViewVisible;
         private int _refreshInMiliSecond;
@@ -35,7 +36,18 @@ namespace InfoBoard.ViewModel
                 mediaSource = value;
                 OnPropertyChanged();
             }
+        }      
+
+        public string MediaInformation {
+            get => mediaInformation;
+            set {
+                if (mediaInformation == value)
+                    return;
+                mediaInformation = value;
+                OnPropertyChanged();
+            }
         }
+
         public bool ImageSourceVisible {
             get => imageSourceVisible;
             set {
@@ -254,22 +266,39 @@ namespace InfoBoard.ViewModel
         //int timing;
         
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
-        {           
-            next = getRandomMedia();            
-            timer4DisplayImage.Interval = TimeSpan.FromSeconds(next.timing);
+        {
+            MediaSource = getMediaPath(current);
 
-            mediaSource = getMediaPath(current);
+            timer4DisplayImage.Interval = TimeSpan.FromSeconds(current.timing);
+
+            MediaInformation = $"Source\t:{MediaSource}\n" +
+                               $"Duration\t: {current.timing}\n" +
+                               $"TimeSpan Timing:{timer4DisplayImage.Interval}";           
+           
 
             if (current.type == "file")
             {                
+                webViewVisible = false;
+                OnPropertyChanged(nameof(WebViewVisible));
+                
+                //OnPropertyChanged(nameof(MediaSource));
+
                 imageSourceVisible = true;
-                webViewVisible = false;                
+                OnPropertyChanged(nameof(ImageSourceVisible));
                 //showImage = false;
             }
-            else
+            else//IF WEBSITE
             {
+                //Give some time website load
+                await Task.Delay(TimeSpan.FromSeconds(2));
                 imageSourceVisible = false;
+                OnPropertyChanged(nameof(ImageSourceVisible));
+                
+                //OnPropertyChanged(nameof(MediaSource));
+
                 webViewVisible = true;
+                OnPropertyChanged(nameof(WebViewVisible));      
+                
                 //showImage = true;
                 //  timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
                 //  await GoToWebView();                
@@ -277,9 +306,9 @@ namespace InfoBoard.ViewModel
                 //  showImage = true;
                 //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
             }
-            OnPropertyChanged(nameof(MediaSource));
-            OnPropertyChanged(nameof(ImageSourceVisible));
-            OnPropertyChanged(nameof(WebViewVisible));
+
+            next = getRandomMedia();
+            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(next.timing);
 
             current = next;
             
@@ -314,7 +343,6 @@ namespace InfoBoard.ViewModel
 
             List<Media> allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
 
-
             //No files to show
             if (allMedia == null || allMedia.Count == 0)
             {      
@@ -325,7 +353,8 @@ namespace InfoBoard.ViewModel
             }
             if(index == allMedia.Count)
                 index = 0;
-            Media randomMedia = allMedia[index++]; ;// allMedia[random.Next(allMedia.Count)];
+            Media randomMedia = allMedia[index]; ;// allMedia[random.Next(allMedia.Count)];
+            index++;
             return randomMedia;
 
             //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
@@ -348,7 +377,11 @@ namespace InfoBoard.ViewModel
                 {
                     return fileName;
                 }
-                return "welcome.jpg"; // TODO : Missing image - we should not come to this point
+                if (media.s3key == "uploadimage.png")
+                {
+                    return "uploadimage.png";
+                }
+                return "welcomeQQQ.jpg"; // TODO : Missing image - we should not come to this point
             }
             return media.path;
         }
