@@ -297,8 +297,9 @@ namespace InfoBoard.ViewModel
                 if (Utilities.isInternetAvailable())
                 {
                     //Give some time website load
-                    await Task.Delay(TimeSpan.FromSeconds(4));
+                    //await Task.Delay(TimeSpan.FromSeconds(1));
                     ImageSourceVisible = false;
+                    await Task.Delay(TimeSpan.FromSeconds(2));
                     //OnPropertyChanged(nameof(ImageSourceVisible));
                     //OnPropertyChanged(nameof(MediaSource));
 
