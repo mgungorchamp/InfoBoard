@@ -267,24 +267,28 @@ namespace InfoBoard.ViewModel
         
         private async Task DisplayImageEvent()//(object sender, EventArgs e)
         {
+            current = getRandomMedia();
+
             MediaSource = getMediaPath(current);
 
             timer4DisplayImage.Interval = TimeSpan.FromSeconds(current.timing);
 
             MediaInformation = $"Source\t:{MediaSource}\n" +
                                $"Duration\t: {current.timing}\n" +
-                               $"TimeSpan Timing:{timer4DisplayImage.Interval}";           
-           
+                               $"TimeSpan Timing:{timer4DisplayImage.Interval}";
 
+
+            
             if (current.type == "file")
-            {                
-                webViewVisible = false;
-                OnPropertyChanged(nameof(WebViewVisible));
-                
+            {
+                WebViewVisible = false;
+                //webViewVisible = false;
+                //OnPropertyChanged(nameof(WebViewVisible));
                 //OnPropertyChanged(nameof(MediaSource));
 
-                imageSourceVisible = true;
-                OnPropertyChanged(nameof(ImageSourceVisible));
+                ImageSourceVisible = true;
+                //imageSourceVisible = true;
+                //OnPropertyChanged(nameof(ImageSourceVisible));
                 //showImage = false;
             }
             else//IF WEBSITE
@@ -293,14 +297,13 @@ namespace InfoBoard.ViewModel
                 if (Utilities.isInternetAvailable())
                 {
                     //Give some time website load
-                    await Task.Delay(TimeSpan.FromSeconds(2));
-                    imageSourceVisible = false;
-                    OnPropertyChanged(nameof(ImageSourceVisible));
-
+                    await Task.Delay(TimeSpan.FromSeconds(4));
+                    ImageSourceVisible = false;
+                    //OnPropertyChanged(nameof(ImageSourceVisible));
                     //OnPropertyChanged(nameof(MediaSource));
 
-                    webViewVisible = true;
-                    OnPropertyChanged(nameof(WebViewVisible));
+                    WebViewVisible = true;
+                    //OnPropertyChanged(nameof(WebViewVisible));
                 }
                 
                 //showImage = true;
@@ -311,10 +314,10 @@ namespace InfoBoard.ViewModel
                 //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
             }
 
-            next = getRandomMedia();
+            //next = getRandomMedia();
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(next.timing);
 
-            current = next;
+            //current = next;
             
 
             //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
