@@ -3,8 +3,16 @@ using Android.Content.PM;
 using Android.OS;
 
 namespace InfoBoard;
+ 
+[Activity(Theme = "@style/Maui.SplashTheme",
+    Enabled = true,
+    Exported = true,
+    MainLauncher = true,
+    LaunchMode = LaunchMode.SingleTask,
+    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+[IntentFilter(new[] { Platform.Intent.ActionAppAction }, Categories = new[] { global::Android.Content.Intent.CategoryLauncher })]
 
-[Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+
 public class MainActivity : MauiAppCompatActivity
 {
 }

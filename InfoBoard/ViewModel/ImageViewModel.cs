@@ -209,7 +209,7 @@ namespace InfoBoard.ViewModel
         //}
 
         List<MediaCategory> categoryList;
-        Media current, next;
+        Media current;
         private async void SetupAndStartTimers()
         {
 

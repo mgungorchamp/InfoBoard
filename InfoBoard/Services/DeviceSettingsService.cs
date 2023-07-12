@@ -42,7 +42,7 @@ namespace InfoBoard.Services
                 //Read the updated settings file and return the latest settings
                 return await readSettingsFromLocalJSON();
             }
-            _logger.LogInformation($"**return existing settings loadDeviceSettings");
+            _logger.LogInformation($"INFO:44 Return existing settings loadDeviceSettings");
             return localDeviceSettings;
         }
 
@@ -99,7 +99,7 @@ namespace InfoBoard.Services
                     string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
                     if (jsonString.Length < 20)
                     {
-                        _logger.LogWarning($"4 **return null readSettingsFromLocalJSON");
+                        _logger.LogWarning($"ERROR#802 SETTINGS FILE  readSettingsFromLocalJSON {jsonString}");
                         return null;
                     }
 
@@ -174,7 +174,7 @@ namespace InfoBoard.Services
 
                 string fileName = "DeviceSettings.json";
                 string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                string jsonString = "RESETED";
+                string jsonString = "UNREGISTERED";
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
                 await Task.Delay(TimeSpan.FromSeconds(2));
