@@ -99,7 +99,8 @@ namespace InfoBoard.Services
                     string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
                     if (jsonString.Length < 20)
                     {
-                        _logger.LogWarning($"ERROR#802 SETTINGS FILE  readSettingsFromLocalJSON {jsonString}");
+                        _logger.LogWarning($"ERROR#802 SETTINGS FILE  readSettingsFromLocalJSON \n" +
+                            $"File Content:{jsonString}\n");
                         return null;
                     }
 
@@ -110,23 +111,26 @@ namespace InfoBoard.Services
 
                     if (deviceSettings?.device_key == null)
                     {
-                        _logger.LogWarning($"66 **return null readSettingsFromLocalJSON");
+                        _logger.LogWarning($"SETTINGS#66 Device Key is Null readSettingsFromLocalJSON");
                         return null;
                     }
-                    _logger.LogInformation($"88 **return deviceSettings readSettingsFromLocalJSON\n");    
+                    _logger.LogInformation($"SETTINGS#66 All is well readSettingsFromLocalJSON: " +
+                        $"\nFile Content:{jsonString}\n");    
                     return deviceSettings;
                 }
                 else
                 {
-                    _logger.LogWarning($"10 **return null readSettingsFromLocalJSON - most likely file does not exist");
+                    _logger.LogWarning($"\"ERROR#569 SETTINGS Returning null for settings readSettingsFromLocalJSON - most likely file does not exist\n" +
+                                       $"File Name: {fullPathJsonFileName}");
                     return null;
                 }
             } 
             catch(Exception ex) {
                 Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
-                _logger.LogError($"99 {ex.Message} readSettingsFromLocalJSON  MURAT");
+                _logger.LogError($"ERROR#926 SETTINGS readSettingsFromLocalJSON\n" +
+                    $"Exception: {ex.Message}");
             }
-            _logger.LogWarning($"11 **return null readSettingsFromLocalJSON - MURAT ");
+            _logger.LogWarning($"SETTINGS#66 NULL settings returned readSettingsFromLocalJSON - MURAT ");
             return null;
         }
 
@@ -148,10 +152,13 @@ namespace InfoBoard.Services
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
 
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
+                _logger.LogInformation($"SETTINGS#987 Settings Updated saveSettingsToLocalAsJSON\n" +
+                                       $"jsonString: {jsonString}");
 
-                await Task.Delay(TimeSpan.FromSeconds(2));
+                //await Task.Delay(TimeSpan.FromSeconds(2));
 
-            } catch (Exception ex) 
+            } 
+            catch (Exception ex) 
             {
                 
                 Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
@@ -177,7 +184,7 @@ namespace InfoBoard.Services
                 string jsonString = "UNREGISTERED";
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
-                await Task.Delay(TimeSpan.FromSeconds(2));
+                //await Task.Delay(TimeSpan.FromSeconds(2));
                 _logger.LogCritical("Local file has resetted resetLocalSettingsFile");
 
             }
