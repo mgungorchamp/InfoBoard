@@ -259,8 +259,8 @@ namespace InfoBoard.ViewModel
             currentMedia = getMedia();
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
             MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
-                               $"Duration\t: {currentMedia.timing}\n";// +
-                               //$"TimeSpan Timing:{timer4DisplayImage.Interval}";
+                               $"Duration\t: {currentMedia.timing}";// +
+                               //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
 
             if (currentMedia.type == "file")
             {
