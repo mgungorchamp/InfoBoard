@@ -233,6 +233,9 @@ namespace InfoBoard.Services
                     deviceKey = await File.ReadAllTextAsync(fullPathFileName);
                     _logger.LogInformation($"SETTINGS#365 Device Key Read from File\n" +
                                        $"deviceKey: {deviceKey}");
+
+                    if(deviceKey.Length < 5)
+                        return "UNKNOWN";
                 }
             }
             catch (Exception ex)

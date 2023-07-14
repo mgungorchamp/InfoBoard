@@ -97,6 +97,7 @@ namespace InfoBoard.Services
                 directoryInfo = Directory.CreateDirectory(directoryName);
             else
                 directoryInfo = new DirectoryInfo(directoryName);
+
             return directoryInfo;
         }
 

@@ -123,7 +123,7 @@ namespace InfoBoard.Services
                     if (deviceSettings.error == null)
                     {
                         await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);
-                        await deviceSettingsService.saveDeviceKeyToFile(deviceSettings.device_key);
+                        //await deviceSettingsService.saveDeviceKeyToFile(deviceSettings.device_key);
                         _logger.LogInformation($"#33-RS Device settings updated!\nDevice_key: {deviceSettings.device_key}");
                     }
                     else
