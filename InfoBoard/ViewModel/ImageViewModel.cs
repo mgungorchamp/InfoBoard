@@ -132,7 +132,7 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Stop();
 
             StopTimer4FilesAndDeviceSettings();
-            _logger.LogInformation("\n\n+++ StopTimersNow() is called\n\n");
+            _logger.LogInformation("\n\n--- StopTimersNow() is called\n\n");
         }
         public void StartTimersNow()
         {
@@ -150,7 +150,7 @@ namespace InfoBoard.ViewModel
 
             timer4DeviceSettingsSync.IsRepeating = false;
             timer4DeviceSettingsSync.Stop();
-            _logger.LogInformation("\n\n+++ STOP Timer 4 Files And DeviceSettings is called\n\n");
+            _logger.LogInformation("\n\n--- STOP Timer 4 Files And DeviceSettings is called\n\n");
         }
 
         private void StartTimer4FilesAndDeviceSettings()
@@ -171,17 +171,18 @@ namespace InfoBoard.ViewModel
             //Stop timer - if running
             StopTimersNow();
 
-            deviceSettings = await UpdateDeviceSettingsEventAsync();           
+            deviceSettings = await UpdateDeviceSettingsEventAsync();
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
-            {
+            {                
                 //Reset all the files - if the device activated before
                 _logger.LogInformation("\nReset local current files if the device used before to clean start\n");
                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                 //Navigate to RegisterView
                 _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
-                await Shell.Current.GoToAsync(nameof(RegisterView));
+                await Shell.Current.GoToAsync(nameof(RegisterView));               
+                
             }
             else//Registered device - start timer for image display and file/settings sync
             {

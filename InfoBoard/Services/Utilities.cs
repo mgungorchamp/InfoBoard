@@ -18,6 +18,7 @@ namespace InfoBoard.Services
         public static string Scheme = "https"; // or http        
         public static string MEDIA_FILES_URL = "UnSet";
 
+        public static string deviceKey = "NoDeviceKey";
 
         //https://guzelboard.com/api/categories.php?device_key=DEVICE_KEY
         public static void updateMediaFilesUrl(string device_key)

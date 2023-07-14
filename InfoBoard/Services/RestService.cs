@@ -62,7 +62,7 @@ namespace InfoBoard.Services
 
                             if (errorWrapper?.error?.code == 3)
                             {
-                                _logger.LogInformation( $"55# DEVICE REMOVED \n" +
+                                _logger.LogInformation( $"MEDIA API 55# DEVICE REMOVED \n" +
                                                         $"Message from server: {errorWrapper.error.message} " +
                                                         $"Server Response: {mediaContent}");
                                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
@@ -71,7 +71,7 @@ namespace InfoBoard.Services
                         }
                         catch (Exception ex2)
                         {                          
-                            _logger.LogError($"06# could not Deserialize\n" +
+                            _logger.LogError($"MEDIA API 06 could not Deserialize\n" +
                                             $"Exception: {ex2.Message}\n" +
                                             $"API Response : {mediaContent}\n");
                         }
@@ -122,15 +122,17 @@ namespace InfoBoard.Services
                     //If error is null, there is no error then update the settings
                     if (deviceSettings.error == null)
                     {
-                        _logger.LogInformation($"#33-RS Device settings updated!\nDevice_key: {deviceSettings.device_key}");
                         await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);
+                        await deviceSettingsService.saveDeviceKeyToFile(deviceSettings.device_key);
+                        _logger.LogInformation($"#33-RS Device settings updated!\nDevice_key: {deviceSettings.device_key}");
                     }
                     else
                     {
                         // Device removed from server - unregister device
+                        await deviceSettingsService.resetLocalSettingsFile();
+                        await deviceSettingsService.resetDeviceKeyInFile();
                         Debug.WriteLine("Device removed from server - unregister device");
                         _logger.LogWarning("\n\n\t\t#89-SETTTINGS Device removed from server - reset device settings unregister device\n\n");
-                        await deviceSettingsService.resetLocalSettingsFile();
                     }
                 }
             }
@@ -139,6 +141,7 @@ namespace InfoBoard.Services
                 Console.WriteLine(@"\tERROR {0} retrieveDeviceSettings MURAT", ex.Message);
                 _logger.LogError($"#77-SETTTINGS Exception: {ex.Message} retrieveDeviceSettings MURAT");
             }
+            await Task.Delay(TimeSpan.FromSeconds(2));
         }
 
 
@@ -159,12 +162,17 @@ namespace InfoBoard.Services
                     string content = await response.Content.ReadAsStringAsync();
                     registerationResult = JsonSerializer.Deserialize<RegisterationResult>(content, _serializerOptions);
 
+                    
                     //Registeration succesful - no error
                     if (registerationResult.error == null)
                     {
                         //Registeration succesful and request full settings and save it to local settings
                         await updateDeviceSettings(registerationResult.device_key);
-                        _logger.LogInformation("Registration succesfully completed!");
+                        
+                        DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                        await deviceSettingsService.saveDeviceKeyToFile(registerationResult.device_key);
+
+                        _logger.LogInformation("DEVICE REGISTERED #22: Registration succesfully completed!");
                         return "Registration succesfully completed!";
                     }
                     else // Either user imput is expected or device registered already timer kicked in - ignore error - or key expired

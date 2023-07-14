@@ -18,7 +18,6 @@ namespace InfoBoard.Services
                 return instance;
             }
         }
- 
         
         public async Task<DeviceSettings> loadDeviceSettings()
         {
@@ -28,7 +27,16 @@ namespace InfoBoard.Services
             {                
                 Debug.WriteLine($"**No internet - return existing settings");  
                 _logger.LogInformation($"**No internet - return existing settings");
-                return localDeviceSettings;
+
+                if (localDeviceSettings == null)
+                {
+                    //Check if there is DeviceKey in local storage - second check
+                    return await secondCheckIfSettingsNull();
+                }
+                else
+                {
+                    return localDeviceSettings;
+                }
             }
 
             //if there is internet and device already registered
@@ -40,51 +48,40 @@ namespace InfoBoard.Services
                 await restService.updateDeviceSettings(localDeviceSettings.device_key);
                 //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
                 //Read the updated settings file and return the latest settings
+                _logger.LogInformation($"SETTINGS #098 Updated from WebServer");
                 return await readSettingsFromLocalJSON();
             }
             _logger.LogInformation($"INFO:44 Return existing settings loadDeviceSettings");
-            return localDeviceSettings;
+
+            if (localDeviceSettings == null)
+            {
+                //Check if there is DeviceKey in local storage - second check
+                return await secondCheckIfSettingsNull();
+            }
+            else
+            {
+                return localDeviceSettings;
+            }            
         }
 
-
-        //public async Task<DeviceSettings> loadDeviceSettingsOLD()
-        //{
-        //    DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
-
-        //    //No internet - return existing settings
-        //    if (!UtilityServices.isInternetAvailable())
-        //    {
-        //        Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");
-        //        return localDeviceSettings;
-        //    }
-
-        //    //Already registered - update settings from web
-        //    //If localDeviceSettings is null. Not registered yet - registering device will be done by GoTime
-        //    if (localDeviceSettings != null)
-        //    {
-        //        //Get Device settings
-        //        RestService restService = new RestService();
-        //        DeviceSettings updatedDeviceSettings = await restService.updateDeviceSettings(localDeviceSettings.device_key);
-        //        if (/*updatedDeviceSettings != null && */updatedDeviceSettings.error == null)
-        //        {
-        //            await saveSettingsToLocalAsJSON(updatedDeviceSettings);
-        //        }
-        //        else/* if (updatedDeviceSettings == null)*/
-        //        {
-        //            // Device removed from server - unregister device
-        //            Debug.WriteLine("Device removed from server - unregister device");
-        //            await resetLocalSettingsFile();
-        //        }
-        //    }
-        //    return await readSettingsFromLocalJSON();
-        //}
-
-        //public async Task RegisterDeviceViaServer()
-        //{
-        //    //First time registration
-        //    RestService restService = new RestService();
-        //    await restService.registerDevice();
-        //}
+        private async Task<DeviceSettings> secondCheckIfSettingsNull() 
+        {
+            //Check if there is DeviceKey in local storage - second check
+            string deviceKey = await readDeviceKeyFromFile();
+            // return null settings since device is NOT REGISTERED or UNREGISTERED
+            if (deviceKey == "UNREGISTERED" || deviceKey == "UNKNOWN")
+            {
+                _logger.LogCritical($"SETTING #5533 DEVICE MIGHT BE {deviceKey}");
+                return null;
+            }
+            else
+            {
+                _logger.LogCritical($"SETTING #6677 DEVICE REGISTERED with deviceKey{deviceKey} but settings file comes null?!");
+                DeviceSettings partialDeviceSettings = new DeviceSettings();
+                partialDeviceSettings.device_key = deviceKey;
+                return partialDeviceSettings;
+            }
+        }
 
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
@@ -195,5 +192,125 @@ namespace InfoBoard.Services
             }
         }
 
+
+        public async Task saveDeviceKeyToFile(string deviceKey)
+        {           
+            try
+            {
+                //To update the media files url
+                Utilities.updateMediaFilesUrl(deviceKey);
+                Utilities.deviceKey = deviceKey;
+
+                string fileName = "DeviceKey.txt";
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                
+
+                await File.WriteAllTextAsync(fullPathFileName, deviceKey);
+                _logger.LogInformation($"SETTINGS#147 Device Registered\n" +
+                                       $"deviceKey: {deviceKey}");
+
+                //await Task.Delay(TimeSpan.FromSeconds(2));
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
+                _logger.LogError(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
+            }
+        }
+
+        public async Task<string> readDeviceKeyFromFile()
+        {
+            string deviceKey = "UNKNOWN";
+            try
+            {     
+                string fileName = "DeviceKey.txt";
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+
+                if (File.Exists(fullPathFileName))
+                {
+                    deviceKey = await File.ReadAllTextAsync(fullPathFileName);
+                    _logger.LogInformation($"SETTINGS#365 Device Key Read from File\n" +
+                                       $"deviceKey: {deviceKey}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString() + "readDeviceKeyFromFile has issues MURAT");
+                _logger.LogError(ex.ToString() + "DEVICE KEY ERROR #459 readDeviceKeyFromFile has issues MURAT");
+            }
+            return deviceKey;
+        }
+
+        public async Task resetDeviceKeyInFile()
+        {
+            try
+            {
+                string deviceKey = "UNREGISTERED";
+                //To update the media files url
+                Utilities.updateMediaFilesUrl(deviceKey);
+                Utilities.deviceKey = deviceKey;
+
+                string fileName = "DeviceKey.txt";
+                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+
+
+                await File.WriteAllTextAsync(fullPathFileName, deviceKey);
+                _logger.LogInformation($"SETTINGS#258 Device UnRegistered\n" +
+                                       $"deviceKey: {deviceKey}");
+
+                //await Task.Delay(TimeSpan.FromSeconds(2));
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
+                _logger.LogError(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
+            }
+        }
+
     }
 }
+
+
+
+//public async Task<DeviceSettings> loadDeviceSettingsOLD()
+//{
+//    DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
+
+//    //No internet - return existing settings
+//    if (!UtilityServices.isInternetAvailable())
+//    {
+//        Debug.WriteLine($"**No internet - return existing settings{localDeviceSettings.device_key}");
+//        return localDeviceSettings;
+//    }
+
+//    //Already registered - update settings from web
+//    //If localDeviceSettings is null. Not registered yet - registering device will be done by GoTime
+//    if (localDeviceSettings != null)
+//    {
+//        //Get Device settings
+//        RestService restService = new RestService();
+//        DeviceSettings updatedDeviceSettings = await restService.updateDeviceSettings(localDeviceSettings.device_key);
+//        if (/*updatedDeviceSettings != null && */updatedDeviceSettings.error == null)
+//        {
+//            await saveSettingsToLocalAsJSON(updatedDeviceSettings);
+//        }
+//        else/* if (updatedDeviceSettings == null)*/
+//        {
+//            // Device removed from server - unregister device
+//            Debug.WriteLine("Device removed from server - unregister device");
+//            await resetLocalSettingsFile();
+//        }
+//    }
+//    return await readSettingsFromLocalJSON();
+//}
+
+//public async Task RegisterDeviceViaServer()
+//{
+//    //First time registration
+//    RestService restService = new RestService();
+//    await restService.registerDevice();
+//}
