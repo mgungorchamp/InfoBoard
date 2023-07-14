@@ -187,6 +187,8 @@ namespace InfoBoard.ViewModel
 
             RegisterationKey = Utilities.TEMPORARY_CODE;
 
+            Utilities.QR_IMAGE_NAME_4_TEMP_CODE = $"qrCode_{Utilities.TEMPORARY_CODE}.png";
+
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
             //createQrCrCodeImage(Utilities.HANDSHAKE_URL);
