@@ -1,14 +1,16 @@
-using CommunityToolkit.Maui.Alerts;
+using InfoBoard.Services;
 using InfoBoard.ViewModel;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.Views;
 
 //https://www.c-sharpcorner.com/article/net-maui-qr-code-generator/
 public partial class RegisterView : ContentPage
 {
-	public RegisterView()
+    private readonly ILogger _logger;
+    public RegisterView()
 	{
+        _logger = Utilities.Logger(nameof(RegisterView));
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
@@ -16,7 +18,7 @@ public partial class RegisterView : ContentPage
         RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
 
-
+        //qrImageButton.Source.cac
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
     }
@@ -29,16 +31,16 @@ public partial class RegisterView : ContentPage
 
     protected override void OnAppearing()
     {
+        _logger.LogInformation($"\n\tRegisterView On Appearing\n");
         base.OnAppearing();
         ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
-        Debug.WriteLine($"RegisterView On Appearing");
     }
 
 
     protected override void OnDisappearing()
     {
+        _logger.LogInformation($"\n\tRegisterView On Disappearing\n");
         base.OnDisappearing();
         ((RegisterDeviceViewModel)BindingContext).StopTimed4DeviceRegisterationEvent();
-        Debug.WriteLine($"RegisterView On Disappearing");
     }
 }

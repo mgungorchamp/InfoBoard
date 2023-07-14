@@ -9,7 +9,7 @@ namespace InfoBoard.Models
     public class RegisterationResult
     {
         #nullable enable
-        public ErrorInfo? error { get; set; }
+        public Error? error { get; set; }
         
         public string? device_key { get; set; }
         #nullable disable

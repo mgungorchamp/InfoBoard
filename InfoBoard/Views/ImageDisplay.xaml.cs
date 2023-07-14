@@ -1,7 +1,7 @@
 using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Views;
 using InfoBoard.ViewModel;
-using System.ComponentModel;
+using InfoBoard.Services;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace InfoBoard.Views;
@@ -28,18 +28,28 @@ public partial class ImageDisplay : ContentPage
     //}
 
     //ImageViewModel _imageViewModel;
+    private readonly ILogger _logger;
     public ImageDisplay()
     {
+        _logger = Utilities.Logger(nameof(ImageDisplay));
+       
+        
         InitializeComponent();
         //NavigationPage.SetHasNavigationBar(this, false);
         
         BindingContext = new ImageViewModel(); 
         //_imageViewModel.NavigationSet = this.Navigation;
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");
-    }
+        _logger.LogInformation("\n++++++++++++++ ImageDisplay Constructor");
+
+       
+
+
+}
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
+        _logger.LogInformation("------------- ImageDisplay Destructor");
     }
 
     //protected override bool OnBackButtonPressed()
@@ -50,31 +60,41 @@ public partial class ImageDisplay : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
+
+
+        //webViewTest.Source = new HtmlWebViewSource
+        //{
+        //    //Html = @"<iframe src=""https://www.youtube.com/embed/os6EZ-LFa5E""; autoplay=1; clipboard-write; encrypted-media; gyroscope; allowfullscreen></iframe>"
+        //    Html = @"<iframe id=""video"" src=""https://www.youtube.com/embed/os6EZ-LFa5E=1?rel=0&autoplay=1"" frameborder=""0"" allowfullscreen></iframe>"
+        //    //Html = @"<iframe src=""https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&controls=0""; allowfullscreen>";
+        //};       
         
+
         //await mainPageImage.FadeTo(0, 500);
         //await mainPageImage.FadeTo(1, 500);
 
-        var toast = Toast.Make($"Appearing! ImageDisplay");
-        await toast.Show();
-        
+        //var toast = Toast.Make($"Appearing! ImageDisplay");
+        //await toast.Show();
+
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
         await ((ImageViewModel)BindingContext).GoTimeNow();
     }
 
      
-    protected async override void OnDisappearing()
+    protected override void OnDisappearing()
     {
         base.OnDisappearing();
 
         ((ImageViewModel)BindingContext).StopTimersNow();
 
-        var toast = Toast.Make("Disappearing! ImageDisplay");
-        await toast.Show();
+        //var toast = Toast.Make("Disappearing! ImageDisplay");
+        //await toast.Show();
 
         Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
-
+        _logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        
     }
 
 

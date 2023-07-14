@@ -9,7 +9,9 @@
 
     <TabBar>
 
-       
+
+
+        
         
         <ShellContent  
             x:Name="imageDisplayItem"
@@ -20,9 +22,11 @@
         <ShellContent  
             x:Name="aboutPageItem"
             ContentTemplate="{DataTemplate views:AboutPage}"/>
+
         <ShellContent  
             x:Name="webViewItem"
             ContentTemplate="{DataTemplate views:WebSiteView}"/>
+
         <!--<ShellContent
             Title="Notes"
             ContentTemplate="{DataTemplate views:AllNotesPage}"

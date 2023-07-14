@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace InfoBoard.Models
 {
-    public class ErrorInfo
-    {          
-        public int code { get; set; }
-        public string message { get; set; }
-        
+    class ErrorWrapper
+    {
+#nullable enable
+        public Error? error { get; set; }
+#nullable disable
     }
 }

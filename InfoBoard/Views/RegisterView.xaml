@@ -8,34 +8,79 @@
         <viewmodel:RegisterDeviceViewModel/>
     </ContentPage.BindingContext>-->
 
-    <VerticalStackLayout Spacing="10" Margin="10" HorizontalOptions="Center">
+    <VerticalStackLayout Spacing="11" Margin="11" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand">
 
         <Label
-                Text="Register Your Device"
-                FontSize="Title"
+                Text="Sign in to your GuzelBoard Account"
+                FontSize="Large"
                 VerticalOptions="Center" 
-                HorizontalOptions="Center" />
+                HorizontalOptions="StartAndExpand" />
 
-        <HorizontalStackLayout Spacing="10">          
+        <HorizontalStackLayout>          
 
-            <VerticalStackLayout Spacing="10" Margin="10">
+            <VerticalStackLayout>
+                <Label               
+                Text="Enter activation code when prompted"
+                FontSize="Default"
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
                 <Label
                 x:Name="RegisterKeyLabel"
                 Text="{Binding RegisterationKey}"
-                FontSize="Medium"
+                FontSize="Large"
+                FontAttributes="Bold"                
                 VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-                
-                <Button Text="Add Device via www.guzelboard.com"       
+                HorizontalOptions="StartAndExpand" />
+
+                <Line                    
+                    StrokeThickness="15"/>
+
+                <Label               
+                Text="METHOD 1"
+                FontSize="Default"      
+                FontAttributes="Bold"   
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
+                <Label               
+                Text="Activate via guzelboard.com"
+                FontSize="Default"
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
+                <Button Text="Activate"       
                 Command="{Binding OnOpenRegisterDeviveWebPageCommand}"
                 HorizontalOptions="Center"/>
+
+                <Line                    
+                    StrokeThickness="15"/>
+
+                <Label               
+                Text="METHOD 2"
+                FontSize="Default"
+                FontAttributes="Bold"
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
+                <Label               
+                Text="Scan the square code via your phone"
+                FontSize="Default"
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
+
+                <Line                    
+                    StrokeThickness="15"/>
+                
+                <Label               
+                Text="ACTIVATION STATUS"
+                FontSize="Default"
+                FontAttributes="Bold"
+                VerticalOptions="Center" 
+                HorizontalOptions="StartAndExpand" />
 
                 <Label
                 x:Name="statusLabel" 
                 Text="{Binding Status}"
-                FontSize="Small"
+                FontSize="Default"
                 VerticalOptions="Center" 
-                HorizontalOptions="Center" />
+                HorizontalOptions="StartAndExpand" />
 
             </VerticalStackLayout>
 
@@ -46,8 +91,8 @@
                 Source="{Binding QRImageButton}"            
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                MinimumWidthRequest="333"
-                MaximumWidthRequest="333"/>
+                MinimumWidthRequest="288"
+                MaximumWidthRequest="288"/>
                 
                 <!--<ImageButton                 
                 x:Name="qrImageButton"
@@ -56,7 +101,7 @@
                 VerticalOptions="Center"
                 MinimumWidthRequest="20"/>-->
 
-                <Button Text="Regenerate Temporary Code"       
+                <Button Text="Regenerate Activation Code"       
                 Command="{Binding OnRegenerateQrCodeCommand}"
                 HorizontalOptions="Center"/>
 

@@ -5,14 +5,15 @@ using QRCoder;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using InfoBoard.Models;
-using CommunityToolkit.Maui.Alerts;
 using InfoBoard.Views;
+using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.ViewModel
 {
     public sealed class RegisterDeviceViewModel : INotifyPropertyChanged
     {          
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ILogger _logger;
         //System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
         IDispatcherTimer timer4Registration;
 
@@ -25,9 +26,10 @@ namespace InfoBoard.ViewModel
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
         public RegisterDeviceViewModel() 
         {
+            _logger = Utilities.Logger(nameof(RegisterDeviceViewModel));
             counter = 0;
             //Initial Code Generation t
-            generateQrCode();
+            //generateQrCode();
 
             OnRegenerateQrCodeCommand = new Command(
                execute: () =>
@@ -39,13 +41,14 @@ namespace InfoBoard.ViewModel
                  execute: async () =>
                  {
                     // Navigate to the specified URL in the system browser.
-                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Constants.TEMPORARY_CODE}");
+                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
 
                  });
 
             timer4Registration = Application.Current.Dispatcher.CreateTimer();
             //Set timer to call to register with new code
             //startTimedRegisterationEvent();
+            _logger.LogInformation($"**RegisterDeviceViewModel** Constructor");
         }
              
 
@@ -94,7 +97,8 @@ namespace InfoBoard.ViewModel
             timer4Registration.IsRepeating = true;
             timer4Registration.Start();
 
-            _status = "Registering device...";
+            _status = "Activating device...";
+            _logger.LogInformation($"**RegisterDeviceViewModel** StartTimed4DeviceRegisterationEvent");
             OnPropertyChanged();
         }
 
@@ -104,83 +108,98 @@ namespace InfoBoard.ViewModel
             timer4Registration.IsRepeating = false;
             timer4Registration.Stop();
             _status = "Timer stopped...";
+            _logger.LogInformation($"**RegisterDeviceViewModel** StopTimed4DeviceRegisterationEvent");
             OnPropertyChanged();
         }
 
         private async Task StartTimer4DeviceRegistration()
         {
             counter++;
-            //aRegistrationTimer.Interval = counter * 10 * 1000;
-
-            if (!UtilityServices.isInternetAvailable())
+            
+            if (!Utilities.isInternetAvailable())
             {             
                 _status = "No Internet Connection";
                 OnPropertyChanged(nameof(Status));
                 return;
             }
 
-            _status = $"Registering Device: Attempt {counter}"; 
-            OnPropertyChanged(nameof(Status));            
+            _status =   $"Activating" +
+                        $"\nAttempt #{counter}"; 
+            OnPropertyChanged(nameof(Status));
 
             //Register Device
-            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
-            RegisterationResult registrationResult = await deviceSettingsService.RegisterDeviceViaServer();
-            
-            //We got response from server
-            if (registrationResult != null)
+            RestService restService = new RestService();
+            string registrationMessage= await restService.registerDevice();
+
+
+            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;            
+            DeviceSettings deviceSettings = await deviceSettingsService.loadDeviceSettings();
+
+            if(deviceSettings == null)
             {
-                //Registeration succesful - no error
-                if (registrationResult.error == null)
-                {
-                   // timer4Registration.IsRepeating = false;
-                    //timer4Registration.Stop();
-
-                    DeviceSettings deviceSettings  = await deviceSettingsService.loadDeviceSettings();
-                    _status = $"Device registered succesfully. \nDevice ID: {deviceSettings.device_key}";
-                    _status += "\nUpdating Media Files... going back to front page!";
-
-                    //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
-                    var toast = Toast.Make("Updating Media Files... going back to front page!");
-                    await toast.Show();
-
-                    OnPropertyChanged(nameof(Status));
-
-                    //await Task.Delay(TimeSpan.FromSeconds(7));
-                    //change to ImageDisplayView               
-                    //await imageViewModel.GoTimeNow();
-                    await Shell.Current.GoToAsync(nameof(ImageDisplay));
-                    counter = 1;
-                    _status = "Welcome!";
-
-                }
-                else // Registration failed - error returned
-                {
-                    _status = $"Attempting... {counter} \nServer says: {registrationResult.error.message}";
-                    OnPropertyChanged(nameof(Status));
-                }               
-            }
-            else
-            {                
-                _status = $"Something strange ocurrred... Please restart your device{counter}";  
+                _status = $"Attempt #{counter}" +
+                          $"\n{registrationMessage}"+                    
+                          $"\n\nI'm not about to give up. " +
+                          $"\nI'll keep pushing forward, " +
+                          $"\nno matter how many trials it takes " +
+                          $"\nLet's go!";
                 OnPropertyChanged(nameof(Status));
-            }         
+                return;
+            }            
+
+            _status =   $"\n{registrationMessage}" +                         
+                        $"\n\nDevice ID: {deviceSettings.device_key}" +
+                        $"\nUpdating MediaInfo Files... " +
+                        $"\nand going to front page!";
+            OnPropertyChanged(nameof(Status));
+            _logger.LogInformation($"Registration Succesful**RegisterDeviceViewModel**: {registrationMessage}");
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
+            //var toast = Toast.Make("Updating MediaInfo Files... going back to front page!");
+            //await toast.Show();
+
+
+            //await Task.Delay(TimeSpan.FromSeconds(7));
+            //change to ImageDisplayView               
+            //await imageViewModel.GoTimeNow();
+            await Shell.Current.GoToAsync(nameof(ImageDisplay));
+            counter = 1;
+            _status = "Welcome!";
+
+            //    }
+            //    else // Registration failed - error returned
+            //    {
+            //        _status = $"Attempting... {counter} \nServer says: {registrationResult.error.message}";
+            //        OnPropertyChanged(nameof(Status));
+            //    }               
+            //}
+            //else
+            //{                
+            //    _status = $"Something strange ocurrred... Please restart your device{counter}";  
+            //    OnPropertyChanged(nameof(Status));
+            //}         
         }
 
         private void generateQrCode()
         {
             //Reset the temporary code and handshake URL
-            Constants.resetTemporaryCodeAndHandshakeURL();
+            Utilities.resetTemporaryCodeAndHandshakeURL();
 
-            _registerKeyLabel = "Temporary Code:" + Constants.TEMPORARY_CODE;
+            RegisterationKey = Utilities.TEMPORARY_CODE;
+
+            Utilities.QR_IMAGE_NAME_4_TEMP_CODE = $"qrCode_{Utilities.TEMPORARY_CODE}.png";
 
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
-            createQrCrCodeImage(Constants.HANDSHAKE_URL);
-            _qrImageButton = Path.Combine(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE);
+            //createQrCrCodeImage(Utilities.HANDSHAKE_URL);
+            createQrCrCodeImage($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
+            //_qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
+            QRImageButton = Path.Combine(FileSystem.CacheDirectory, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 
-            _status = "New QR Code Generated";
+
+            _status = "New activation code generated";
             OnPropertyChanged(nameof(RegisterationKey));
-            OnPropertyChanged(nameof(QRImageButton));
+            //OnPropertyChanged(nameof(QRImageButton));
             OnPropertyChanged(nameof(Status));
 
             // Navigate to the specified URL in the system browser.
@@ -192,7 +211,8 @@ namespace InfoBoard.ViewModel
         private void createQrCrCodeImage(string content)
         {
             var image = generateImage(content, (qr) => qr.GetGraphic(11) as Image<Rgba32>);
-            saveImageToFile(Constants.MEDIA_DIRECTORY_PATH, Constants.QR_IMAGE_NAME_4_TEMP_CODE, image);
+            //saveImageToFile(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE, image);
+            saveImageToFile(FileSystem.CacheDirectory, Utilities.QR_IMAGE_NAME_4_TEMP_CODE, image);
 
         }
         private Image<Rgba32> generateImage(string content, Func<QRCode, Image<Rgba32>> getGraphic)
@@ -207,7 +227,16 @@ namespace InfoBoard.ViewModel
             if (String.IsNullOrEmpty(path))
                 return;
 
+            string fullPathFileName = Path.Combine(path, imageName);
+
+            if (File.Exists(fullPathFileName))
+            {
+                _logger.LogInformation($"QRCODE #176 Existing QR Deleted\n");
+                File.Delete(fullPathFileName);
+            }
+
             image.Save(Path.Combine(path, imageName));
+            _logger.LogInformation($"QRCODE #126 QR Saved\n");
         }
 
         // SVG you may try 

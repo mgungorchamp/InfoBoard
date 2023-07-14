@@ -8,13 +8,14 @@ public partial class AppShell : Shell
 {
     public AppShell()
     {
-        InitializeComponent();        
+        InitializeComponent();
 
         //NavigationPage.SetHasNavigationBar(this, false);
         //NavigationPage.SetHasBackButton(this, false);        
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
         Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
+        Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
         //Shell.Current.CurrentItem = imageDisplayItem;
 
