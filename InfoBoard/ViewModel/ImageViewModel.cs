@@ -177,7 +177,7 @@ namespace InfoBoard.ViewModel
             if (deviceSettings == null)
             {                
                 //Reset all the files - if the device activated before
-                _logger.LogInformation("\nReset local current files if the device used before to clean start\n");
+                _logger.LogInformation("\nReset local currentMedia files if the device used before to clean start\n");
                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                 //Navigate to RegisterView
                 _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
@@ -210,43 +210,31 @@ namespace InfoBoard.ViewModel
         //}
 
         List<MediaCategory> categoryList;
-        Media current;
+        Media currentMedia, previousMedia;
         private async void SetupAndStartTimers()
         {
-
-            categoryList = await fileDownloadService.synchroniseMediaFiles();
-            //categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
-
-            //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
-            //await Task.Delay(TimeSpan.FromSeconds(3));
-
-            current = getRandomMedia();
-            await DisplayImageEvent();
-            
-
-            //Set up the timer for Display Image
-            timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
-            timer4DisplayImage.Tick += async (sender, e) => await DisplayImageEvent();
-            
+            categoryList = await fileDownloadService.synchroniseMediaFiles();           
 
             //Set up the timer for Syncronise Media Files             
             timer4FileSync.Interval = TimeSpan.FromSeconds(20);
             timer4FileSync.Tick += async (sender, e) => categoryList = await fileDownloadService.synchroniseMediaFiles();
-            //timer4FileSync.Tick += (sender, e) => categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
-
-
-            //await MainThread.InvokeOnMainThreadAsync(async () =>
-            //{
-            //    await _navigation.PopToRootAsync(true);
-            //});
-
-            //await Shell.Current.GoToAsync("imagedisplay");
 
             //StartTimer4DeviceSettings
             //Get latest settings from server - every 15 seconds
             timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
+
+            //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
+            //await Task.Delay(TimeSpan.FromSeconds(3));
+
+            //currentMedia = previousMedia = getMedia();
+            await DisplayMediaEvent();            
+
+            //Set up the timer for Display Image
+            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
+            //timer4DisplayImage.Tick += async (sender, e) => await DisplayMediaEvent();
             
+            //Start the timers
             StartTimersNow();
         }
 
@@ -266,64 +254,44 @@ namespace InfoBoard.ViewModel
 
         //int timing;
         
-        private async Task DisplayImageEvent()//(object sender, EventArgs e)
+        private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
-            current = getRandomMedia();
+            currentMedia = getMedia();
+            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
+            MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
+                               $"Duration\t: {currentMedia.timing}\n";// +
+                               //$"TimeSpan Timing:{timer4DisplayImage.Interval}";
 
-            MediaSource = getMediaPath(current);
-
-            timer4DisplayImage.Interval = TimeSpan.FromSeconds(current.timing);
-
-            MediaInformation = $"Source\t:{MediaSource}\n" +
-                               $"Duration\t: {current.timing}\n" +
-                               $"TimeSpan Timing:{timer4DisplayImage.Interval}";
-
-
-            
-            if (current.type == "file")
+            if (currentMedia.type == "file")
             {
+                MediaSource = getMediaPath(currentMedia);
                 WebViewVisible = false;
-                //webViewVisible = false;
-                //OnPropertyChanged(nameof(WebViewVisible));
-                //OnPropertyChanged(nameof(MediaSource));
-
                 ImageSourceVisible = true;
-                //imageSourceVisible = true;
-                //OnPropertyChanged(nameof(ImageSourceVisible));
-                //showImage = false;
+                await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
             }
             else//IF WEBSITE
             {
                 //If not internet, don't try to show websites.
                 if (Utilities.isInternetAvailable())
                 {
+                    MediaSource = getMediaPath(currentMedia);
                     //Give some time website load
                     //await Task.Delay(TimeSpan.FromSeconds(1));
                     ImageSourceVisible = false;
-                    await Task.Delay(TimeSpan.FromSeconds(2));
-                    //OnPropertyChanged(nameof(ImageSourceVisible));
-                    //OnPropertyChanged(nameof(MediaSource));
-
+                    await Task.Delay(TimeSpan.FromSeconds(2));                    
                     WebViewVisible = true;
-                    //OnPropertyChanged(nameof(WebViewVisible));
+                    await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
                 }
-                
-                //showImage = true;
-                //  timer4DisplayImage.Interval = TimeSpan.FromSeconds(10);
-                //  await GoToWebView();                
-                //  await Task.Delay(TimeSpan.FromSeconds(10));
-                //  showImage = true;
-                //  await Shell.Current.GoToAsync(nameof(ImageDisplay));
+                else
+                { 
+                    MediaInformation += "No internet connection!";
+                    //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
+                }                
             }
-
-            //next = getRandomMedia();
-            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(next.timing);
-
-            //current = next;
-            
+            //previousMedia = currentMedia;
+           // currentMedia = getMedia();
 
             //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
-
 
             //No settings found - register device and update deviceSettings
             if (deviceSettings == null)
@@ -340,12 +308,13 @@ namespace InfoBoard.ViewModel
             {
                 StartTimer4FilesAndDeviceSettings();
             }
+            await DisplayMediaEvent(); //RECURSIVE CALL
         }
   
 
         private static Random random = new Random();
         int index = 0;
-        private Media getRandomMedia()
+        private Media getMedia()
         {
             //TODO : File list should be a member variable and should be updated in a timed event
             //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
@@ -379,10 +348,10 @@ namespace InfoBoard.ViewModel
 
             //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
             //Media randomMedia;
-            //if (randomCategory.current.Count > 0)
-            //    return randomCategory.current[random.Next(randomCategory.current.Count)];
+            //if (randomCategory.currentMedia.Count > 0)
+            //    return randomCategory.currentMedia[random.Next(randomCategory.currentMedia.Count)];
             //else 
-            //    return getRandomMedia();
+            //    return getMedia();
 
             //return randomMedia;
             // Pick some other picture
@@ -430,7 +399,7 @@ namespace InfoBoard.ViewModel
                         OnPropertyChanged(nameof(ImageSource));
                         await Task.Delay(_refreshInMiliSecond);
 
-                        _imageSource = "https://current.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
+                        _imageSource = "https://currentMedia.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
                         OnPropertyChanged(nameof(ImageSource));
                         await Task.Delay(_refreshInMiliSecond);
                     */

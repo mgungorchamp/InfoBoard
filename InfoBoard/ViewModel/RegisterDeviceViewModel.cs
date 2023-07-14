@@ -29,7 +29,7 @@ namespace InfoBoard.ViewModel
             _logger = Utilities.Logger(nameof(RegisterDeviceViewModel));
             counter = 0;
             //Initial Code Generation t
-            generateQrCode();
+            //generateQrCode();
 
             OnRegenerateQrCodeCommand = new Command(
                execute: () =>
@@ -225,7 +225,16 @@ namespace InfoBoard.ViewModel
             if (String.IsNullOrEmpty(path))
                 return;
 
+            string fullPathFileName = Path.Combine(path, imageName);
+
+            if (File.Exists(fullPathFileName))
+            {
+                _logger.LogInformation($"QRCODE #176 Existing QR Deleted\n");
+                File.Delete(fullPathFileName);
+            }
+
             image.Save(Path.Combine(path, imageName));
+            _logger.LogInformation($"QRCODE #126 QR Saved\n");
         }
 
         // SVG you may try 
