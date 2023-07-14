@@ -192,12 +192,12 @@ namespace InfoBoard.ViewModel
             //createQrCrCodeImage(Utilities.HANDSHAKE_URL);
             createQrCrCodeImage($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
             //_qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
-            _qrImageButton = Path.Combine(FileSystem.CacheDirectory, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
+            QRImageButton = Path.Combine(FileSystem.CacheDirectory, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 
 
             _status = "New activation code generated";
             OnPropertyChanged(nameof(RegisterationKey));
-            OnPropertyChanged(nameof(QRImageButton));
+            //OnPropertyChanged(nameof(QRImageButton));
             OnPropertyChanged(nameof(Status));
 
             // Navigate to the specified URL in the system browser.

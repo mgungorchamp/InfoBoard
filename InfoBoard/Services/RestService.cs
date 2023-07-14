@@ -132,7 +132,8 @@ namespace InfoBoard.Services
                         await deviceSettingsService.resetLocalSettingsFile();
                         await deviceSettingsService.resetDeviceKeyInFile();
                         Debug.WriteLine("Device removed from server - unregister device");
-                        _logger.LogWarning("\n\n\t\t#89-SETTTINGS Device removed from server - reset device settings unregister device\n\n");
+                        _logger.LogWarning($"\n\t#89-SETTTINGS Device removed from server - reset device settings unregister device\n\n" +
+                                            $"DeviceSettings.error: {deviceSettings.error}");
                     }
                 }
             }

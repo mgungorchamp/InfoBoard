@@ -18,7 +18,7 @@ public partial class RegisterView : ContentPage
         RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
 
-
+        //qrImageButton.Source.cac
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
     }

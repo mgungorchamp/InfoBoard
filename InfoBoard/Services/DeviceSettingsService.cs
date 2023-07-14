@@ -77,6 +77,10 @@ namespace InfoBoard.Services
             else
             {
                 _logger.LogCritical($"SETTING #6677 DEVICE REGISTERED with deviceKey{deviceKey} but settings file comes null?!");
+
+                RestService restService = new RestService();
+                await restService.updateDeviceSettings(deviceKey);
+
                 DeviceSettings partialDeviceSettings = new DeviceSettings();
                 partialDeviceSettings.device_key = deviceKey;
                 return partialDeviceSettings;
@@ -86,7 +90,7 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            //await Task.Delay(TimeSpan.FromSeconds(2));
             try
             {
                 string fileName = "DeviceSettings.json";
@@ -201,6 +205,7 @@ namespace InfoBoard.Services
                 Utilities.updateMediaFilesUrl(deviceKey);
                 Utilities.deviceKey = deviceKey;
 
+
                 string fileName = "DeviceKey.txt";
                 string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 
@@ -236,6 +241,9 @@ namespace InfoBoard.Services
 
                     if(deviceKey.Length < 5)
                         return "UNKNOWN";
+
+                    //To update the media files url
+                    Utilities.updateMediaFilesUrl(deviceKey);
                 }
             }
             catch (Exception ex)

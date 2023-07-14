@@ -42,8 +42,10 @@ public partial class ImageDisplay : ContentPage
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");
         _logger.LogInformation("\n++++++++++++++ ImageDisplay Constructor");
 
+       
 
-    }
+
+}
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
@@ -58,13 +60,22 @@ public partial class ImageDisplay : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
+
+
+        //webViewTest.Source = new HtmlWebViewSource
+        //{
+        //    //Html = @"<iframe src=""https://www.youtube.com/embed/os6EZ-LFa5E""; autoplay=1; clipboard-write; encrypted-media; gyroscope; allowfullscreen></iframe>"
+        //    Html = @"<iframe id=""video"" src=""https://www.youtube.com/embed/os6EZ-LFa5E=1?rel=0&autoplay=1"" frameborder=""0"" allowfullscreen></iframe>"
+        //    //Html = @"<iframe src=""https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&controls=0""; allowfullscreen>";
+        //};       
         
+
         //await mainPageImage.FadeTo(0, 500);
         //await mainPageImage.FadeTo(1, 500);
 
         //var toast = Toast.Make($"Appearing! ImageDisplay");
         //await toast.Show();
-        
+
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 

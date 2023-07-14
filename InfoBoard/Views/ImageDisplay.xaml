@@ -19,6 +19,9 @@
             ShouldShowPlaybackControls="True" /
         Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
         >-->
+
+       
+        
         <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"                        
@@ -27,7 +30,7 @@
             BackgroundColor="DarkSlateBlue"
             IsVisible="{Binding ImageSourceVisible}"
             Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
-        </Image>
+        </Image>       
 
         <WebView 
             x:Name="webView"              
@@ -41,6 +44,11 @@
             TextColor="Orange"                 
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="StartAndExpand"/>
+
+        <!--<WebView 
+            x:Name="webViewTest"              
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"/>-->
 
         <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
