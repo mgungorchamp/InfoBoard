@@ -1,8 +1,8 @@
-using CommunityToolkit.Maui.Alerts;
 using InfoBoard.ViewModel;
 using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.Maui.Controls;
 
 namespace InfoBoard.Views;
 
@@ -42,10 +42,9 @@ public partial class ImageDisplay : ContentPage
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");
         _logger.LogInformation("\n++++++++++++++ ImageDisplay Constructor");
 
-       
+        
 
-
-}
+    }
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
@@ -61,6 +60,8 @@ public partial class ImageDisplay : ContentPage
     {
         base.OnAppearing();
 
+        // Set the KeepScreenOn property to true to prevent the screen from turning off
+        DeviceDisplay.Current.KeepScreenOn = true;             
 
         //webViewTest.Source = new HtmlWebViewSource
         //{
@@ -68,7 +69,7 @@ public partial class ImageDisplay : ContentPage
         //    Html = @"<iframe id=""video"" src=""https://www.youtube.com/embed/os6EZ-LFa5E=1?rel=0&autoplay=1"" frameborder=""0"" allowfullscreen></iframe>"
         //    //Html = @"<iframe src=""https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&controls=0""; allowfullscreen>";
         //};       
-        
+
 
         //await mainPageImage.FadeTo(0, 500);
         //await mainPageImage.FadeTo(1, 500);
