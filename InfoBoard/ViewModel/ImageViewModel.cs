@@ -105,20 +105,7 @@ namespace InfoBoard.ViewModel
 
 
 
-        //public ImageViewModel(INavigation navigation)
-        //{
-        //    this.Navigation = navigation;           
-        //    fileDownloadService = new FileDownloadService();
-        //    _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
-        //    _refreshInMiliSecond = 3000;
-
-           
-        //    timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
-        //    timer4FileSync = Application.Current.Dispatcher.CreateTimer();
-        //    timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
-           
-        //    //GoTime();
-        //}
+      
 
         public async Task GoTimeNow()
         {
@@ -167,27 +154,36 @@ namespace InfoBoard.ViewModel
         //[UnsupportedOSPlatform("iOS")]
         private async Task GoTime() 
         {
-            Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
-            //Stop timer - if running
-            StopTimersNow();
-
-            deviceSettings = await UpdateDeviceSettingsEventAsync();
-
-            //No settings found - register device and update deviceSettings
-            if (deviceSettings == null)
-            {                
-                //Reset all the files - if the device activated before
-                _logger.LogInformation("\nReset local currentMedia files if the device used before to clean start\n");
-                await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
-                //Navigate to RegisterView
-                _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
-                await Shell.Current.GoToAsync(nameof(RegisterView));               
-                
-            }
-            else//Registered device - start timer for image display and file/settings sync
+            try
             {
-                _logger.LogInformation("\n\n+++ Registered device - start timer for image display and file/settings sync\n\n"); 
-                SetupAndStartTimers();              
+                Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
+                //Stop timer - if running
+                StopTimersNow();
+
+                deviceSettings = await UpdateDeviceSettingsEventAsync();
+
+                //No settings found - register device and update deviceSettings
+                if (deviceSettings == null)
+                {
+                    //Reset all the files - if the device activated before
+                    _logger.LogInformation("\nReset local currentMedia files if the device used before to clean start\n");
+                    await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
+                    //Navigate to RegisterView
+                    _logger.LogInformation("\n\n+++ No settings found - register device and update deviceSettings\n\n");
+                    await Shell.Current.GoToAsync(nameof(RegisterView));
+
+                }
+                else//Registered device - start timer for image display and file/settings sync
+                {
+                    _logger.LogInformation("\n\n+++ Registered device - start timer for image display and file/settings sync\n\n");
+                    SetupAndStartTimers();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GoTime #396 Exception\n" +
+                                $"Exception: {ex.Message}");
+                await GoTime();
             }
         }
 
@@ -199,15 +195,7 @@ namespace InfoBoard.ViewModel
             return deviceSettings;
         } 
 
-        //public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
-        //{
-        //    //await MainThread.InvokeOnMainThreadAsync(async () =>
-        //    //{
-        //    //    await _navigation.PushAsync(new RegisterView(this), true);               
-        //    //}); 
-
-           
-        //}
+      
 
         List<MediaCategory> categoryList;
         Media currentMedia, previousMedia;
@@ -284,7 +272,8 @@ namespace InfoBoard.ViewModel
                 }
                 else
                 { 
-                    MediaInformation += "No internet connection!";
+                    MediaInformation += "\tNo internet connection!";
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                     //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
                 }                
             }
@@ -419,3 +408,29 @@ namespace InfoBoard.ViewModel
     }
 
 }
+
+
+//public ImageViewModel(INavigation navigation)
+//{
+//    this.Navigation = navigation;           
+//    fileDownloadService = new FileDownloadService();
+//    _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
+//    _refreshInMiliSecond = 3000;
+
+
+//    timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
+//    timer4FileSync = Application.Current.Dispatcher.CreateTimer();
+//    timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
+
+//    //GoTime();
+//}
+
+//public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
+//{
+//    //await MainThread.InvokeOnMainThreadAsync(async () =>
+//    //{
+//    //    await _navigation.PushAsync(new RegisterView(this), true);               
+//    //}); 
+
+
+//}

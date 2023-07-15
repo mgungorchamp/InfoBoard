@@ -78,6 +78,8 @@ namespace InfoBoard.Services
             {
                 _logger.LogCritical($"SETTING #6677 DEVICE REGISTERED with deviceKey{deviceKey} but settings file comes null?!");
 
+                //This is needed, if the device still remembers the old device key but actually 
+                //it has been removed from the server, we need to make sure about it, to reset the device key
                 RestService restService = new RestService();
                 await restService.updateDeviceSettings(deviceKey);
 
@@ -152,6 +154,14 @@ namespace InfoBoard.Services
                 string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
                 string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
 
+                if(jsonString.Length < 20)
+                {
+                    _logger.LogError($"ERROR#882 SETTINGS FILE  saveSettingsToLocalAsJSON \n" +
+                                               $"jsonString:{jsonString}\n" +
+                                               $"device_key:{deviceSettings.device_key}");
+                    return;
+                }
+
                 await File.WriteAllTextAsync(fullPathFileName, jsonString);
                 _logger.LogInformation($"SETTINGS#987 Settings Updated saveSettingsToLocalAsJSON\n" +
                                        $"jsonString: {jsonString}");
@@ -163,7 +173,8 @@ namespace InfoBoard.Services
             {
                 
                 Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
-                _logger.LogError(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
+                _logger.LogError($"ERROR # 682 SETTINGS saveSettingsToLocalAsJSON has issues MURAT\n" +
+                                $"Exception: {ex.Message}");
             }
         }
         

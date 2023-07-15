@@ -98,6 +98,13 @@ namespace InfoBoard.Services
                              $"API Response : {mediaContent}\n");
         }
 
+        /*
+         SUCCESS
+            "{\"id\":343,\"user_id\":19,\"name\":\"WIN HOME\",\"type\":\"MVP\",\"version\":\"1\",\"last_handshake_temporary_code\":\"GFYMCH\",\"last_heard_from\":\"2023-07-15 02:42:52\",\"device_key\":\"062af6699ac512a04075bc764617ba7e\"}"
+         FAILURE
+            "{\"error\":{\"code\":3,\"message\":\"couldn't find device for that device key\"}}"
+         
+         */
         public async Task updateDeviceSettings(string deviceKey)
         {  
             //No internet - return 
@@ -122,8 +129,7 @@ namespace InfoBoard.Services
                     //If error is null, there is no error then update the settings
                     if (deviceSettings.error == null)
                     {
-                        await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);
-                        //await deviceSettingsService.saveDeviceKeyToFile(deviceSettings.device_key);
+                        await deviceSettingsService.saveSettingsToLocalAsJSON(deviceSettings);                        
                         _logger.LogInformation($"#33-RS Device settings updated!\nDevice_key: {deviceSettings.device_key}");
                     }
                     else
@@ -142,9 +148,16 @@ namespace InfoBoard.Services
                 Console.WriteLine(@"\tERROR {0} retrieveDeviceSettings MURAT", ex.Message);
                 _logger.LogError($"#77-SETTTINGS Exception: {ex.Message} retrieveDeviceSettings MURAT");
             }
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            //await Task.Delay(TimeSpan.FromSeconds(2));
         }
 
+
+        /*
+         SUCCESS
+            "{\"device_key\":\"062af6699ac512a04075bc764617ba7e\"}"
+         ERROR
+            "{\"error\":{\"code\":1,\"message\":\"unrecognized device\"}}"
+         */
 
         public async Task<string> registerDevice()
         {
