@@ -10,7 +10,9 @@
     <!--<ContentPage.BindingContext>
         <viewmodel:ImageViewModel/>
     </ContentPage.BindingContext>-->
+
     
+
     <Grid>
         <!--<toolkit:MediaElement 
             x:Name="mediaElement"                    
@@ -20,9 +22,18 @@
         Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
         >-->
 
-       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--<WebView 
+            x:Name="webViewTest"              
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"/>-->
         
-        <Image 
+        <StackLayout Orientation="Vertical" Spacing="0">
+            <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"                        
             VerticalOptions="FillAndExpand"
@@ -30,25 +41,32 @@
             BackgroundColor="DarkSlateBlue"
             IsVisible="{Binding ImageSourceVisible}"
             Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
-        </Image>       
+            </Image>
+            <!--<Frame IsVisible="{Binding WebViewVisible}">-->
+            <WebView 
+                x:Name="webView"        
+                class=""
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"  
+               
+                IsVisible="{Binding WebViewVisible}"
+                Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
 
-        <WebView 
-            x:Name="webView"              
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"                        
-            IsVisible="{Binding WebViewVisible}"
-            Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
+        </StackLayout>
+        <!--<VerticalStackLayout  VerticalOptions="Start" HorizontalOptions="Center" BackgroundColor="Aquamarine">-->
+            
+
+        <!--</VerticalStackLayout>-->
 
         <Label 
             Text="{Binding MediaInformation}"
-            TextColor="Orange"                 
+            TextColor="Orange"   
+            IsVisible="true"
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="StartAndExpand"/>
 
-        <!--<WebView 
-            x:Name="webViewTest"              
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"/>-->
+
+       
 
         <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
