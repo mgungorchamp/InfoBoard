@@ -256,15 +256,10 @@ namespace InfoBoard.ViewModel
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
             currentMedia = getMedia();
-            if (currentMedia.display_width <= -1)
-            {
-                DisplayWidth = Utilities.maximumDisplayWidth;
-            }
-            else
-            {
-                DisplayWidth = currentMedia.display_width;
-            }
             
+            ImageSourceVisible  = WebViewVisible = false;
+            
+
 
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
             MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
@@ -274,7 +269,8 @@ namespace InfoBoard.ViewModel
             if (currentMedia.type == "file")
             {
                 MediaSource = getMediaPath(currentMedia);
-                WebViewVisible = false;
+                //WebViewVisible = false;
+                setDisplayWidth();
                 ImageSourceVisible = true;
                 await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
             }
@@ -286,8 +282,9 @@ namespace InfoBoard.ViewModel
                     MediaSource = getMediaPath(currentMedia);
                     //Give some time website load
                     //await Task.Delay(TimeSpan.FromSeconds(1));
-                    ImageSourceVisible = false;
-                    await Task.Delay(TimeSpan.FromSeconds(1));                    
+                    //ImageSourceVisible = false;
+                    //await Task.Delay(TimeSpan.FromSeconds(1));
+                    setDisplayWidth();
                     WebViewVisible = true;
                     await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
                 }
@@ -319,6 +316,18 @@ namespace InfoBoard.ViewModel
                 StartTimer4FilesAndDeviceSettings();
             }
             await DisplayMediaEvent(); //RECURSIVE CALL
+        }
+
+        private void setDisplayWidth()
+        {
+            if (currentMedia.display_width <= -1)
+            {
+                DisplayWidth = Utilities.maximumDisplayWidth;
+            }
+            else
+            {
+                DisplayWidth = currentMedia.display_width;
+            }
         }
   
 
