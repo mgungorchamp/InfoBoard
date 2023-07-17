@@ -257,9 +257,7 @@ namespace InfoBoard.ViewModel
         {
             currentMedia = getMedia();
             
-            ImageSourceVisible  = WebViewVisible = false;
-            
-
+            ImageSourceVisible  = WebViewVisible = false;      
 
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
             MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
