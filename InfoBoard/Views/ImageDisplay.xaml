@@ -36,8 +36,8 @@
             <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"                        
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
+            VerticalOptions="StartAndExpand"
+            HorizontalOptions="CenterAndExpand"
             BackgroundColor="DarkSlateBlue"
             IsVisible="{Binding ImageSourceVisible}"
             Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
