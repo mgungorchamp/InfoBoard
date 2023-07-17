@@ -44,11 +44,9 @@
             </Image>
             <!--<Frame IsVisible="{Binding WebViewVisible}">-->
             <WebView 
-                x:Name="webView"        
-                class=""
+                x:Name="webView"                    
+                HorizontalOptions="FillAndExpand"      
                 VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand"  
-               
                 IsVisible="{Binding WebViewVisible}"
                 Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
 
@@ -92,3 +90,6 @@
                 Radius="40"
                 Opacity="0.8" />
 </Image.Shadow>-->
+
+<!--VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"--> 
