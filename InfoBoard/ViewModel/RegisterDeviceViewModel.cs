@@ -153,7 +153,7 @@ namespace InfoBoard.ViewModel
                         $"\nand going to front page!";
             OnPropertyChanged(nameof(Status));
             _logger.LogInformation($"Registration Succesful**RegisterDeviceViewModel**: {registrationMessage}");
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            //await Task.Delay(TimeSpan.FromSeconds(3));
             //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
             //var toast = Toast.Make("Updating MediaInfo Files... going back to front page!");
             //await toast.Show();

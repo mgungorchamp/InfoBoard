@@ -18,7 +18,8 @@ namespace InfoBoard.ViewModel
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync;
 
-        private string mediaSource;
+        private string _mediaSource;
+        private int _display_width;
         private string mediaInformation;
         private bool imageSourceVisible;
         private bool webViewVisible;
@@ -29,11 +30,11 @@ namespace InfoBoard.ViewModel
         private FileDownloadService fileDownloadService;
         
         public string MediaSource {
-            get => mediaSource;
+            get => _mediaSource;
             set {
-                if (mediaSource == value)
+                if (_mediaSource == value)
                     return;
-                mediaSource = value;
+                _mediaSource = value;
                 OnPropertyChanged();
             }
         }      
@@ -64,6 +65,16 @@ namespace InfoBoard.ViewModel
                 if (webViewVisible == value)
                     return;
                 webViewVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int DisplayWidth {
+            get => _display_width;
+            set {
+                if (_display_width == value)
+                    return;
+                _display_width = value;
                 OnPropertyChanged();
             }
         }
@@ -198,7 +209,7 @@ namespace InfoBoard.ViewModel
       
 
         List<MediaCategory> categoryList;
-        Media currentMedia, previousMedia;
+        Media currentMedia;
         private async void SetupAndStartTimers()
         {
             categoryList = await fileDownloadService.synchroniseMediaFiles();           
@@ -245,6 +256,16 @@ namespace InfoBoard.ViewModel
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
             currentMedia = getMedia();
+            if (currentMedia.display_width <= -1)
+            {
+                DisplayWidth = Utilities.maximumDisplayWidth;
+            }
+            else
+            {
+                DisplayWidth = currentMedia.display_width;
+            }
+            
+
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
             MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
                                $"Duration\t: {currentMedia.timing}";// +
@@ -266,7 +287,7 @@ namespace InfoBoard.ViewModel
                     //Give some time website load
                     //await Task.Delay(TimeSpan.FromSeconds(1));
                     ImageSourceVisible = false;
-                    await Task.Delay(TimeSpan.FromSeconds(2));                    
+                    await Task.Delay(TimeSpan.FromSeconds(1));                    
                     WebViewVisible = true;
                     await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
                 }
@@ -367,7 +388,7 @@ namespace InfoBoard.ViewModel
          
         public async void ChangeImage()
         {
-            mediaSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
+            _mediaSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
             //"https://innovation.wustl.edu/wp-content/uploads/2022/07/WashU-startup-wall-in-Cortex-Innovation-Community-768x512.jpg"; //https://picsum.photos/200/300
             OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
@@ -375,7 +396,7 @@ namespace InfoBoard.ViewModel
             //_imageSource = "https://drive.google.com/file/d/1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8/view";
 
             //_imageSource = "https://gdurl.com/R-59";
-            mediaSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
+            _mediaSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
             OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
             /*
@@ -393,12 +414,12 @@ namespace InfoBoard.ViewModel
                         await Task.Delay(_refreshInMiliSecond);
                     */
 
-            mediaSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
+            _mediaSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
             OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);
 
 
-            mediaSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
+            _mediaSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
             OnPropertyChanged(nameof(MediaSource));
             await Task.Delay(_refreshInMiliSecond);            
         }

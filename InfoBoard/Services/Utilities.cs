@@ -20,6 +20,8 @@ namespace InfoBoard.Services
 
         public static string deviceKey = "NoDeviceKey";
 
+        public static int maximumDisplayWidth = -1;
+
         //https://guzelboard.com/api/categories.php?device_key=DEVICE_KEY
         public static void updateMediaFilesUrl(string device_key)
         {

@@ -32,7 +32,7 @@
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"/>-->
         
-        <StackLayout Orientation="Vertical" Spacing="0">
+        
             <Image 
             x:Name="mainPageImage"
             Aspect="AspectFit"                        
@@ -46,11 +46,11 @@
             <WebView 
                 x:Name="webView"                    
                 HorizontalOptions="FillAndExpand"      
-                VerticalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" 
+                WidthRequest="{Binding DisplayWidth}"
                 IsVisible="{Binding WebViewVisible}"
                 Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
-
-        </StackLayout>
+        
         <!--<VerticalStackLayout  VerticalOptions="Start" HorizontalOptions="Center" BackgroundColor="Aquamarine">-->
             
 

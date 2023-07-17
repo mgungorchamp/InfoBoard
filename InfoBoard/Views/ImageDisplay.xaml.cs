@@ -48,6 +48,8 @@ public partial class ImageDisplay : ContentPage
         //DeviceDisplay.Current.KeepScreenOn = true;
         DeviceDisplay.Current.KeepScreenOn = true;
 
+        Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
+
         //var toast = Toast.Make($"Appearing! ImageDisplay");
         //await toast.Show();
 
@@ -93,7 +95,7 @@ public partial class ImageDisplay : ContentPage
         switch (screenWidth)
         {
             case <= 960:
-                webView.WidthRequest = 722;               
+                //webView.WidthRequest = 722;
                 //webView.HeightRequest = screenHeight;
 
                 //webView.MaximumWidthRequest = screenWidth;

@@ -7,6 +7,7 @@
             path = "uploadimage.png";            
             s3key = "uploadimage.png";
             type = "file";
+            display_width = -1;
             timing = 10;
         }
         public int id { get; set; }
@@ -17,7 +18,8 @@
         public string created_at { get; set; }
         public string s3key { get; set; }
         public int size { get; set; }
-        public string mime_type { get; set; }                
+        public string mime_type { get; set; }
+        public int display_width { get; set; }
         public List<string> media_categories { get; set; }
         public string path { get; set; }
 

@@ -34,6 +34,7 @@ namespace InfoBoard.Services
         //Below code works but messy since it cannot parse the error message
         //For now know issue and might be fixed later - IT WORKS... but why not parsing 
         //During category rewrite I might address this issue
+        //https://guzelboard.com/api/categories.php?device_key=a9cbf288fdd3f70e0264d3784dab810a
         public async Task updateMediaList()
         {
             if (!Utilities.isInternetAvailable())
