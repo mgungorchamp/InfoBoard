@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
+using CommunityToolkit.Maui.Alerts;
 
 namespace InfoBoard.Views;
 
@@ -50,8 +51,8 @@ public partial class ImageDisplay : ContentPage
 
         Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
 
-        //var toast = Toast.Make($"Appearing! ImageDisplay");
-        //await toast.Show();
+        var toast = Toast.Make($"Appearing! ImageDisplay");
+        await toast.Show();
 
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
@@ -61,7 +62,7 @@ public partial class ImageDisplay : ContentPage
     }
 
      
-    protected override void OnDisappearing()
+    protected async override void OnDisappearing()
     {
         base.OnDisappearing();
 
@@ -70,12 +71,14 @@ public partial class ImageDisplay : ContentPage
 
         ((ImageViewModel)BindingContext).StopTimersNow();
 
-        //var toast = Toast.Make("Disappearing! ImageDisplay");
-        //await toast.Show();
+        var toast = Toast.Make("Disappearing! ImageDisplay");
+        await toast.Show();
 
         Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        
     }
+
+
 
     //Ref: https://dev.to/vhugogarcia/responsive-flyout-in-net-maui-4ll1
     //https://responsiveviewer.org/

@@ -14,7 +14,13 @@ namespace InfoBoard.Services
         // URL of REST service (Android does not use localhost)
         // Use http cleartext for local deployment. Change to https for production
         //public static string LocalhostUrl = DeviceInfo.Platform == DevicePlatform.Android ? "10.0.2.2" : "localhost";
-        public static string HostUrl = "guzelboard.com";
+
+#if DEBUG
+        public static string HostUrl = "infopanel.vermontic.com";
+#else        
+        public static string HostUrl = "app.guzelboard.com";
+#endif
+
         public static string Scheme = "https"; // or http        
         public static string MEDIA_FILES_URL = "UnSet";
 
