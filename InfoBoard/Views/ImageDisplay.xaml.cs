@@ -49,7 +49,7 @@ public partial class ImageDisplay : ContentPage
         //DeviceDisplay.Current.KeepScreenOn = true;
         DeviceDisplay.Current.KeepScreenOn = true;
 
-        Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
+        //Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
 
         //var toast = Toast.Make($"Appearing! ImageDisplay");
         //await toast.Show();
