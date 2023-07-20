@@ -51,8 +51,8 @@ public partial class ImageDisplay : ContentPage
 
         Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
 
-        var toast = Toast.Make($"Appearing! ImageDisplay");
-        await toast.Show();
+        //var toast = Toast.Make($"Appearing! ImageDisplay");
+        //await toast.Show();
 
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
@@ -62,7 +62,7 @@ public partial class ImageDisplay : ContentPage
     }
 
      
-    protected async override void OnDisappearing()
+    protected override void OnDisappearing()
     {
         base.OnDisappearing();
 
@@ -71,8 +71,8 @@ public partial class ImageDisplay : ContentPage
 
         ((ImageViewModel)BindingContext).StopTimersNow();
 
-        var toast = Toast.Make("Disappearing! ImageDisplay");
-        await toast.Show();
+        //var toast = Toast.Make("Disappearing! ImageDisplay");
+        //await toast.Show();
 
         Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        
@@ -88,34 +88,34 @@ public partial class ImageDisplay : ContentPage
     }
     private void SetWebViewBehavior()
     {
-        // Get the screen points 
-        double screenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+        //// Get the screen points 
+        //double screenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
         
-        double screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        //double screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
 
-        Debug.WriteLine(screenWidth);
-        // sizes obtained from the official bootstrap CSS 
-        switch (screenWidth)
-        {
-            case <= 960:
-                //webView.WidthRequest = 722;
-                //webView.HeightRequest = screenHeight;
+        //Debug.WriteLine(screenWidth);
+        //// sizes obtained from the official bootstrap CSS 
+        //switch (screenWidth)
+        //{
+        //    case <= 960:
+        //        //webView.WidthRequest = 722;
+        //        //webView.HeightRequest = screenHeight;
 
-                //webView.MaximumWidthRequest = screenWidth;
-                //webView.MaximumHeightRequest = screenHeight;
+        //        //webView.MaximumWidthRequest = screenWidth;
+        //        //webView.MaximumHeightRequest = screenHeight;
 
-                //webView.MinimumWidthRequest = screenWidth;
-                //webView.MinimumHeightRequest = screenHeight;
+        //        //webView.MinimumWidthRequest = screenWidth;
+        //        //webView.MinimumHeightRequest = screenHeight;
 
-                //double theHeight = webView.Height;
-                //double theWidth = webView.Width;
+        //        //double theHeight = webView.Height;
+        //        //double theWidth = webView.Width;
 
 
-                break;
-            case > 960:
-                webView.WidthRequest = screenWidth;
-                break;
-        }
+        //        break;
+        //    case > 960:
+        //        webView.WidthRequest = screenWidth;
+        //        break;
+        //}
     }
 
 

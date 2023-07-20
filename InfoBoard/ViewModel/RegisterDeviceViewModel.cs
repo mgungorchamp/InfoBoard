@@ -41,7 +41,7 @@ namespace InfoBoard.ViewModel
                  execute: async () =>
                  {
                     // Navigate to the specified URL in the system browser.
-                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
+                     await Launcher.Default.OpenAsync($"{Utilities.Scheme}://{Utilities.HostUrl}/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
 
                  });
 

@@ -61,6 +61,9 @@
 	  <Compile Update="Views\ImageShower.xaml.cs">
 	    <DependentUpon>ImageShower.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\InformationView.xaml.cs">
+	    <DependentUpon>InformationView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\RegisterView.xaml.cs">
 	    <DependentUpon>RegisterView.xaml</DependentUpon>
 	  </Compile>
@@ -77,6 +80,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ImageShower.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InformationView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterView.xaml">

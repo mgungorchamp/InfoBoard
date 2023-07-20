@@ -15,6 +15,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
         Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
+        Routing.RegisterRoute(nameof(InformationView), typeof(InformationView));
         Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
         //Shell.Current.CurrentItem = imageDisplayItem;

@@ -1,4 +1,6 @@
-﻿using InfoBoard.Models;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
 using Microsoft.Extensions.Logging;
@@ -204,19 +206,25 @@ namespace InfoBoard.ViewModel
             DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
             deviceSettings = await deviceSettingsService.loadDeviceSettings();
             return deviceSettings;
-        } 
-
-      
+        }
 
         List<MediaCategory> categoryList;
+        List<Media> allMedia;
         Media currentMedia;
+        private async Task UpdateMediaEventAsync()
+        {
+            //Update Device Settings
+            categoryList = await fileDownloadService.synchroniseMediaFiles();
+            allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
+        }
+       
         private async void SetupAndStartTimers()
         {
-            categoryList = await fileDownloadService.synchroniseMediaFiles();           
+            await UpdateMediaEventAsync();           
 
             //Set up the timer for Syncronise Media Files             
             timer4FileSync.Interval = TimeSpan.FromSeconds(20);
-            timer4FileSync.Tick += async (sender, e) => categoryList = await fileDownloadService.synchroniseMediaFiles();
+            timer4FileSync.Tick += async (sender, e) => await UpdateMediaEventAsync();
 
             //StartTimer4DeviceSettings
             //Get latest settings from server - every 15 seconds
@@ -225,16 +233,14 @@ namespace InfoBoard.ViewModel
 
             //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
             //await Task.Delay(TimeSpan.FromSeconds(3));
-
             //currentMedia = previousMedia = getMedia();
-            await DisplayMediaEvent();            
-
             //Set up the timer for Display Image
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
             //timer4DisplayImage.Tick += async (sender, e) => await DisplayMediaEvent();
             
             //Start the timers
             StartTimersNow();
+            await DisplayMediaEvent();
         }
 
         public async Task GoToWebView()
@@ -255,18 +261,38 @@ namespace InfoBoard.ViewModel
         
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
-            currentMedia = getMedia();
+            if (allMedia.Count == 0)
+            {
+                StopTimersNow();
+                Information info = new Information();
+                info.Title = "Assign Media Categories to Your Device";
+                info.Message = "Welcome to GuzelBoard\n" +
+                    "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
+                    "There is one last step that requires your attention.\n" +
+                    "Assign the categories that will be displayed on your device, via our web portal.\nhttps://guzelboard.com";
+                var navigationParameter = new Dictionary<string, object>
+                {
+                    { "PickCategories", info }
+                };
+                await Shell.Current.GoToAsync(nameof(InformationView),true, navigationParameter);
+                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Shell.Current.GoToAsync("..");              
+                return;
+            }   
+
+            currentMedia = getMedia();           
             
-            ImageSourceVisible  = WebViewVisible = false;      
+            ImageSourceVisible  = WebViewVisible = false;
 
             //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
+#if DEBUG
             MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
                                $"Duration\t: {currentMedia.timing}";// +
-                               //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
-
+                                                                    //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
+#endif
             if (currentMedia.type == "file")
             {
-                MediaSource = getMediaPath(currentMedia);
+                MediaSource = getMediaPath(currentMedia); // This has to be separte from website for offline situations si
                 //WebViewVisible = false;
                 setDisplayWidth();
                 ImageSourceVisible = true;
@@ -336,17 +362,17 @@ namespace InfoBoard.ViewModel
             //TODO : File list should be a member variable and should be updated in a timed event
             //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
             try
-            {
-                List<Media> allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
+            {             
 
                 //No files to show
-                if (allMedia == null || allMedia.Count == 0)
+                if (allMedia.Count == 0)
                 {
                     Debug.WriteLine("No files to show");
                     _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
                     index = 0;
                     Media noMedia = new Media();
                     return noMedia;
+                    //return null;
                 }
                 if (index >= allMedia.Count)
                     index = 0;

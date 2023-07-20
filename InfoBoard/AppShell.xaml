@@ -19,6 +19,12 @@
         <ShellContent     
             x:Name="registerViewItem"
             ContentTemplate="{DataTemplate views:RegisterView}"/>
+
+        <ShellContent     
+            x:Name="informationViewItem"
+            ContentTemplate="{DataTemplate views:InformationView}"/>
+
+
         <ShellContent  
             x:Name="aboutPageItem"
             ContentTemplate="{DataTemplate views:AboutPage}"/>

@@ -31,40 +31,41 @@
             x:Name="webViewTest"              
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"/>-->
-        
-        
-            <Image 
-            x:Name="mainPageImage"
-            Aspect="AspectFit"                        
-            VerticalOptions="StartAndExpand"
-            HorizontalOptions="CenterAndExpand"
-            BackgroundColor="DarkSlateBlue"
-            IsVisible="{Binding ImageSourceVisible}"
-            Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
-            </Image>
+
+
+        <Image 
+                x:Name="mainPageImage"
+                Aspect="AspectFit"                        
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="Orange"
+                IsVisible="{Binding ImageSourceVisible}"
+                Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
+        </Image>
             <!--<Frame IsVisible="{Binding WebViewVisible}">-->
-            <WebView 
-                x:Name="webView"                    
+        <WebView 
+                x:Name="webView"  
+                BackgroundColor="Turquoise"
                 HorizontalOptions="FillAndExpand"      
                 VerticalOptions="FillAndExpand" 
                 WidthRequest="{Binding DisplayWidth}"
                 IsVisible="{Binding WebViewVisible}"
                 Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
-        
+
         <!--<VerticalStackLayout  VerticalOptions="Start" HorizontalOptions="Center" BackgroundColor="Aquamarine">-->
             
 
         <!--</VerticalStackLayout>-->
 
         <Label 
-            Text="{Binding MediaInformation}"
-            TextColor="Orange"   
-            IsVisible="true"
-            VerticalOptions="EndAndExpand" 
-            HorizontalOptions="StartAndExpand"/>
+                Text="{Binding MediaInformation}"
+                TextColor="Orange"   
+                IsVisible="true"
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
 
 
-       
+
 
         <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
