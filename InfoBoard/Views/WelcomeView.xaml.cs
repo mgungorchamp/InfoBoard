@@ -30,6 +30,6 @@ public partial class WelcomeView : ContentPage
         _logger.LogInformation($"Welcome OnAppearing\n");
 
         MediaManager manager = MediaManager.Instance;
-        await manager.GoTimeNow();
+        await manager.GoTime();
     }
 }

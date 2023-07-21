@@ -133,7 +133,7 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Stop();
 
             StopTimer4FilesAndDeviceSettings();
-            _logger.LogInformation("\n\n--- StopTimersNow() is called\n\n");
+            _logger.LogInformation("\n\n--- StopTimersNow4MediaDisplayAndFilesAndSettings() is called\n\n");
         }
         public void StartTimersNow()
         {
@@ -141,7 +141,7 @@ namespace InfoBoard.ViewModel
             timer4DisplayImage.Start();
 
             StartTimer4FilesAndDeviceSettings();
-            _logger.LogInformation("\n\n+++ StartTimersNow() is called\n\n");
+            _logger.LogInformation("\n\n+++ StartTimersNow4MediaDisplayAndFilesAndSettings() is called\n\n");
         }
 
         private void StopTimer4FilesAndDeviceSettings() 
@@ -236,8 +236,8 @@ namespace InfoBoard.ViewModel
             //await Task.Delay(TimeSpan.FromSeconds(3));
             //currentMedia = previousMedia = getMedia();
             //Set up the timer for Display Image
-            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
-            //timer4DisplayImage.Tick += async (sender, e) => await DisplayMediaEvent();
+            //timer4MediaDisplaying.Interval = TimeSpan.FromSeconds(5);
+            //timer4MediaDisplaying.Tick += async (sender, e) => await DisplayMediaEvent();
             
             //Start the timers
             StartTimersNow();
@@ -292,11 +292,11 @@ namespace InfoBoard.ViewModel
 
                 ImageSourceVisible = WebViewVisible = false;
 
-                //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
+                //timer4MediaDisplaying.Interval = TimeSpan.FromSeconds(previousMedia.timing);
 #if DEBUG
                 MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
                                    $"Duration\t: {currentMedia.timing}";// +
-                                                                        //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
+                                                                        //$"\nTimeSpan Timing:{timer4MediaDisplaying.Interval}";
 #endif
                 if (currentMedia.type == "file")
                 {
@@ -346,7 +346,7 @@ namespace InfoBoard.ViewModel
                     {
                         MediaInformation += "\tNo internet connection!";
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
+                        //timer4MediaDisplaying.Interval = TimeSpan.FromSeconds(0);
                     }
                 }
                 //previousMedia = currentMedia;
@@ -508,7 +508,7 @@ namespace InfoBoard.ViewModel
 //    _refreshInMiliSecond = 3000;
 
 
-//    timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
+//    timer4MediaDisplaying = Application.Current.Dispatcher.CreateTimer();
 //    timer4FileSync = Application.Current.Dispatcher.CreateTimer();
 //    timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
 

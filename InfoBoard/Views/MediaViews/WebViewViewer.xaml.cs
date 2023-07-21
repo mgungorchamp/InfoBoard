@@ -16,7 +16,7 @@ public partial class WebViewViewer : ContentPage, IQueryAttributable
     {
         var infoMessage = message["WebMedia"] as Media;
         
-        _logger.LogError($"WebMedia: {message.Keys.ToString()} \t {message.Values.ToString()}");
+        _logger.LogInformation($"WebMedia Displaying: {infoMessage.name}");
         
         BindingContext = infoMessage;      
     }

@@ -11,7 +11,7 @@ namespace InfoBoard.ViewModel
     public class MediaManager
     {        
         private readonly ILogger _logger;
-        private IDispatcherTimer timer4DisplayImage;
+        private IDispatcherTimer timer4MediaDisplaying;
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync; 
 
@@ -31,32 +31,30 @@ namespace InfoBoard.ViewModel
             _logger = Utilities.Logger(nameof(MediaManager));
             fileDownloadService = new FileDownloadService();
 
-            timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
+            timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
             timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
         }
+ 
 
-        public async Task GoTimeNow()
+       
+        private void StartTimersNow4MediaDisplayAndFilesAndSettings()
         {
-            _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
-            await GoTime();
-        }
+            _logger.LogInformation("\t\t+++ START StartTimersNow4MediaDisplayAndFilesAndSettings() is called");
 
-        public void StopTimersNow()
-        {
-            timer4DisplayImage.IsRepeating = false;
-            timer4DisplayImage.Stop();
-
-            StopTimer4FilesAndDeviceSettings();
-            _logger.LogInformation("\n\n--- StopTimersNow() is called\n\n");
-        }
-        public void StartTimersNow()
-        {
-            timer4DisplayImage.IsRepeating = true;
-            timer4DisplayImage.Start();
+            timer4MediaDisplaying.IsRepeating = true;
+            timer4MediaDisplaying.Start();
 
             StartTimer4FilesAndDeviceSettings();
-            _logger.LogInformation("\n\n+++ StartTimersNow() is called\n\n");
+        } 
+        private void StopTimersNow4MediaDisplayAndFilesAndSettings()
+        {
+            _logger.LogInformation("\t\t--- STOP StopTimersNow4MediaDisplayAndFilesAndSettings() is called");
+            
+            timer4MediaDisplaying.IsRepeating = false;
+            timer4MediaDisplaying.Stop();
+
+            StopTimer4FilesAndDeviceSettings();
         }
 
         private void StopTimer4FilesAndDeviceSettings() 
@@ -66,7 +64,7 @@ namespace InfoBoard.ViewModel
 
             timer4DeviceSettingsSync.IsRepeating = false;
             timer4DeviceSettingsSync.Stop();
-            _logger.LogInformation("\n\n--- STOP Timer 4 Files And DeviceSettings is called\n\n");
+            _logger.LogInformation("\t\t--- STOP Timer 4 Files And DeviceSettings is called\n");
         }
 
         private void StartTimer4FilesAndDeviceSettings()
@@ -76,15 +74,15 @@ namespace InfoBoard.ViewModel
 
             timer4DeviceSettingsSync.IsRepeating = true;
             timer4DeviceSettingsSync.Start();
-            _logger.LogInformation("\n\n+++ START Timer 4 Files And DeviceSettings is called\n\n");
+            _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
         }        
-        private async Task GoTime() 
+        public async Task GoTime() 
         {
             try
             {
                 Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
                 //Stop timer - if running
-                StopTimersNow();
+                StopTimersNow4MediaDisplayAndFilesAndSettings();
 
                 deviceSettings = await UpdateDeviceSettingsEventAsync();
 
@@ -101,15 +99,15 @@ namespace InfoBoard.ViewModel
                 }
                 else//Registered device - start timer for image display and file/settings sync
                 {
-                    _logger.LogInformation("\n\n+++ Registered device - start timer for image display and file/settings sync\n\n");
-                    SetupAndStartTimers();
+                    _logger.LogInformation("\t\t+++ START Timer for image display and file/settings sync\n");
+                    SetupAndStartTimers4MediaAndSettings();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"GoTime #396 Exception\n" +
                                 $"Exception: {ex.Message}");
-                await GoTime();
+                await GoTime(); // IF EXCEPTION - TRY AGAIN
             }
         }
 
@@ -131,29 +129,21 @@ namespace InfoBoard.ViewModel
             allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
         }
        
-        private async void SetupAndStartTimers()
+        private async void SetupAndStartTimers4MediaAndSettings()
         {
             await UpdateMediaEventAsync();           
 
             //Set up the timer for Syncronise Media Files             
             timer4FileSync.Interval = TimeSpan.FromSeconds(20);
             timer4FileSync.Tick += async (sender, e) => await UpdateMediaEventAsync();
-
-            //StartTimer4DeviceSettings
+            
             //Get latest settings from server - every 15 seconds
             timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
-
-            //TODO SLEEP HERE TO WAIT FOR FILE DOWNLOAD
-            //await Task.Delay(TimeSpan.FromSeconds(3));
-            //currentMedia = previousMedia = getMedia();
-            //Set up the timer for Display Image
-            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(5);
-            //timer4DisplayImage.Tick += async (sender, e) => await DisplayMediaEvent();
             
             //Start the timers
-            StartTimersNow();
-            await DisplayMediaEvent();
+            StartTimersNow4MediaDisplayAndFilesAndSettings();
+            await DisplayMediaEvent();//FIRST TIME CALL
         }
          
         private async Task DoDelay(int time)
@@ -208,7 +198,7 @@ namespace InfoBoard.ViewModel
                             { "WebMedia", currentMedia }
                         };
 
-                        _logger.LogError($"Navigating to: {currentMedia.path}");
+                        //_logger.LogInformation($"Navigating to: {currentMedia.path}");
                         await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);
                         //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
                         await DoDelay(currentMedia.timing); 
@@ -218,7 +208,7 @@ namespace InfoBoard.ViewModel
                         //No Internet
                         //MediaInformation += "\tNo internet connection!";
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
+                        //timer4MediaDisplaying.Interval = TimeSpan.FromSeconds(0);
                     }
                 }
                 //previousMedia = currentMedia;
@@ -229,7 +219,7 @@ namespace InfoBoard.ViewModel
                 //No settings found - register device and update deviceSettings
                 if (deviceSettings == null)
                 {
-                    await GoTime();
+                    await GoTime(); // DEVICE REMOVED GO TO REGISTER
                     return;
                 }
                 //If internet is not available stop file syncronisation

@@ -9,10 +9,9 @@
     </ContentPage.BindingContext>
     <Grid>
         <WebView 
-                x:Name="webView"  
-                BackgroundColor="Turquoise"
+                x:Name="webView"                              
+                VerticalOptions="FillAndExpand"     
                 HorizontalOptions="FillAndExpand"      
-                VerticalOptions="FillAndExpand" 
                 WidthRequest="{Binding display_width}"                
                 Source="{Binding path, TargetNullValue='https://vermontic.com/'}"/>
 
@@ -25,7 +24,7 @@
         <Label 
                 Text="{Binding timing}"
                 FontAttributes="Bold"
-                TextColor="Red"   
+                TextColor="Chartreuse"   
                 IsVisible="true"
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="StartAndExpand"/>

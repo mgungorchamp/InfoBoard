@@ -114,11 +114,11 @@ namespace InfoBoard.Services
 
                     if (deviceSettings?.device_key == null)
                     {
-                        _logger.LogWarning($"SETTINGS#66 Device Key is Null readSettingsFromLocalJSON");
+                        _logger.LogWarning($"SETTINGS#785 Device Key is Null readSettingsFromLocalJSON");
                         return null;
                     }
-                    _logger.LogInformation($"SETTINGS#66 All is well readSettingsFromLocalJSON: " +
-                        $"\nFile Content:{jsonString}\n");    
+                    _logger.LogInformation($"SETTINGS#66 Received: " +
+                        $"\tFile Content:{jsonString}");    
                     return deviceSettings;
                 }
                 else
