@@ -14,7 +14,9 @@ public partial class AppShell : Shell
         //NavigationPage.SetHasNavigationBar(this, false);
         //NavigationPage.SetHasBackButton(this, false);        
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
-        
+
+        Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
+
         Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
         Routing.RegisterRoute(nameof(InformationView), typeof(InformationView));

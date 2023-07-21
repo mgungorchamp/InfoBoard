@@ -162,7 +162,7 @@ namespace InfoBoard.ViewModel
             //await Task.Delay(TimeSpan.FromSeconds(7));
             //change to ImageDisplayView               
             //await imageViewModel.GoTimeNow();
-            await Shell.Current.GoToAsync(nameof(ImageDisplay));
+            await Shell.Current.GoToAsync(nameof(WelcomeView));
             counter = 1;
             _status = "Welcome!";
 

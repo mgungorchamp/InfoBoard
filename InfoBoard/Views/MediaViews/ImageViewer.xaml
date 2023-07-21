@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.MediaViews.ImageViewer"
-             Title="ImageViewer">    
+             Title="ImageViewer"
+             BackgroundColor="Firebrick">    
     <ContentPage.BindingContext>
         <models:Media/>
     </ContentPage.BindingContext>
@@ -18,7 +19,7 @@
         </Image> 
 
         <Label 
-                Text="{Binding path}"
+                Text="{Binding name}"
                 TextColor="DarkTurquoise"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
@@ -28,11 +29,11 @@
                 FontAttributes="Bold"
                 TextColor="Red"   
                 IsVisible="true"
-                VerticalOptions="Center" 
-                HorizontalOptions="EndAndExpand"/>
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
 
         <Label 
-            Text="GuzelBoard TESTING IMAGE VIEW"
+            Text="IMAGE VIEW"
             FontAttributes="Bold"
             TextColor="LawnGreen"
             FontSize="Large"

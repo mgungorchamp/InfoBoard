@@ -17,7 +17,7 @@
                 Source="{Binding path, TargetNullValue='https://vermontic.com/'}"/>
 
         <Label 
-                Text="{Binding path}"
+                Text="{Binding name}"
                 TextColor="Orange"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
@@ -27,13 +27,13 @@
                 FontAttributes="Bold"
                 TextColor="Red"   
                 IsVisible="true"
-                VerticalOptions="Center" 
-                HorizontalOptions="EndAndExpand"/>
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
 
         <Label 
-            Text="GuzelBoard TESTING WEB VIEW"
+            Text="WEB VIEW"
             FontAttributes="Bold"
-            TextColor="Orange"
+            TextColor="Cornsilk"
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="CenterAndExpand" />

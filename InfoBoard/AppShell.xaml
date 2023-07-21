@@ -11,6 +11,12 @@
     
     <TabBar>
 
+        
+
+        <ShellContent  
+            x:Name="welcomeViewItem"
+            ContentTemplate="{DataTemplate views:WelcomeView}"/>
+
         <ShellContent  
             x:Name="imageDisplayItem"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>

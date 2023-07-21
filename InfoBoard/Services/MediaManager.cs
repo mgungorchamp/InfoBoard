@@ -1,125 +1,40 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using InfoBoard.Models;
+﻿using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
 using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 
 
 namespace InfoBoard.ViewModel
 {
-    public partial class ImageViewModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+    public class MediaManager
+    {        
         private readonly ILogger _logger;
         private IDispatcherTimer timer4DisplayImage;
         private IDispatcherTimer timer4FileSync;
-        private IDispatcherTimer timer4DeviceSettingsSync;
-
-        private string _mediaSource;
-        private int _display_width;
-        private string mediaInformation;
-        private bool imageSourceVisible;
-        private bool webViewVisible;
-        private int _refreshInMiliSecond;
-        private TimeSpan _cachingInterval; //caching interval
-        public INavigation _navigation;
-
-        private FileDownloadService fileDownloadService;
-        
-        public string MediaSource {
-            get => _mediaSource;
-            set {
-                if (_mediaSource == value)
-                    return;
-                _mediaSource = value;
-                OnPropertyChanged();
-            }
-        }      
-
-        public string MediaInformation {
-            get => mediaInformation;
-            set {
-                if (mediaInformation == value)
-                    return;
-                mediaInformation = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool ImageSourceVisible {
-            get => imageSourceVisible;
-            set {
-                if (imageSourceVisible == value)
-                    return;
-                imageSourceVisible = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool WebViewVisible {
-            get => webViewVisible;
-            set {
-                if (webViewVisible == value)
-                    return;
-                webViewVisible = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int DisplayWidth {
-            get => _display_width;
-            set {
-                if (_display_width == value)
-                    return;
-                _display_width = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public TimeSpan CachingTime {
-            get => _cachingInterval;
-            set {
-                if (_cachingInterval == value)
-                    return;
-                _cachingInterval = value;
-                OnPropertyChanged();
-            }
-        }
+        private IDispatcherTimer timer4DeviceSettingsSync; 
 
         DeviceSettings deviceSettings;
+        private FileDownloadService fileDownloadService;
 
-        public INavigation NavigationSet {
-            get => _navigation;
-            set {
-                if (_navigation == value)
-                    return;
-                _navigation = value;
+        private static readonly MediaManager instance = new MediaManager();        
+
+        public static MediaManager Instance {
+            get {
+                return instance;
             }
         }
-        public ImageViewModel()
+
+        private MediaManager()
         {
-            _logger = Utilities.Logger(nameof(ImageViewModel));
+            _logger = Utilities.Logger(nameof(MediaManager));
             fileDownloadService = new FileDownloadService();
-            _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
-            _refreshInMiliSecond = 3000;
-            
-            //imageSourceVisible = true;
-            //webViewVisible = false;
 
             timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
             timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
         }
-
-
-
-      
 
         public async Task GoTimeNow()
         {
@@ -162,10 +77,7 @@ namespace InfoBoard.ViewModel
             timer4DeviceSettingsSync.IsRepeating = true;
             timer4DeviceSettingsSync.Start();
             _logger.LogInformation("\n\n+++ START Timer 4 Files And DeviceSettings is called\n\n");
-        }
-
-
-        //[UnsupportedOSPlatform("iOS")]
+        }        
         private async Task GoTime() 
         {
             try
@@ -210,7 +122,7 @@ namespace InfoBoard.ViewModel
         }
 
         private List<MediaCategory> categoryList;
-        public static List<Media> allMedia;
+        public  List<Media> allMedia;
         Media currentMedia;
         private async Task UpdateMediaEventAsync()
         {
@@ -243,23 +155,7 @@ namespace InfoBoard.ViewModel
             StartTimersNow();
             await DisplayMediaEvent();
         }
-
-        public async Task GoToWebView()
-        {
-            Media mediaInfo = new Media();
-            mediaInfo.path = "https://vermontic.com/";
-            var navigationParameter = new Dictionary<string, object>
-            {
-                { "MediaInformationParam", mediaInfo }
-            };
-            //await Shell.Current.GoToAsync($"beardetails", navigationParameter);
-            await Shell.Current.GoToAsync(nameof(WebSiteView), navigationParameter);
-        }
-
-        //bool showImage = true; 
-
-        //int timing;
-
+         
         private async Task DoDelay(int time)
         {
             await Task.Delay(TimeSpan.FromSeconds(time));            
@@ -271,7 +167,6 @@ namespace InfoBoard.ViewModel
             {
                 if (allMedia.Count == 0)
                 {
-                    StopTimersNow();
                     Information info = new Information();
                     info.Title = "Assign Media Categories to Your Device";
                     info.Message = "Welcome to GuzelBoard\n" +
@@ -279,72 +174,49 @@ namespace InfoBoard.ViewModel
                         "There is one last step that requires your attention.\n" +
                         "Assign the categories that will be displayed on your device, via our web portal.\nhttps://guzelboard.com";
                     var navigationParameter = new Dictionary<string, object>
-                {
-                    { "PickCategories", info }
-                };
-                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
+                    {
+                        { "PickCategories", info }
+                    };
+                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);       
+                    
+                    //Wait 10 seconds and call the function again
                     await Task.Delay(TimeSpan.FromSeconds(10));
-                    await Shell.Current.GoToAsync("..");
-                    return;
+                    await DisplayMediaEvent(); //RECURSIVE CALL
                 }
 
                 currentMedia = getMedia();
-
-                ImageSourceVisible = WebViewVisible = false;
-
-                //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
-#if DEBUG
-                MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
-                                   $"Duration\t: {currentMedia.timing}";// +
-                                                                        //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
-#endif
+  
                 if (currentMedia.type == "file")
                 {
-                    var navigationParameter = new Dictionary<string, object>
+                    var mediaParameter = new Dictionary<string, object>
                     {
                         { "ImageMedia", currentMedia }
                     };
 
                     currentMedia.path = getMediaPath(currentMedia);
-                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, navigationParameter);
+                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
                     await DoDelay(currentMedia.timing);
-                    await Shell.Current.GoToAsync("..");
-
-                    /*
-                    MediaSource = getMediaPath(currentMedia); // This has to be separte from website for offline situations si
-                    //WebViewVisible = false;
-                    setDisplayWidth();
-                    ImageSourceVisible = true;
-                    await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));*/
                 }
                 else//IF WEBSITE
-                {
+                {                    
                     //If not internet, don't try to show websites.
                     if (Utilities.isInternetAvailable())
                     {
-                        var navigationParameter = new Dictionary<string, object>
+                        var webParameter = new Dictionary<string, object>
                         {
                             { "WebMedia", currentMedia }
                         };
 
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, navigationParameter);
+                        _logger.LogError($"Navigating to: {currentMedia.path}");
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);
                         //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
-                        await DoDelay(currentMedia.timing);
-                        await Shell.Current.GoToAsync("..");
-                        /*
-                        MediaSource = getMediaPath(currentMedia);
-                        //Give some time website load
-                        //await Task.Delay(TimeSpan.FromSeconds(1));
-                        //ImageSourceVisible = false;
-                        //await Task.Delay(TimeSpan.FromSeconds(1));
-                        setDisplayWidth();
-                        WebViewVisible = true;
-                        await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));*/
+                        await DoDelay(currentMedia.timing); 
                     }
                     else
                     {
-                        MediaInformation += "\tNo internet connection!";
+                        //No Internet
+                        //MediaInformation += "\tNo internet connection!";
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
                     }
@@ -369,24 +241,13 @@ namespace InfoBoard.ViewModel
                 {
                     StartTimer4FilesAndDeviceSettings();
                 }
+
                 await DisplayMediaEvent(); //RECURSIVE CALL
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"#861 Exception: {ex.Message} {nameof(ImageViewModel)}"); 
                 _logger.LogError($"\n\t #861 Exception {ex.Message} {nameof(ImageViewModel)}\n\n");
-            }
-        }
-
-        private void setDisplayWidth()
-        {
-            if (currentMedia.display_width <= -1)
-            {
-                DisplayWidth = Utilities.maximumDisplayWidth;
-            }
-            else
-            {
-                DisplayWidth = currentMedia.display_width;
             }
         }
   
@@ -454,73 +315,8 @@ namespace InfoBoard.ViewModel
             return media.path;
         }
 
-         
-        public async void ChangeImage()
-        {
-            _mediaSource = "https://drive.google.com/uc?id=1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8";
-            //"https://innovation.wustl.edu/wp-content/uploads/2022/07/WashU-startup-wall-in-Cortex-Innovation-Community-768x512.jpg"; //https://picsum.photos/200/300
-            OnPropertyChanged(nameof(MediaSource));
-            await Task.Delay(_refreshInMiliSecond);
-
-            //_imageSource = "https://drive.google.com/file/d/1D6omslsbfWey0cWa6NvBqeTI7yfGeVg8/view";
-
-            //_imageSource = "https://gdurl.com/R-59";
-            _mediaSource = "https://lh3.googleusercontent.com/drive-viewer/AFGJ81qti0yDlD6Ph_LpUExWqh7lBDF10LrOXegbtMpz7yj-aC9vaVVhbbrA7R7b4NObrF39hLS0pseyuwtBERuTdpDS5cDE7g=s1600";
-            OnPropertyChanged(nameof(MediaSource));
-            await Task.Delay(_refreshInMiliSecond);
-            /*
-                        _imageSource = "https://aka.ms/campus.jpg"; //https://picsum.photos/200/300
-                        OnPropertyChanged(nameof(ImageSource));
-                        await Task.Delay(_refreshInMiliSecond);
-
-                    /*
-                        _imageSource = "https://vermontic.com/wp-content/uploads/2023/04/lake-champlain-scenic-water-204309-1024x768.jpg";
-                        OnPropertyChanged(nameof(ImageSource));
-                        await Task.Delay(_refreshInMiliSecond);
-
-                        _imageSource = "https://currentMedia.cnn.com/api/v1/images/stellar/prod/230502171051-01-msg-misunderstood-ingredient-top.jpg";
-                        OnPropertyChanged(nameof(ImageSource));
-                        await Task.Delay(_refreshInMiliSecond);
-                    */
-
-            _mediaSource = "https://www.champlain.edu/assets/images/Internships/Internships-Hero-Desktop-1280x450.jpg";
-            OnPropertyChanged(nameof(MediaSource));
-            await Task.Delay(_refreshInMiliSecond);
-
-
-            _mediaSource = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals";
-            OnPropertyChanged(nameof(MediaSource));
-            await Task.Delay(_refreshInMiliSecond);            
-        }
-
-        public void OnPropertyChanged([CallerMemberName] string name = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+     
     }
 
 }
-
-
-//public ImageViewModel(INavigation navigation)
-//{
-//    this.Navigation = navigation;           
-//    fileDownloadService = new FileDownloadService();
-//    _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
-//    _refreshInMiliSecond = 3000;
-
-
-//    timer4DisplayImage = Application.Current.Dispatcher.CreateTimer();
-//    timer4FileSync = Application.Current.Dispatcher.CreateTimer();
-//    timer4DeviceSettingsSync = Application.Current.Dispatcher.CreateTimer();            
-
-//    //GoTime();
-//}
-
-//public async void NavigateToRegisterViewAndStartTimer4RegisteringDevice()
-//{
-//    //await MainThread.InvokeOnMainThreadAsync(async () =>
-//    //{
-//    //    await _navigation.PushAsync(new RegisterView(this), true);               
-//    //}); 
-
-
-//}
+ 
