@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Core;
 using InfoBoard.Models;
 using InfoBoard.Services;
 using InfoBoard.Views;
+using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -108,8 +109,8 @@ namespace InfoBoard.ViewModel
             _cachingInterval = new TimeSpan(0, 0, 3, 00); // TimeSpan (int days, int hours, int minutes, int seconds);
             _refreshInMiliSecond = 3000;
             
-            imageSourceVisible = true;
-            webViewVisible = false;
+            //imageSourceVisible = true;
+            //webViewVisible = false;
 
             timer4DisplayImage = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
@@ -258,88 +259,123 @@ namespace InfoBoard.ViewModel
         //bool showImage = true; 
 
         //int timing;
-        
+
+        private async Task DoDelay(int time)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(time));            
+        }
+
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
-            if (allMedia.Count == 0)
+            try
             {
-                StopTimersNow();
-                Information info = new Information();
-                info.Title = "Assign Media Categories to Your Device";
-                info.Message = "Welcome to GuzelBoard\n" +
-                    "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
-                    "There is one last step that requires your attention.\n" +
-                    "Assign the categories that will be displayed on your device, via our web portal.\nhttps://guzelboard.com";
-                var navigationParameter = new Dictionary<string, object>
+                if (allMedia.Count == 0)
+                {
+                    StopTimersNow();
+                    Information info = new Information();
+                    info.Title = "Assign Media Categories to Your Device";
+                    info.Message = "Welcome to GuzelBoard\n" +
+                        "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
+                        "There is one last step that requires your attention.\n" +
+                        "Assign the categories that will be displayed on your device, via our web portal.\nhttps://guzelboard.com";
+                    var navigationParameter = new Dictionary<string, object>
                 {
                     { "PickCategories", info }
                 };
-                await Shell.Current.GoToAsync(nameof(InformationView),true, navigationParameter);
-                await Task.Delay(TimeSpan.FromSeconds(10));
-                await Shell.Current.GoToAsync("..");              
-                return;
-            }   
-
-            currentMedia = getMedia();           
-            
-            ImageSourceVisible  = WebViewVisible = false;
-
-            //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
-#if DEBUG
-            MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
-                               $"Duration\t: {currentMedia.timing}";// +
-                                                                    //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
-#endif
-            if (currentMedia.type == "file")
-            {
-                MediaSource = getMediaPath(currentMedia); // This has to be separte from website for offline situations si
-                //WebViewVisible = false;
-                setDisplayWidth();
-                ImageSourceVisible = true;
-                await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
-            }
-            else//IF WEBSITE
-            {
-                //If not internet, don't try to show websites.
-                if (Utilities.isInternetAvailable())
-                {
-                    MediaSource = getMediaPath(currentMedia);
-                    //Give some time website load
-                    //await Task.Delay(TimeSpan.FromSeconds(1));
-                    //ImageSourceVisible = false;
-                    //await Task.Delay(TimeSpan.FromSeconds(1));
-                    setDisplayWidth();
-                    WebViewVisible = true;
-                    await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
+                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
+                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    await Shell.Current.GoToAsync("..");
+                    return;
                 }
-                else
-                { 
-                    MediaInformation += "\tNo internet connection!";
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
-                }                
-            }
-            //previousMedia = currentMedia;
-           // currentMedia = getMedia();
 
-            //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
+                currentMedia = getMedia();
 
-            //No settings found - register device and update deviceSettings
-            if (deviceSettings == null)
-            {
-                await GoTime();
-                return;
+                ImageSourceVisible = WebViewVisible = false;
+
+                //timer4DisplayImage.Interval = TimeSpan.FromSeconds(previousMedia.timing);
+#if DEBUG
+                MediaInformation = $"Source\t:{getMediaPath(currentMedia)}\n" +
+                                   $"Duration\t: {currentMedia.timing}";// +
+                                                                        //$"\nTimeSpan Timing:{timer4DisplayImage.Interval}";
+#endif
+                if (currentMedia.type == "file")
+                {
+                    var navigationParameter = new Dictionary<string, object>
+                    {
+                        { "ImageMedia", currentMedia }
+                    };
+
+                    currentMedia.path = getMediaPath(currentMedia);
+                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, navigationParameter);
+                    //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
+                    await DoDelay(currentMedia.timing);
+                    await Shell.Current.GoToAsync("..");
+
+                    /*
+                    MediaSource = getMediaPath(currentMedia); // This has to be separte from website for offline situations si
+                    //WebViewVisible = false;
+                    setDisplayWidth();
+                    ImageSourceVisible = true;
+                    await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));*/
+                }
+                else//IF WEBSITE
+                {
+                    //If not internet, don't try to show websites.
+                    if (Utilities.isInternetAvailable())
+                    {
+                        var navigationParameter = new Dictionary<string, object>
+                        {
+                            { "WebMedia", currentMedia }
+                        };
+
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, navigationParameter);
+                        //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
+                        await DoDelay(currentMedia.timing);
+                        await Shell.Current.GoToAsync("..");
+                        /*
+                        MediaSource = getMediaPath(currentMedia);
+                        //Give some time website load
+                        //await Task.Delay(TimeSpan.FromSeconds(1));
+                        //ImageSourceVisible = false;
+                        //await Task.Delay(TimeSpan.FromSeconds(1));
+                        setDisplayWidth();
+                        WebViewVisible = true;
+                        await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));*/
+                    }
+                    else
+                    {
+                        MediaInformation += "\tNo internet connection!";
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        //timer4DisplayImage.Interval = TimeSpan.FromSeconds(0);
+                    }
+                }
+                //previousMedia = currentMedia;
+                // currentMedia = getMedia();
+
+                //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
+
+                //No settings found - register device and update deviceSettings
+                if (deviceSettings == null)
+                {
+                    await GoTime();
+                    return;
+                }
+                //If internet is not available stop file syncronisation
+                if (!Utilities.isInternetAvailable() && timer4FileSync.IsRunning)
+                {
+                    StopTimer4FilesAndDeviceSettings();
+                }
+                else if (Utilities.isInternetAvailable() && !timer4FileSync.IsRunning)
+                {
+                    StartTimer4FilesAndDeviceSettings();
+                }
+                await DisplayMediaEvent(); //RECURSIVE CALL
             }
-            //If internet is not available stop file syncronisation
-            if (!Utilities.isInternetAvailable() && timer4FileSync.IsRunning)
+            catch (Exception ex)
             {
-                StopTimer4FilesAndDeviceSettings();  
+                Debug.WriteLine($"#861 Exception: {ex.Message} {nameof(ImageViewModel)}"); 
+                _logger.LogError($"\n\t #861 Exception {ex.Message} {nameof(ImageViewModel)}\n\n");
             }
-            else if (Utilities.isInternetAvailable() && !timer4FileSync.IsRunning)
-            {
-                StartTimer4FilesAndDeviceSettings();
-            }
-            await DisplayMediaEvent(); //RECURSIVE CALL
         }
 
         private void setDisplayWidth()

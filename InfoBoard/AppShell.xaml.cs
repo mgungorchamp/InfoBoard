@@ -1,5 +1,6 @@
 ﻿using InfoBoard.Services;
 using InfoBoard.Views;
+using InfoBoard.Views.MediaViews;
 using System.Diagnostics;
 
 namespace InfoBoard;
@@ -13,9 +14,16 @@ public partial class AppShell : Shell
         //NavigationPage.SetHasNavigationBar(this, false);
         //NavigationPage.SetHasBackButton(this, false);        
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
+        
         Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
         Routing.RegisterRoute(nameof(InformationView), typeof(InformationView));
+
+        //Viewers for Media
+        Routing.RegisterRoute(nameof(WebViewViewer), typeof(WebViewViewer));
+        Routing.RegisterRoute(nameof(ImageViewer), typeof(ImageViewer));
+
+
         Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
         //Shell.Current.CurrentItem = imageDisplayItem;

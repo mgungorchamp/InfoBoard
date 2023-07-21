@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:InfoBoard.Models"
+             x:Class="InfoBoard.Views.MediaViews.WebViewViewer"
+             Title="WebViewViewer">
+    <ContentPage.BindingContext>
+        <models:Media/>
+    </ContentPage.BindingContext>
+    <Grid>
+        <WebView 
+                x:Name="webView"  
+                BackgroundColor="Turquoise"
+                HorizontalOptions="FillAndExpand"      
+                VerticalOptions="FillAndExpand" 
+                WidthRequest="{Binding display_width}"                
+                Source="{Binding path, TargetNullValue='https://vermontic.com/'}"/>
+
+        <Label 
+                Text="{Binding path}"
+                TextColor="Orange"   
+                IsVisible="true"
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+        <Label 
+                Text="{Binding timing}"
+                FontAttributes="Bold"
+                TextColor="Red"   
+                IsVisible="true"
+                VerticalOptions="Center" 
+                HorizontalOptions="EndAndExpand"/>
+
+        <Label 
+            Text="GuzelBoard TESTING WEB VIEW"
+            FontAttributes="Bold"
+            TextColor="Orange"
+            FontSize="Large"
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="CenterAndExpand" />
+    </Grid>
+</ContentPage>

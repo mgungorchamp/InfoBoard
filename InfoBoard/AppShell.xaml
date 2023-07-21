@@ -4,15 +4,13 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
     xmlns:views="clr-namespace:InfoBoard.Views"    
+    xmlns:mediaviews="clr-namespace:InfoBoard.Views.MediaViews"    
     Shell.NavBarIsVisible="false"
     Shell.TabBarIsVisible="False">
 
+    
     <TabBar>
 
-
-
-        
-        
         <ShellContent  
             x:Name="imageDisplayItem"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
@@ -24,6 +22,16 @@
             x:Name="informationViewItem"
             ContentTemplate="{DataTemplate views:InformationView}"/>
 
+        <!--MEDIA VIEWERS-->
+        <ShellContent     
+            x:Name="webViewViewerItem"
+            ContentTemplate="{DataTemplate mediaviews:WebViewViewer}"/>
+
+        <ShellContent     
+            x:Name="imageViewerItem"
+            ContentTemplate="{DataTemplate mediaviews:ImageViewer}"/>
+
+        <!--BELOW CAN BE DELETED -->
 
         <ShellContent  
             x:Name="aboutPageItem"

@@ -28,7 +28,7 @@ namespace InfoBoard.Services
 
         public static int maximumDisplayWidth = -1;
 
-        //https://guzelboard.com/api/categories.php?device_key=DEVICE_KEY
+        //https://HostUrl/api/categories.php?device_key=DEVICE_KEY
         public static void updateMediaFilesUrl(string device_key)
         {
             MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/categories.php?device_key={device_key}";
@@ -36,7 +36,7 @@ namespace InfoBoard.Services
 
         public static string TEMPORARY_CODE;
 
-        //https://guzelboard.com/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
+        //https://HostUrl/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
         public static string HANDSHAKE_URL;
         private static void updateHandshakeUrl(string temporaryCode)
         {

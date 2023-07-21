@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using InfoBoard.ViewModel;
 using InfoBoard.Views;
+using InfoBoard.Views.MediaViews;
 using MetroLog.MicrosoftExtensions;
 using MetroLog.Operators;
 using Microsoft.Extensions.Logging;
@@ -31,8 +32,12 @@ public static class MauiProgram
             });       
 
         builder.Services.AddSingleton<ImageDisplay>();
-        builder.Services.AddSingleton<WebSiteView>();
+        //builder.Services.AddSingleton<WebSiteView>();
         builder.Services.AddTransient<RegisterView>();
+
+        builder.Services.AddSingleton<ImageViewer>();
+        builder.Services.AddSingleton<WebViewViewer>();
+
         //builder.Services.AddTransient<ImageViewModel>();
 
 
