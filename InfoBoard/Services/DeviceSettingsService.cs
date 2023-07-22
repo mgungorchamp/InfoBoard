@@ -117,8 +117,7 @@ namespace InfoBoard.Services
                         _logger.LogWarning($"SETTINGS#785 Device Key is Null readSettingsFromLocalJSON");
                         return null;
                     }
-                    _logger.LogInformation($"SETTINGS#66 Received: " +
-                        $"\tFile Content: {jsonString}");    
+                    _logger.LogInformation($"SETTINGS#33 Read from Local file: {jsonString}");    
                     return deviceSettings;
                 }
                 else

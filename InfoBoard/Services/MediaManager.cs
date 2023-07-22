@@ -136,11 +136,11 @@ namespace InfoBoard.ViewModel
             await UpdateMediaEventAsync();           
 
             //Set up the timer for Syncronise Media Files             
-            timer4FileSync.Interval = TimeSpan.FromSeconds(20);
+            timer4FileSync.Interval = TimeSpan.FromSeconds(101);
             timer4FileSync.Tick += async (sender, e) => await UpdateMediaEventAsync();
             
             //Get latest settings from server - every 15 seconds
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(15);
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(107);
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             
             //Start the timers
@@ -184,7 +184,7 @@ namespace InfoBoard.ViewModel
                     };
 
                     currentMedia.path = getMediaPath(currentMedia);
-                    _logger.LogInformation($"Navigating to Image: {currentMedia.name}");
+                    _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
                     await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);                    
                     await DoDelay(currentMedia.timing);
                 }
@@ -198,7 +198,7 @@ namespace InfoBoard.ViewModel
                             { "WebMedia", currentMedia }
                         };
 
-                        _logger.LogInformation($"Navigating to Web Media: {currentMedia.name}");
+                        _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
                         await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);                        
                         await DoDelay(currentMedia.timing); 
                     }
@@ -229,8 +229,10 @@ namespace InfoBoard.ViewModel
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"#861 Exception: {ex.Message} {nameof(ImageViewModel)}"); 
-                _logger.LogError($"\n\t #861 Exception {ex.Message} {nameof(ImageViewModel)}\n\n");                
+                Debug.WriteLine($"#879 Exception: {ex.Message}"); 
+                _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
+                    $"Path: {currentMedia.path}\n" +
+                    $"s3key: {currentMedia.s3key}\n");                
             }
             await DisplayMediaEvent(); //RECURSIVE CALL
         }
@@ -246,7 +248,7 @@ namespace InfoBoard.ViewModel
                 if (allMedia == null || allMedia.Count == 0)
                 {
                     Debug.WriteLine("No files to show");
-                    _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");
+                    _logger.LogInformation($"\n\t #433 No files to show {nameof(MediaManager)}\n\n");
                     index = 0;
                     Media noMedia = new Media();
                     return noMedia;
@@ -260,7 +262,7 @@ namespace InfoBoard.ViewModel
             } 
             catch (Exception ex) 
             {
-                _logger.LogError($"\n\t #411 Index exception ocurred {nameof(ImageViewModel)}\n " +
+                _logger.LogError($"\n\t #411 Index exception ocurred {nameof(MediaManager)}\n " +
                                 $"\tException {ex.Message}\n");
                 Media noMedia = new Media();
                 return noMedia;

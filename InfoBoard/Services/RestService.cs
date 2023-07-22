@@ -22,7 +22,7 @@ namespace InfoBoard.Services
         public RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
-            _client = new HttpClient();
+            _client = new HttpClient();            
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -81,6 +81,7 @@ namespace InfoBoard.Services
                     }
                     List<MediaCategory> fileList = JsonSerializer.Deserialize<List<MediaCategory>>(mediaContent, _serializerOptions);
                     await fileDownloadService.saveCategoryListToLocalJSON(fileList);
+                    _logger.LogError($"RestService API 736 Category (Media) List Updated\n");
                     return;                    
                 }
             }
@@ -147,7 +148,9 @@ namespace InfoBoard.Services
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0} retrieveDeviceSettings MURAT", ex.Message);
-                _logger.LogError($"#77-SETTTINGS Exception: {ex.Message} retrieveDeviceSettings MURAT");
+                _logger.LogError($"#77-SETTTINGS Exception: {ex.Message}" +
+                     $"URI : {uri.ToString()}\n" +
+                     $"updateDeviceSettings MURAT");
             }
             //await Task.Delay(TimeSpan.FromSeconds(2));
         }

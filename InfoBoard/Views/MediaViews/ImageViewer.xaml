@@ -12,7 +12,7 @@
         <Image 
                 x:Name="mainPageImage"
                 Aspect="AspectFit"                        
-                VerticalOptions="StartAndExpand"
+                VerticalOptions="CenterAndExpand"
                 HorizontalOptions="CenterAndExpand"                
                 Source="{Binding path, TargetNullValue='welcome.jpg'}">
         </Image> 
