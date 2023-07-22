@@ -20,14 +20,15 @@ public partial class WelcomeView : ContentPage
     {
         base.OnAppearing();
 
-        // Set the KeepScreenOn property to true to prevent the screen from turning off
-        //DeviceDisplay.Current.KeepScreenOn = true;
+        // Set the KeepScreenOn property to true to prevent the screen from turning off        
         DeviceDisplay.Current.KeepScreenOn = true;
 
         //var toast = Toast.Make($"Appearing! ImageDisplay");
         //await toast.Show();
         
         _logger.LogInformation($"Welcome OnAppearing\n");
+
+        await Task.Delay(TimeSpan.FromSeconds(4));
 
         MediaManager manager = MediaManager.Instance;
         await manager.GoTime();

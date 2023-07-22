@@ -19,7 +19,7 @@
 
         <Label 
                 Text="{Binding name}"
-                TextColor="DarkTurquoise"   
+                TextColor="WhiteSmoke"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
@@ -30,6 +30,14 @@
                 IsVisible="true"
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
+
+        <Image 
+                x:Name="noInternetImage"
+                Source="no_wifi.png"                     
+                HeightRequest="77"
+                WidthRequest="77"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="EndAndExpand"/>
 
         <Label 
             Text="IMAGE VIEW"

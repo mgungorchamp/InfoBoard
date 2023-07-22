@@ -13,10 +13,14 @@ namespace InfoBoard.ViewModel
         private readonly ILogger _logger;
         private IDispatcherTimer timer4MediaDisplaying;
         private IDispatcherTimer timer4FileSync;
-        private IDispatcherTimer timer4DeviceSettingsSync; 
+        private IDispatcherTimer timer4DeviceSettingsSync;
 
-        DeviceSettings deviceSettings;
+        private DeviceSettings deviceSettings;
         private FileDownloadService fileDownloadService;
+
+        private List<MediaCategory> categoryList;
+        private List<Media> allMedia;
+        private Media currentMedia;
 
         private static readonly MediaManager instance = new MediaManager();        
 
@@ -99,13 +103,13 @@ namespace InfoBoard.ViewModel
                 }
                 else//Registered device - start timer for image display and file/settings sync
                 {
-                    _logger.LogInformation("\t\t+++ START Timer for image display and file/settings sync\n");
+                    _logger.LogInformation("\t\t+++ SETUP Timer for image display and file/settings sync\n");
                     SetupAndStartTimers4MediaAndSettings();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"GoTime #396 Exception\n" +
+                _logger.LogCritical($"GoTime #396 Exception\n" +
                                 $"Exception: {ex.Message}");
                 await GoTime(); // IF EXCEPTION - TRY AGAIN
             }
@@ -119,9 +123,7 @@ namespace InfoBoard.ViewModel
             return deviceSettings;
         }
 
-        private List<MediaCategory> categoryList;
-        public  List<Media> allMedia;
-        Media currentMedia;
+       
         private async Task UpdateMediaEventAsync()
         {
             //Update Device Settings
@@ -146,10 +148,7 @@ namespace InfoBoard.ViewModel
             await DisplayMediaEvent();//FIRST TIME CALL
         }
          
-        private async Task DoDelay(int time)
-        {
-            await Task.Delay(TimeSpan.FromSeconds(time));            
-        }
+       
 
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
@@ -169,8 +168,8 @@ namespace InfoBoard.ViewModel
                     };
                     await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);       
                     
-                    //Wait 10 seconds and call the function again
-                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    //Wait 10 seconds and call the function again                    
+                    await DoDelay(10);
                     await DisplayMediaEvent(); //RECURSIVE CALL
                 }
 
@@ -184,8 +183,7 @@ namespace InfoBoard.ViewModel
                     };
 
                     currentMedia.path = getMediaPath(currentMedia);
-                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
-                    //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
+                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);                    
                     await DoDelay(currentMedia.timing);
                 }
                 else//IF WEBSITE
@@ -199,24 +197,18 @@ namespace InfoBoard.ViewModel
                         };
 
                         //_logger.LogInformation($"Navigating to: {currentMedia.path}");
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);
-                        //await Task.Delay(TimeSpan.FromSeconds(currentMedia.timing));
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);                        
                         await DoDelay(currentMedia.timing); 
                     }
                     else
                     {
                         //No Internet
-                        //MediaInformation += "\tNo internet connection!";
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                        //timer4MediaDisplaying.Interval = TimeSpan.FromSeconds(0);
+                        //MediaInformation += "\tNo internet connection!";                        
+                        await DoDelay(1);
                     }
-                }
-                //previousMedia = currentMedia;
-                // currentMedia = getMedia();
+                }                
 
-                //await Task.Delay(TimeSpan.FromSeconds(3));//It gives control to UI thread to update the UI
-
-                //No settings found - register device and update deviceSettings
+                //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)
                 {
                     await GoTime(); // DEVICE REMOVED GO TO REGISTER
@@ -231,14 +223,13 @@ namespace InfoBoard.ViewModel
                 {
                     StartTimer4FilesAndDeviceSettings();
                 }
-
-                await DisplayMediaEvent(); //RECURSIVE CALL
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"#861 Exception: {ex.Message} {nameof(ImageViewModel)}"); 
-                _logger.LogError($"\n\t #861 Exception {ex.Message} {nameof(ImageViewModel)}\n\n");
+                _logger.LogError($"\n\t #861 Exception {ex.Message} {nameof(ImageViewModel)}\n\n");                
             }
+            await DisplayMediaEvent(); //RECURSIVE CALL
         }
   
 
@@ -246,11 +237,8 @@ namespace InfoBoard.ViewModel
         int index = 0;
         private Media getMedia()
         {
-            //TODO : File list should be a member variable and should be updated in a timed event
-            //List<FileInformation> categoryList = fileDownloadService.readMediaNamesFromLocalJSON();
             try
-            {             
-
+            {        
                 //No files to show
                 if (allMedia.Count == 0)
                 {
@@ -274,17 +262,10 @@ namespace InfoBoard.ViewModel
                 Media noMedia = new Media();
                 return noMedia;
             }
-            
-
-            //MediaCategory randomCategory = categoryList[random.Next(categoryList.Count)];
-            //Media randomMedia;
-            //if (randomCategory.currentMedia.Count > 0)
-            //    return randomCategory.currentMedia[random.Next(randomCategory.currentMedia.Count)];
-            //else 
-            //    return getMedia();
-
-            //return randomMedia;
-            // Pick some other picture
+        }
+        private async Task DoDelay(int seconds)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(seconds));
         }
 
         private string getMediaPath(Media media) 
@@ -303,10 +284,7 @@ namespace InfoBoard.ViewModel
                 return "welcome.jpg"; // TODO : Missing image - image must have deleted from the local file
             }
             return media.path;
-        }
-
-     
+        }     
     }
-
 }
  
