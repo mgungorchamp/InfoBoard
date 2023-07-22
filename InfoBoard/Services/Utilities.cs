@@ -116,7 +116,7 @@ namespace InfoBoard.Services
             options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
         }));
 
-        public static ILogger Logger(string categoryName) {
+        public static ILogger Logger(string categoryName) {            
             return loggerFactory.CreateLogger(categoryName);
         }
 

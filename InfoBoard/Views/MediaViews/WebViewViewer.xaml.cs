@@ -6,18 +6,17 @@ namespace InfoBoard.Views.MediaViews;
 
 public partial class WebViewViewer : ContentPage, IQueryAttributable
 {
-    private readonly ILogger _logger;
+    //private readonly ILogger _logger;
     public WebViewViewer()
 	{
 		InitializeComponent();
-        _logger = Utilities.Logger(nameof(WebViewViewer));
+        //_logger = Utilities.Logger(nameof(WebViewViewer));
     }
     void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> message)
     {
         var infoMessage = message["WebMedia"] as Media;
-        
-        _logger.LogInformation($"WebMedia Displaying: {infoMessage.name}");
-        
-        BindingContext = infoMessage;      
+        BindingContext = infoMessage;
+
+        //_logger.LogInformation($"WebMedia Displaying: {infoMessage.name}");
     }
 }

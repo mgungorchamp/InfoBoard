@@ -7,7 +7,7 @@
     <ContentPage.BindingContext>
         <models:Information/>
     </ContentPage.BindingContext>
-    <VerticalStackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+    <VerticalStackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  Margin="20">
         <Label FontSize="22" FontAttributes="Bold" Text="{Binding Title}" VerticalOptions="End" />
         <Line  StrokeThickness="15"/>
         <Label FontSize="22" Text="{Binding Message}" VerticalOptions="End" />

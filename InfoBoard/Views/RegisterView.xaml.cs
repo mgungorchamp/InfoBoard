@@ -33,6 +33,7 @@ public partial class RegisterView : ContentPage
     {
         _logger.LogInformation($"\n\tRegisterView On Appearing\n");
         base.OnAppearing();
+        
         ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
     }
 

@@ -154,7 +154,7 @@ namespace InfoBoard.ViewModel
         {
             try
             {
-                if (allMedia.Count == 0)
+                if (allMedia == null || allMedia.Count == 0)
                 {
                     Information info = new Information();
                     info.Title = "Assign Media Categories to Your Device";
@@ -169,8 +169,9 @@ namespace InfoBoard.ViewModel
                     await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);       
                     
                     //Wait 10 seconds and call the function again                    
-                    await DoDelay(10);
-                    await DisplayMediaEvent(); //RECURSIVE CALL
+                    await DoDelay(15);
+                    await GoTime(); //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN
+                    return;
                 }
 
                 currentMedia = getMedia();
@@ -183,6 +184,7 @@ namespace InfoBoard.ViewModel
                     };
 
                     currentMedia.path = getMediaPath(currentMedia);
+                    _logger.LogInformation($"Navigating to Image: {currentMedia.name}");
                     await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);                    
                     await DoDelay(currentMedia.timing);
                 }
@@ -196,7 +198,7 @@ namespace InfoBoard.ViewModel
                             { "WebMedia", currentMedia }
                         };
 
-                        //_logger.LogInformation($"Navigating to: {currentMedia.path}");
+                        _logger.LogInformation($"Navigating to Web Media: {currentMedia.name}");
                         await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);                        
                         await DoDelay(currentMedia.timing); 
                     }
@@ -211,6 +213,7 @@ namespace InfoBoard.ViewModel
                 //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)
                 {
+                    allMedia.Clear();
                     await GoTime(); // DEVICE REMOVED GO TO REGISTER
                     return;
                 }
@@ -240,7 +243,7 @@ namespace InfoBoard.ViewModel
             try
             {        
                 //No files to show
-                if (allMedia.Count == 0)
+                if (allMedia == null || allMedia.Count == 0)
                 {
                     Debug.WriteLine("No files to show");
                     _logger.LogInformation($"\n\t #433 No files to show {nameof(ImageViewModel)}\n\n");

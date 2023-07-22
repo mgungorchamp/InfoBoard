@@ -118,7 +118,7 @@ namespace InfoBoard.Services
                         return null;
                     }
                     _logger.LogInformation($"SETTINGS#66 Received: " +
-                        $"\tFile Content:{jsonString}");    
+                        $"\tFile Content: {jsonString}");    
                     return deviceSettings;
                 }
                 else
