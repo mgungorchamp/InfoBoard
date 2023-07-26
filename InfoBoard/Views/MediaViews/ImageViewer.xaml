@@ -18,12 +18,14 @@
         </Image> 
 
         <Label 
+                x:Name="imageName"
                 Text="{Binding name}"
                 TextColor="WhiteSmoke"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
         <Label 
+                x:Name="imageTiming"
                 Text="{Binding timing}"
                 FontAttributes="Bold"
                 TextColor="Chartreuse"   
