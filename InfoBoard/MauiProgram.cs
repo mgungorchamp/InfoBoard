@@ -35,8 +35,8 @@ public static class MauiProgram
         //builder.Services.AddSingleton<WebSiteView>();
         builder.Services.AddTransient<RegisterView>();
 
-        builder.Services.AddTransient<ImageViewer>();
-        builder.Services.AddTransient<WebViewViewer>();
+        builder.Services.AddSingleton<ImageViewer>();
+        builder.Services.AddSingleton<WebViewViewer>();
         
         builder.Services.AddSingleton<InformationView>();
 
