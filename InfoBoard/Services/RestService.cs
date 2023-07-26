@@ -81,7 +81,7 @@ namespace InfoBoard.Services
                     }
                     List<MediaCategory> fileList = JsonSerializer.Deserialize<List<MediaCategory>>(mediaContent, _serializerOptions);
                     await fileDownloadService.saveCategoryListToLocalJSON(fileList);
-                    _logger.LogError($"RestService API 736 Category (Media) List Updated\n");
+                    _logger.LogInformation($"RestService API 736 Category (Media) List Updated\n");
                     return;                    
                 }
             }
