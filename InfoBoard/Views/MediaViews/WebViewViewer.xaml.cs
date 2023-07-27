@@ -20,6 +20,10 @@ public partial class WebViewViewer : ContentPage, IQueryAttributable
 
         _logger.LogInformation($"WebMedia Displaying, Path: {infoMessage.path}");
 
-        BindingContext = infoMessage;
+        //BindingContext = infoMessage;
+        webView.Source = infoMessage.path;
+        _logger.LogInformation($"Image view Displaying, Name: {infoMessage.name}");
+        imageName.Text = infoMessage.name;
+        imageTiming.Text = infoMessage.timing.ToString();
     }
 }
