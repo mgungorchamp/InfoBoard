@@ -232,7 +232,8 @@ namespace InfoBoard.ViewModel
                 Debug.WriteLine($"#879 Exception: {ex.Message}"); 
                 _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
                     $"Path: {currentMedia.path}\n" +
-                    $"s3key: {currentMedia.s3key}\n");                
+                    $"s3key: {currentMedia.s3key}\n");
+                await DoDelay(currentMedia.timing);
             }
             await DisplayMediaEvent(); //RECURSIVE CALL
         }

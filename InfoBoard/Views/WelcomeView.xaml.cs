@@ -18,19 +18,28 @@ public partial class WelcomeView : ContentPage
 
     protected async override void OnAppearing()
     {
-        base.OnAppearing();
+        try
+        {
+            base.OnAppearing();
 
-        // Set the KeepScreenOn property to true to prevent the screen from turning off        
-        DeviceDisplay.Current.KeepScreenOn = true;
+            // Set the KeepScreenOn property to true to prevent the screen from turning off        
+            DeviceDisplay.Current.KeepScreenOn = true;
 
-        //var toast = Toast.Make($"Appearing! ImageDisplay");
-        //await toast.Show();
-        
-        _logger.LogInformation($"Welcome OnAppearing\n");
+            //var toast = Toast.Make($"Appearing! ImageDisplay");
+            //await toast.Show();
 
-        await Task.Delay(TimeSpan.FromSeconds(4));
+            _logger.LogInformation($"Welcome OnAppearing\n");
 
-        MediaManager manager = MediaManager.Instance;
-        await manager.GoTime();
+            await Task.Delay(TimeSpan.FromSeconds(4));
+
+            MediaManager manager = MediaManager.Instance;
+            await manager.GoTime();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            _logger.LogError($"WELCOME #275 Exception: {ex.Message}\n");
+        }   
+       
     }
 }
