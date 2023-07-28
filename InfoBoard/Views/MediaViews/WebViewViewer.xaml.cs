@@ -22,7 +22,7 @@ public partial class WebViewViewer : ContentPage, IQueryAttributable
 
         //BindingContext = infoMessage;
         webView.Source = infoMessage.path;
-        _logger.LogInformation($"Image view Displaying, Name: {infoMessage.name}");
+        _logger.LogInformation($"Web view Displaying, Name: {infoMessage.name}");
         imageName.Text = infoMessage.name;
         imageTiming.Text = infoMessage.timing.ToString();
     }
