@@ -10,7 +10,7 @@ public partial class ImageViewer : ContentPage, IQueryAttributable
     public ImageViewer()
 	{
 		InitializeComponent();
-        _logger = Utilities.Logger(nameof(WebViewViewer));
+        _logger = Utilities.Logger(nameof(ImageViewer));
         _logger.LogInformation($"{nameof(ImageViewer)} @ Constructor Called");    
     }
 
