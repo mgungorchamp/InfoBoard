@@ -4,27 +4,27 @@
              xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.MediaViews.WebViewViewer"
              Title="WebViewViewer">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <models:Media/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     <Grid>
         <WebView 
                 x:Name="webView"                              
                 VerticalOptions="FillAndExpand"     
                 HorizontalOptions="FillAndExpand"      
                 WidthRequest="{Binding display_width}"                
-                Source="{Binding path, TargetNullValue='https://vermontic.com/'}"/>
+               />
 
         <Label 
                 x:Name="imageName"
-                Text="{Binding name}"
+               
                 TextColor="Orange"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
         <Label 
                 x:Name="imageTiming"
-                Text="{Binding timing}"
+               
                 FontAttributes="Bold"
                 TextColor="Chartreuse"   
                 IsVisible="true"
@@ -40,3 +40,7 @@
             HorizontalOptions="CenterAndExpand" />
     </Grid>
 </ContentPage>
+
+<!--Source="{Binding path, TargetNullValue='https://vermontic.com/'}"
+     Text="{Binding name}"
+     Text="{Binding timing}"-->

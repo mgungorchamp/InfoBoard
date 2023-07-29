@@ -166,8 +166,8 @@ namespace InfoBoard.ViewModel
                     {
                         { "PickCategories", info }
                     };
-                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);       
-                    
+                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
+
                     //Wait 10 seconds and call the function again                    
                     await DoDelay(15);
                     await GoTime(); //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN
@@ -175,32 +175,32 @@ namespace InfoBoard.ViewModel
                 }
 
                 currentMedia = getMedia();
-  
+
                 if (currentMedia.type == "file")
                 {
                     var mediaParameter = new Dictionary<string, object>
                     {
-                        { "ImageMedia", currentMedia }
+                        { "MyMedia", currentMedia }
                     };
 
                     currentMedia.path = getMediaPath(currentMedia);
                     _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
-                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);                    
+                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
                 }
                 else//IF WEBSITE
-                {                    
+                {
                     //If not internet, don't try to show websites.
                     if (Utilities.isInternetAvailable())
                     {
                         var webParameter = new Dictionary<string, object>
                         {
-                            { "WebMedia", currentMedia }
+                            { "MyMedia", currentMedia }
                         };
 
                         _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);                        
-                        await DoDelay(currentMedia.timing); 
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);
+                        await DoDelay(currentMedia.timing);
                     }
                     else
                     {
@@ -208,7 +208,7 @@ namespace InfoBoard.ViewModel
                         //MediaInformation += "\tNo internet connection!";                        
                         await DoDelay(1);
                     }
-                }                
+                }
 
                 //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)
@@ -227,9 +227,16 @@ namespace InfoBoard.ViewModel
                     StartTimer4FilesAndDeviceSettings();
                 }
             }
+            //Ref https://learning.oreilly.com/library/view/c-cookbook/0596003390/ch05s09.html
+            catch (System.Runtime.InteropServices.COMException ce)
+            {
+                _logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
+                       $"Path: {currentMedia.path}\n" +
+                       $"s3key: {currentMedia.s3key}\n");
+            }
             catch (Exception ex)
             {
-                Debug.WriteLine($"#879 Exception: {ex.Message}"); 
+                Debug.WriteLine($"#879 Exception: {ex.Message}");
                 _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
                     $"Path: {currentMedia.path}\n" +
                     $"s3key: {currentMedia.s3key}\n");

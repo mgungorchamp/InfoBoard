@@ -5,28 +5,28 @@
              x:Class="InfoBoard.Views.MediaViews.ImageViewer"
              Title="ImageViewer"
              BackgroundColor="Firebrick">    
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <models:Media/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     <Grid>
         <Image 
                 x:Name="mainPageImage"
                 Aspect="AspectFit"                        
                 VerticalOptions="CenterAndExpand"
-                HorizontalOptions="CenterAndExpand"                
-                Source="{Binding path, TargetNullValue='welcome.jpg'}">
+                HorizontalOptions="CenterAndExpand">
+            <!--Source="{Binding path, TargetNullValue='welcome.jpg'}"-->
+            
         </Image> 
 
         <Label 
-                x:Name="imageName"
-                Text="{Binding name}"
+                x:Name="imageName"               
                 TextColor="WhiteSmoke"   
                 IsVisible="true"
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
         <Label 
                 x:Name="imageTiming"
-                Text="{Binding timing}"
+               
                 FontAttributes="Bold"
                 TextColor="Chartreuse"   
                 IsVisible="true"
@@ -50,3 +50,7 @@
             HorizontalOptions="CenterAndExpand" />
     </Grid>
 </ContentPage>
+
+<!--Text="{Binding name}"-->
+
+<!--Text="{Binding timing}"-->
