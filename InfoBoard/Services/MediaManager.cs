@@ -239,6 +239,11 @@ namespace InfoBoard.ViewModel
                        $"Path: {currentMedia.path}\n" +
                        $"s3key: {currentMedia.s3key}\n");
             }
+            catch (System.UriFormatException exFormat)
+            {
+                _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
+                       $"Path: {currentMedia.path}\n");
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine($"#879 Exception: {ex.Message}");
