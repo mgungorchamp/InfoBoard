@@ -8,7 +8,7 @@ namespace InfoBoard.Views.MediaViews;
 public partial class ImageViewer : ContentPage //, IQueryAttributable
 {
     private readonly ILogger _logger;
-    private Media contextMedia;
+    private MiniMedia contextMedia;
     public ImageViewer()
 	{
 		InitializeComponent();
@@ -17,7 +17,7 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
         //BindingContext = contextMedia;
     }
 
-    public Media MyMedia {
+    public MiniMedia MyMedia {
         set {
             contextMedia = value;
         }

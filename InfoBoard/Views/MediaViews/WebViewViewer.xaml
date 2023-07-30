@@ -11,8 +11,7 @@
         <WebView 
                 x:Name="webView"                              
                 VerticalOptions="FillAndExpand"     
-                HorizontalOptions="FillAndExpand"      
-                WidthRequest="{Binding display_width}"                
+                HorizontalOptions="FillAndExpand"  
                />
 
         <Label 
@@ -43,4 +42,5 @@
 
 <!--Source="{Binding path, TargetNullValue='https://vermontic.com/'}"
      Text="{Binding name}"
-     Text="{Binding timing}"-->
+     Text="{Binding timing}"
+    WidthRequest="{Binding display_width}"-->

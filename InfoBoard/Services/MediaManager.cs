@@ -176,15 +176,19 @@ namespace InfoBoard.ViewModel
 
                 currentMedia = getMedia();
 
+                
+
                 if (currentMedia.type == "file")
                 {
-                    var mediaParameter = new Dictionary<string, object>
-                    {
-                        { "MyMedia", currentMedia }
-                    };
-
                     currentMedia.path = getMediaPath(currentMedia);
                     _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
+
+                    MiniMedia miniMedia = new MiniMedia(currentMedia);
+                    var mediaParameter = new Dictionary<string, object>
+                    {
+                        { "MyMedia", miniMedia }
+                    };
+
                     await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
                 }
@@ -193,13 +197,14 @@ namespace InfoBoard.ViewModel
                     //If not internet, don't try to show websites.
                     if (Utilities.isInternetAvailable())
                     {
-                        var webParameter = new Dictionary<string, object>
-                        {
-                            { "MyMedia", currentMedia }
-                        };
-
                         _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, webParameter);
+
+                        MiniMedia miniMedia = new MiniMedia(currentMedia);
+                        var mediaParameter = new Dictionary<string, object>
+                        {
+                            { "MyMedia", miniMedia }
+                        };
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
                     }
                     else

@@ -8,7 +8,7 @@ namespace InfoBoard.Views.MediaViews;
 public partial class WebViewViewer : ContentPage//, IQueryAttributable
 {
     private readonly ILogger _logger;
-    private Media contextMedia;
+    private MiniMedia contextMedia;
     public WebViewViewer()
 	{
 		InitializeComponent();
@@ -16,7 +16,7 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
         _logger.LogInformation($"{nameof(WebViewViewer)} # Constructor Called");
     }
 
-    public Media MyMedia {
+    public MiniMedia MyMedia {
         set {
             contextMedia = value;
         }
@@ -26,6 +26,7 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         webView.Source = contextMedia.path;
+        webView.WidthRequest = contextMedia.display_width;
         _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
         imageName.Text = contextMedia.name;
         imageTiming.Text = contextMedia.timing.ToString();
