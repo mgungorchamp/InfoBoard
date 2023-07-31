@@ -4,11 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.Views.MediaViews;
 
-[QueryProperty(nameof(MyMedia), "MyMedia")]
+//[QueryProperty(nameof(MyMedia), "MyMedia")]
 public partial class WebViewViewer : ContentPage//, IQueryAttributable
 {
     private readonly ILogger _logger;
-    private MiniMedia contextMedia;
+    //private MiniMedia contextMedia;
+    public static Media contextMedia;
     public WebViewViewer()
 	{
 		InitializeComponent();
@@ -16,11 +17,11 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
         _logger.LogInformation($"{nameof(WebViewViewer)} # Constructor Called");
     }
 
-    public MiniMedia MyMedia {
-        set {
-            contextMedia = value;
-        }
-    }
+    //public MiniMedia MyMedia {
+    //    set {
+    //        contextMedia = value;
+    //    }
+    //}
     //https://learn.microsoft.com/en-us/answers/questions/1164621/shell-navigation-and-passing-parameter-values
     //https://stackoverflow.com/questions/72704895/net-maui-shell-navigation-is-it-possible-to-pass-a-query-parameter-and-auto-p
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

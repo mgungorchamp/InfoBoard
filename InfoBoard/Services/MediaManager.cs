@@ -189,7 +189,9 @@ namespace InfoBoard.ViewModel
                         { "MyMedia", miniMedia }
                     };
 
-                    await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
+                    ImageViewer.contextMedia = currentMedia;    
+                    await Shell.Current.GoToAsync(nameof(ImageViewer), true);
+                    //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
                 }
                 else//IF WEBSITE
@@ -204,7 +206,9 @@ namespace InfoBoard.ViewModel
                         {
                             { "MyMedia", miniMedia }
                         };
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
+                        WebViewViewer.contextMedia = currentMedia;
+                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true);
+                        //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
                     }
                     else
