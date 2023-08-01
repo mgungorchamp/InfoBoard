@@ -13,6 +13,8 @@ public partial class WelcomeView : ContentPage
 		InitializeComponent();
 
         _logger = Utilities.Logger(nameof(WelcomeView));
+        _logger.LogInformation($"{nameof(WelcomeView)} # Constructor Called");
+
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         DeviceDisplay.Current.KeepScreenOn = true;
         MediaManager manager = MediaManager.Instance;
