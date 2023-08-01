@@ -205,10 +205,7 @@ namespace InfoBoard.ViewModel
              
                     //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
-
-                   
-                       
-
+                    await Shell.Current.GoToAsync("..");
                 }
                 else//IF WEBSITE
                 {
@@ -227,6 +224,7 @@ namespace InfoBoard.ViewModel
                         await Shell.Current.GoToAsync(nameof(WebViewViewer), true);
                         //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
+                        await Shell.Current.GoToAsync("..");
                     }
                     else
                     {
@@ -276,7 +274,7 @@ namespace InfoBoard.ViewModel
                     $"s3key: {currentMedia.s3key}\n");
                 await DoDelay(currentMedia.timing);
             }
-            await Shell.Current.Navigation.PopToRootAsync();
+            //await Shell.Current.Navigation.PopToRootAsync();
             await DisplayMediaEvent(); //RECURSIVE CALL
         }
   
