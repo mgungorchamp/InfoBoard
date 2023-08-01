@@ -5,7 +5,7 @@
              Title="Welcome to GuzelBoard">
     <Grid BackgroundColor="Black">
 
-        <Image 
+        <!--<Image 
                 x:Name="homepageImage"
                 Aspect="AspectFit"                        
                 VerticalOptions="StartAndExpand"
@@ -19,6 +19,6 @@
             TextColor="Firebrick"
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
-            HorizontalOptions="CenterAndExpand" />
+            HorizontalOptions="CenterAndExpand" />-->
     </Grid>
 </ContentPage>

@@ -13,27 +13,31 @@ public partial class WelcomeView : ContentPage
 		InitializeComponent();
 
         _logger = Utilities.Logger(nameof(WelcomeView));
-
+        // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        DeviceDisplay.Current.KeepScreenOn = true;
+        MediaManager manager = MediaManager.Instance;
+        _ = manager.GoTime();
     }
 
-    protected async override void OnAppearing()
+    protected override void OnAppearing()
     {
         try
         {
             base.OnAppearing();
 
             // Set the KeepScreenOn property to true to prevent the screen from turning off        
-            DeviceDisplay.Current.KeepScreenOn = true;
+            //DeviceDisplay.Current.KeepScreenOn = true;
 
             //var toast = Toast.Make($"Appearing! ImageDisplay");
             //await toast.Show();
 
             _logger.LogInformation($"Welcome OnAppearing\n");
+            Debug.WriteLine($"=> Welcome OnAppearing");
 
-            await Task.Delay(TimeSpan.FromSeconds(4));
+            //await Task.Delay(TimeSpan.FromSeconds(4));
 
-            MediaManager manager = MediaManager.Instance;
-            await manager.GoTime();
+            //MediaManager manager = MediaManager.Instance;
+            //await manager.GoTime();
         }
         catch (Exception ex)
         {

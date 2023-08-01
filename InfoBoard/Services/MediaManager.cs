@@ -145,6 +145,8 @@ namespace InfoBoard.ViewModel
             
             //Start the timers
             StartTimersNow4MediaDisplayAndFilesAndSettings();
+
+            //await Shell.Current.Navigation.PopToRootAsync();
             await DisplayMediaEvent();//FIRST TIME CALL
         }
          
@@ -182,6 +184,7 @@ namespace InfoBoard.ViewModel
                 {
                     currentMedia.path = getMediaPath(currentMedia);
                     _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
+                    Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
 
                     MiniMedia miniMedia = new MiniMedia(currentMedia);
                     var mediaParameter = new Dictionary<string, object>
@@ -189,10 +192,23 @@ namespace InfoBoard.ViewModel
                         { "MyMedia", miniMedia }
                     };
 
+                    //await Shell.Current.GoToAsync("..");
+                    //Shell.Current.CurrentPage;
+                    //Shell.Current.
+
+
+                    //await Shell.Current.Navigation.PopAsync();
+                    //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
+
                     ImageViewer.contextMedia = currentMedia;    
                     await Shell.Current.GoToAsync(nameof(ImageViewer), true);
+             
                     //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
+
+                   
+                       
+
                 }
                 else//IF WEBSITE
                 {
@@ -200,6 +216,7 @@ namespace InfoBoard.ViewModel
                     if (Utilities.isInternetAvailable())
                     {
                         _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
+                        Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
 
                         MiniMedia miniMedia = new MiniMedia(currentMedia);
                         var mediaParameter = new Dictionary<string, object>
@@ -218,6 +235,9 @@ namespace InfoBoard.ViewModel
                         await DoDelay(1);
                     }
                 }
+
+                INavigation nav = Shell.Current.Navigation;
+                Debug.WriteLine($"URL PATH Count: {nav.NavigationStack.Count}");
 
                 //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)
@@ -256,6 +276,7 @@ namespace InfoBoard.ViewModel
                     $"s3key: {currentMedia.s3key}\n");
                 await DoDelay(currentMedia.timing);
             }
+            await Shell.Current.Navigation.PopToRootAsync();
             await DisplayMediaEvent(); //RECURSIVE CALL
         }
   
