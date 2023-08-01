@@ -85,6 +85,9 @@
 	  <MauiXaml Update="Views\InformationView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\MediaViews\EmptyPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\MediaViews\ImageViewer.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

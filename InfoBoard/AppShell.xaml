@@ -8,10 +8,10 @@
     Shell.NavBarIsVisible="false"
     Shell.TabBarIsVisible="False">
 
-    
-    <TabBar>
 
-        
+    <FlyoutItem>
+
+
 
         <ShellContent  
             x:Name="welcomeViewItem"
@@ -19,22 +19,27 @@
 
         <ShellContent  
             x:Name="imageDisplayItem"
+            FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
         <ShellContent     
             x:Name="registerViewItem"
+            FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate views:RegisterView}"/>
 
         <ShellContent     
             x:Name="informationViewItem"
+            FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate views:InformationView}"/>
 
         <!--MEDIA VIEWERS-->
         <ShellContent     
             x:Name="webViewViewerItem"
+             FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate mediaviews:WebViewViewer}"/>
 
         <ShellContent     
             x:Name="imageViewerItem"
+             FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate mediaviews:ImageViewer}"/>
 
         <!--BELOW CAN BE DELETED -->
@@ -55,9 +60,9 @@
         <ShellContent
             Title="About"
             ContentTemplate="{DataTemplate views:AboutPage}"
-            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->        
-       
-    </TabBar>
+            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->
+
+     </FlyoutItem>
 
 </Shell>
 

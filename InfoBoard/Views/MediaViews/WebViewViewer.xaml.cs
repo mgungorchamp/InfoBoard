@@ -34,6 +34,16 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
         base.OnNavigatedTo(args);
     }
 
+    protected override void OnDisappearing() 
+    {
+        webView.Resources.Clear();
+        webView = null;
+        base.OnDisappearing();
+    }
+
+
+
+
 
     //void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> message)
     //{

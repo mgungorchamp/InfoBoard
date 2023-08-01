@@ -35,7 +35,8 @@
 
         <Image 
                 x:Name="noInternetImage"
-                Source="no_wifi.png"                     
+                Source="no_wifi.png"   
+                IsVisible="false"
                 HeightRequest="77"
                 WidthRequest="77"
                 VerticalOptions="StartAndExpand" 

@@ -9,7 +9,8 @@ using System.Diagnostics;
 namespace InfoBoard.ViewModel
 {
     public class MediaManager
-    {        
+    {
+        INavigation Navigation;
         private readonly ILogger _logger;
         private IDispatcherTimer timer4MediaDisplaying;
         private IDispatcherTimer timer4FileSync;
@@ -21,6 +22,7 @@ namespace InfoBoard.ViewModel
         private List<MediaCategory> categoryList;
         private List<Media> allMedia;
         private Media currentMedia;
+
 
         private static readonly MediaManager instance = new MediaManager();        
 
@@ -39,9 +41,14 @@ namespace InfoBoard.ViewModel
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
             timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
         }
- 
 
-       
+        public void SetNavigation(INavigation Navigation)
+        {
+            this.Navigation = Navigation;
+        }
+
+
+
         private void StartTimersNow4MediaDisplayAndFilesAndSettings()
         {
             _logger.LogInformation("\t\t+++ START StartTimersNow4MediaDisplayAndFilesAndSettings() is called");
@@ -147,6 +154,7 @@ namespace InfoBoard.ViewModel
             StartTimersNow4MediaDisplayAndFilesAndSettings();
 
             //await Shell.Current.Navigation.PopToRootAsync();
+            await Navigation.PushModalAsync(new EmptyPage(), false);
             await DisplayMediaEvent();//FIRST TIME CALL
         }
          
@@ -201,11 +209,12 @@ namespace InfoBoard.ViewModel
                     //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
 
                     ImageViewer.contextMedia = currentMedia;    
-                    await Shell.Current.GoToAsync(nameof(ImageViewer), true);
-             
+                    //await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", true);
+                    await Navigation.PushModalAsync(new ImageViewer(), true);  
                     //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
-                    await Shell.Current.GoToAsync("..");
+                    //await Shell.Current.GoToAsync("..");
+                    await Navigation.PopModalAsync();
                 }
                 else//IF WEBSITE
                 {
@@ -221,10 +230,12 @@ namespace InfoBoard.ViewModel
                             { "MyMedia", miniMedia }
                         };
                         WebViewViewer.contextMedia = currentMedia;
-                        await Shell.Current.GoToAsync(nameof(WebViewViewer), true);
+                        //await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", true);
+                        await Navigation.PushModalAsync(new WebViewViewer(), true);    
                         //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
-                        await Shell.Current.GoToAsync("..");
+                        //await Shell.Current.GoToAsync("..");
+                        await Navigation.PopModalAsync();
                     }
                     else
                     {
@@ -234,8 +245,8 @@ namespace InfoBoard.ViewModel
                     }
                 }
 
-                INavigation nav = Shell.Current.Navigation;
-                Debug.WriteLine($"URL PATH Count: {nav.NavigationStack.Count}");
+                //INavigation nav = Shell.Current.Navigation;
+                Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");
 
                 //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)

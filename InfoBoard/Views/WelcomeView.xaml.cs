@@ -1,5 +1,6 @@
 using InfoBoard.Services;
 using InfoBoard.ViewModel;
+using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -14,12 +15,13 @@ public partial class WelcomeView : ContentPage
 
         _logger = Utilities.Logger(nameof(WelcomeView));
         _logger.LogInformation($"{nameof(WelcomeView)} # Constructor Called");
-        Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");
-
+        Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");        
+        
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
-        DeviceDisplay.Current.KeepScreenOn = true;
+        //DeviceDisplay.Current.KeepScreenOn = true;
         MediaManager manager = MediaManager.Instance;
-        _ = manager.GoTime();
+        manager.SetNavigation(Navigation);
+        _ = manager.GoTime();        
     }
 
     protected override void OnAppearing()
@@ -29,11 +31,10 @@ public partial class WelcomeView : ContentPage
             base.OnAppearing();
 
             // Set the KeepScreenOn property to true to prevent the screen from turning off        
-            //DeviceDisplay.Current.KeepScreenOn = true;
+            DeviceDisplay.Current.KeepScreenOn = true;
 
             //var toast = Toast.Make($"Appearing! ImageDisplay");
-            //await toast.Show();
-
+            //await toast.Show();           
             _logger.LogInformation($"Welcome OnAppearing\n");
             Debug.WriteLine($"=> Welcome OnAppearing");
 

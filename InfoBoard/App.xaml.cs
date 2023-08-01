@@ -26,8 +26,9 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        MainPage = new AppShell(); 
-
+        //MainPage = new AppShell(); 
+        MainPage = new NavigationPage(new WelcomeView());
+        
         // Following the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
         Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");         
         //MainPage = new NavigationPage(root: new ImageDisplay());
