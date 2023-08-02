@@ -8,12 +8,12 @@
     <!--<ContentPage.BindingContext>
         <models:Media/>
     </ContentPage.BindingContext>-->
-    <Grid>
-        <WebView 
+    <Grid x:Name="myGrid">
+        <!--<WebView 
                 x:Name="webView"                              
                 VerticalOptions="FillAndExpand"     
                 HorizontalOptions="FillAndExpand"  
-               />
+               />-->
 
         <Label 
                 x:Name="imageName"

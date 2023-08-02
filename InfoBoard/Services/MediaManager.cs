@@ -157,8 +157,8 @@ namespace InfoBoard.ViewModel
             await Navigation.PushModalAsync(new EmptyPage(), false);
             await DisplayMediaEvent();//FIRST TIME CALL
         }
-         
-       
+
+        static Page webPage = new WebViewViewer();
 
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
@@ -231,7 +231,7 @@ namespace InfoBoard.ViewModel
                         };
                         WebViewViewer.contextMedia = currentMedia;
                         //await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", true);
-                        await Navigation.PushModalAsync(new WebViewViewer(), true);    
+                        await Navigation.PushModalAsync(webPage, true);
                         //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
                         //await Shell.Current.GoToAsync("..");
