@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using InfoBoard.Services;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -17,11 +19,13 @@ namespace InfoBoard;
 
 public class MainActivity : MauiAppCompatActivity
 {
+    private static ILogger _logger;
     // In MainActivity
     //Ref:https://peterno.wordpress.com/2015/04/15/unhandled-exception-handling-in-ios-and-android-with-xamarin/
     protected override void OnCreate(Bundle bundle)
     {
         base.OnCreate(bundle);
+        _logger = Utilities.Logger(nameof(MainActivity) + "MKG");
 
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
@@ -39,6 +43,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {unobservedTaskExceptionEventArgs.Exception.ToString()}");
+        _logger.LogError($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {unobservedTaskExceptionEventArgs.Exception.ToString()}");
 
         LogUnhandledException(newExc);
     }
@@ -47,6 +52,8 @@ public class MainActivity : MauiAppCompatActivity
         var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", e.Exception);
 
         System.Diagnostics.Debug.WriteLine($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
+        _logger.LogError($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
+
         LogUnhandledException(newExc);
     }
 
@@ -54,6 +61,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! Details: {unhandledExceptionEventArgs.ExceptionObject.ToString()}");
+        _logger.LogError($"**********************************  Unhandled Exception! Details: {unhandledExceptionEventArgs.ExceptionObject.ToString()}");
 
         LogUnhandledException(newExc);
     }
