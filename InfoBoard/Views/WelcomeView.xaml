@@ -4,9 +4,12 @@
              x:Class="InfoBoard.Views.WelcomeView"
              NavigationPage.HasBackButton="False"
              NavigationPage.HasNavigationBar="False"
+                Shell.NavBarIsVisible="false"
+                Shell.TabBarIsVisible="False"
+                Shell.FlyoutItemIsVisible="False"
              Title="Welcome..."             
              BackgroundColor="Black">
-    <Grid>
+    <!--<Grid>-->
 
         <!--<Image 
                 x:Name="homepageImage"
@@ -23,5 +26,5 @@
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="CenterAndExpand" />-->
-    </Grid>
+    <!--</Grid>-->
 </ContentPage>

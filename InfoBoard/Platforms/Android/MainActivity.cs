@@ -72,7 +72,7 @@ public class MainActivity : MauiAppCompatActivity
         try
         {
             const string errorFileName = "Fatal.log";
-            var libraryPath = Android.OS.Environment.DownloadCacheDirectory.Path; // iOS: Environment.SpecialFolder.Resources
+            var libraryPath = FileSystem.CacheDirectory; // iOS: Environment.SpecialFolder.Resources
             var errorFilePath = Path.Combine(libraryPath, errorFileName);
             var errorMessage = String.Format("Time: {0}\r\nError: Unhandled Exception\r\n{1}",
             DateTime.Now, exception.ToString());
@@ -95,7 +95,7 @@ public class MainActivity : MauiAppCompatActivity
     private void DisplayCrashReport()
     {
         const string errorFilename = "Fatal.log";
-        var libraryPath = Android.OS.Environment.DownloadCacheDirectory.Path;
+        var libraryPath = FileSystem.CacheDirectory;
         var errorFilePath = Path.Combine(libraryPath, errorFilename);
 
         if (!File.Exists(errorFilePath))
