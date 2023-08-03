@@ -26,6 +26,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         base.OnCreate(bundle);
         _logger = Utilities.Logger(nameof(MainActivity) + "MKG");
+        _logger.LogInformation($" +++++++++++++++++ > MainActivity  OnCreate! \n{App.Current.Id}");     
 
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
