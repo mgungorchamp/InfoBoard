@@ -217,7 +217,7 @@ namespace InfoBoard.Services
                     //await Shell.Current.GoToAsync("..");
                     
                     await Shell.Current.Navigation.PopAsync();
-                    await DoDelay(1);
+                    //await DoDelay(1);
 
                     //await Application.Current.MainPage.Navigation.PopAsync();
                     //await Application.Current.MainPage.Navigation.PopToRootAsync();
@@ -248,7 +248,7 @@ namespace InfoBoard.Services
                         //await Shell.Current.GoToAsync("..");
                                 
                         await Shell.Current.Navigation.PopAsync();
-                        await DoDelay(1);
+                        //await DoDelay(1);
 
                         //await Shell.Current.Navigation.PopAsync();
                         //await Application.Current.MainPage.Navigation.PopToRootAsync();

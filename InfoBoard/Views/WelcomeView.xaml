@@ -5,7 +5,7 @@
              NavigationPage.HasBackButton="False"
              NavigationPage.HasNavigationBar="False"
              Title="Welcome..."             
-             BackgroundColor="Yellow">
+             BackgroundColor="Black">
     <Grid>
 
         <!--<Image 
@@ -16,12 +16,12 @@
                 Source="welcome.jpg">
         </Image>-->
         
-        <Label 
+        <!--<Label 
             Text="Welcome to GuzelBoard"
             FontAttributes="Bold"
             TextColor="Firebrick"
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
-            HorizontalOptions="CenterAndExpand" />
+            HorizontalOptions="CenterAndExpand" />-->
     </Grid>
 </ContentPage>
