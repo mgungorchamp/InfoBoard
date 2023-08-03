@@ -8,6 +8,8 @@
     Shell.NavBarIsVisible="false"
     Shell.TabBarIsVisible="False"
     Shell.FlyoutItemIsVisible="False"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False"
     Title="Guzel Board - Shell Title">
 
     <!--Shell.NavBarIsVisible="false"

@@ -52,11 +52,11 @@ public partial class AppShell : Shell
     }
 
     //To prevent the app from changing view when the back button is pressed via mouse or remote control
-    protected override bool OnBackButtonPressed()
-    {
-        Debug.WriteLine($"AppShell OnBackButtonPressed");
-        return true;
-    }
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    Debug.WriteLine($"AppShell OnBackButtonPressed");
+    //    return true;
+    //}
 
     //https://github.com/dotnet/maui/issues/9300
     protected override void OnNavigated(ShellNavigatedEventArgs args)
