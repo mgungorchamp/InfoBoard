@@ -38,29 +38,9 @@ public partial class App : Application
         // Following the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
         Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");
         //MainPage = new NavigationPage(root: new ImageDisplay());
-        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-        AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-        TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+       
     }
 
-    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-    {
-        System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
-        _logger.LogError($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
-        //throw new NotImplementedException();
-    }
-
-    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-    {
-        System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! Details: {e.ExceptionObject.ToString()}");
-        _logger.LogError($"**********************************  Unhandled Exception! Details: {e.ExceptionObject.ToString()}");
-        //throw new NotImplementedException();
-    }
-    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
-    {
-        System.Diagnostics.Debug.WriteLine($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
-        _logger.LogError($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
-    }
 
     ~App() 
     {
