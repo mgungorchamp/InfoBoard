@@ -4,16 +4,20 @@
              xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.MediaViews.WebViewViewer"
              BackgroundColor="Black"
+                        
              Title="WebViewViewer">
+    <!--NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False"-->
+    
     <!--<ContentPage.BindingContext>
         <models:Media/>
     </ContentPage.BindingContext>-->
     <Grid x:Name="myGrid">
-        <!--<WebView 
+        <WebView 
                 x:Name="webView"                              
                 VerticalOptions="FillAndExpand"     
                 HorizontalOptions="FillAndExpand"  
-               />-->
+               />
 
         <Label 
                 x:Name="imageName"

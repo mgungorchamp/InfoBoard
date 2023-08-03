@@ -27,10 +27,10 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     //https://stackoverflow.com/questions/72704895/net-maui-shell-navigation-is-it-possible-to-pass-a-query-parameter-and-auto-p
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        WebView webView = new WebView();
+        //WebView webView = new WebView();
         webView.Source = contextMedia.path;
         webView.WidthRequest = contextMedia.display_width;
-        this.Content = webView;
+        //this.Content = webView;
         // = webView;
         _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
         imageName.Text = contextMedia.name;
@@ -41,7 +41,7 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
     protected override void OnDisappearing() 
     {
-        this.Content = null;
+        //this.Content = null;
         base.OnDisappearing();
         _logger.LogInformation($"Web view OnDisappearing, Name: {contextMedia.name}");
     }

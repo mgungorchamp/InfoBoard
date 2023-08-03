@@ -3,10 +3,11 @@ using InfoBoard.Services;
 using InfoBoard.Views;
 using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls;
 using System.Diagnostics;
 
 
-namespace InfoBoard.ViewModel
+namespace InfoBoard.Services
 {
     public class MediaManager
     {
@@ -154,11 +155,11 @@ namespace InfoBoard.ViewModel
             StartTimersNow4MediaDisplayAndFilesAndSettings();
 
             //await Shell.Current.Navigation.PopToRootAsync();
-            await Navigation.PushModalAsync(new EmptyPage(), false);
+            //await Application.Current.MainPage.Navigation.PushAsync(new EmptyPage(), false);
             await DisplayMediaEvent();//FIRST TIME CALL
         }
 
-        static Page webPage = new WebViewViewer();
+        //Page webPage = new WebViewViewer();
 
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
@@ -209,12 +210,18 @@ namespace InfoBoard.ViewModel
                     //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
 
                     ImageViewer.contextMedia = currentMedia;    
-                    //await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", true);
-                    await Navigation.PushModalAsync(new ImageViewer(), true);  
+                    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}");
+                    //await Application.Current.MainPage.Navigation.PushAsync(new ImageViewer(), true);  
                     //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
                     //await Shell.Current.GoToAsync("..");
-                    await Navigation.PopModalAsync();
+                    
+                    await Shell.Current.Navigation.PopAsync();
+                    await DoDelay(1);
+
+                    //await Application.Current.MainPage.Navigation.PopAsync();
+                    //await Application.Current.MainPage.Navigation.PopToRootAsync();
+                    //await Shell.Current.GoToAsync($"//{nameof(WelcomeView)}");
                 }
                 else//IF WEBSITE
                 {
@@ -229,13 +236,24 @@ namespace InfoBoard.ViewModel
                         {
                             { "MyMedia", miniMedia }
                         };
+                        //webPage.contextMedia = currentMedia;
                         WebViewViewer.contextMedia = currentMedia;
-                        //await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", true);
-                        await Navigation.PushModalAsync(webPage, true);
+                        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}");
+                        
+                      
+                        //await Navigation.PushAsync(webPage, true);
+                        //await Application.Current.MainPage.Navigation.PushAsync(new WebViewViewer(), true);
                         //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
                         await DoDelay(currentMedia.timing);
                         //await Shell.Current.GoToAsync("..");
-                        await Navigation.PopModalAsync();
+                                
+                        await Shell.Current.Navigation.PopAsync();
+                        await DoDelay(1);
+
+                        //await Shell.Current.Navigation.PopAsync();
+                        //await Application.Current.MainPage.Navigation.PopToRootAsync();
+
+                        /*In user interface design, “modal” refers to something that requires user interaction before the application can continue.*/
                     }
                     else
                     {
@@ -246,7 +264,10 @@ namespace InfoBoard.ViewModel
                 }
 
                 //INavigation nav = Shell.Current.Navigation;
-                Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");
+                //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                
+                Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.ToString()}");
+                Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.Count}");
+                
 
                 //No settings found (device removed) - register device and update deviceSettings
                 if (deviceSettings == null)

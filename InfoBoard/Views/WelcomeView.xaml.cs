@@ -19,19 +19,20 @@ public partial class WelcomeView : ContentPage
         
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         //DeviceDisplay.Current.KeepScreenOn = true;
-        MediaManager manager = MediaManager.Instance;
-        manager.SetNavigation(Navigation);
-        _ = manager.GoTime();        
+        //MediaManager manager = MediaManager.Instance;
+        //manager.SetNavigation(Navigation);
+        //_ = manager.GoTime();        
     }
 
     protected override void OnAppearing()
     {
+        
         try
         {
-            base.OnAppearing();
+           
 
             // Set the KeepScreenOn property to true to prevent the screen from turning off        
-            DeviceDisplay.Current.KeepScreenOn = true;
+            //DeviceDisplay.Current.KeepScreenOn = true;
 
             //var toast = Toast.Make($"Appearing! ImageDisplay");
             //await toast.Show();           
@@ -41,13 +42,19 @@ public partial class WelcomeView : ContentPage
             //await Task.Delay(TimeSpan.FromSeconds(4));
 
             //MediaManager manager = MediaManager.Instance;
-            //await manager.GoTime();
+            //manager.SetNavigation(Navigation);
+            //_ = manager.GoTime();
+
+            
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             _logger.LogError($"WELCOME #275 Exception: {ex.Message}\n");
-        }   
-       
+        }
+
+        base.OnAppearing();
+
     }
+    
 }

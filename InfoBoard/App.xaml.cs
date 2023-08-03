@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using InfoBoard.Services;
+using InfoBoard.ViewModel;
 using InfoBoard.Views;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui;
 using System.Diagnostics;
 
@@ -21,41 +24,61 @@ public partial class App : Application
 
     ////    //imageDisplayView.showMustStart();
     //}
+    private readonly ILogger _logger;
 
     public App()
     {
         InitializeComponent();
+        _logger = Utilities.Logger(nameof(App));
 
-        //MainPage = new AppShell(); 
-        MainPage = new NavigationPage(new WelcomeView());
-        
+
+        MainPage = new AppShell(); 
+        //MainPage = new NavigationPage(new WelcomeView());       
+
         // Following the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
-        Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");         
+        Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");
         //MainPage = new NavigationPage(root: new ImageDisplay());
+        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+    }
+
+    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+        _logger.LogError($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+        //throw new NotImplementedException();
+    }
+
+    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! Details: {e.ExceptionObject.ToString()}");
+        _logger.LogError($"**********************************  Unhandled Exception! Details: {e.ExceptionObject.ToString()}");
+        //throw new NotImplementedException();
+    }
+    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
+        _logger.LogError($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
     }
 
     ~App() 
     {
         Debug.WriteLine($"  ---------------- > App  DESTRUCTOR!//////// \n{App.Current.Id}");
     }
-    protected override void OnStart()
+    protected async override void OnStart()
     {
-        //var task = InitAsync();
+        MediaManager manager = MediaManager.Instance;
+        await manager.GoTime();
 
-       // task.ContinueWith((task) =>
-        //{
-         //   MainThread.BeginInvokeOnMainThread(() =>
-          //  {
-                Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");
-               // MainPage = new AppShell();
+        // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        DeviceDisplay.Current.KeepScreenOn = true;
 
-                // Choose navigation depending on init
-                //Shell.Current.GoToAsync("imagedisplay");
-           // });
-       // });
-
+        Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");
         base.OnStart();
     }
+
+
 
     //private async Task InitAsync()
     //{
@@ -69,7 +92,7 @@ public partial class App : Application
     //    // Window window = Application.Current.Windows.FirstOrDefault();   
     //    if (window != null)
     //        return window;
-        
+
     //    window = base.CreateWindow(activationState);
 
     //    window.Created += (s, e) =>
@@ -78,16 +101,16 @@ public partial class App : Application
     //        var toast = Toast.Make($"Created!");
     //        toast.Show();
 
-            
+
     //        Debug.WriteLine($"\n\t**window.Page.Id: {window.Page.Id}");
     //        Debug.WriteLine($"\n\t**MainPage.Id: {MainPage.Id}");
     //        Debug.WriteLine($"Creating....");
     //        //MainPage = new NavigationPage(root: new ImageDisplay());
     //        Debug.WriteLine($"Created:\n\twindow.Id: {window.Id} \n\t App.Current.Id:{App.Current.Id} \n\tMainPage.Id: {MainPage.Id}");
-            
+
     //        //MainPage = new NavigationPage(root: imageDisplayView); // when it was singleton
     //    };
-        
+
     //    window.Resumed += (s, e) =>
     //    {
     //        // Custom logic
@@ -95,7 +118,7 @@ public partial class App : Application
     //        //toast.Show();            
     //        Debug.WriteLine($"OnResumed:\n\twindow.Id: {window.Id} \n\t App.Current.Id:{App.Current.Id} \n\tMainPage.Id: {MainPage.Id}");
     //    };
-        
+
     //    window.Activated += (s, e) =>
     //    {
     //        // Custom logic
@@ -108,19 +131,19 @@ public partial class App : Application
     //        //imageDisplayView.showMustStart();
 
     //    };
-        
+
     //    window.Destroying += (s, e) =>
     //    {
     //        // Custom logic
     //        var toast = Toast.Make($"Destroying!");
     //        toast.Show();
-            
+
 
     //        Debug.WriteLine($"Destroying:\n\twindow.Id: {window.Id} \n\t App.Current.Id:{App.Current.Id} \n\tMainPage.Id: {MainPage.Id}");
     //    };
 
-        
-      
+
+
     //    return window;
     //}
 

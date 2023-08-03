@@ -2,6 +2,7 @@
 using InfoBoard.Views;
 using InfoBoard.Views.MediaViews;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace InfoBoard;
 
@@ -15,7 +16,7 @@ public partial class AppShell : Shell
         //NavigationPage.SetHasBackButton(this, false);        
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 
-        Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
+        //Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
 
         Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
@@ -56,4 +57,45 @@ public partial class AppShell : Shell
         Debug.WriteLine($"AppShell OnBackButtonPressed");
         return true;
     }
+
+    //https://github.com/dotnet/maui/issues/9300
+    protected override void OnNavigated(ShellNavigatedEventArgs args)
+    {
+        try
+        {
+            Debug.WriteLine($"AppShell OnNavigated {CurrentItem.ToString()}");
+            string location = args.Current?.Location?.ToString();
+            Debug.WriteLine($"AppShell location {location}");
+            base.OnNavigated(args);
+        }
+       
+        catch (System.Runtime.InteropServices.COMException ex)
+        {
+            //_logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
+            //       $"Path: {currentMedia.path}\n" +
+            //       $"s3key: {currentMedia.s3key}\n");
+
+            Debug.WriteLine($"AppShell #354 OnNavigated Exception {ex.Message}");
+        }
+        catch (System.UriFormatException ex)
+        {
+        //    _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
+        //           $"Path: {currentMedia.path}\n");
+            Debug.WriteLine($"AppShell #934 OnNavigated Exception {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"AppShell #987 OnNavigated Exception {ex.Message}");
+        }
+        //catch (Exception ex)
+        //{
+        //    Debug.WriteLine($"#879 Exception: {ex.Message}");
+        //    _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
+        //        $"Path: {currentMedia.path}\n" +
+        //        $"s3key: {currentMedia.s3key}\n");
+        //    await DoDelay(currentMedia.timing);
+        //}
+    }
+
+    //https://gist.github.com/mattjohnsonpint/7b385b7a2da7059c4a16562bc5ddb3b7
 }
