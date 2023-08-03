@@ -56,7 +56,17 @@ public static class MauiProgram
             configure.AddDebug();
         });
 #endif
+       // CustomizeWebViewHandler();
 
         return builder.Build();
     }
+//    private static void CustomizeWebViewHandler()
+//    {
+//#if ANDROID26_0_OR_GREATER
+//    Microsoft.Maui.Handlers.WebViewHandler.Mapper.ModifyMapping(
+//        nameof(Android.Webkit.WebView.WebChromeClient),
+//        (handler, view, args) => handler.PlatformView.SetWebChromeClient(new MyWebChromeClient(handler)));
+//#endif
+//    }
+
 }

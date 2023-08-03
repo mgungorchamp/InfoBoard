@@ -25,12 +25,15 @@ namespace InfoBoard.Services
         private Media currentMedia;
 
 
-        private static readonly MediaManager instance = new MediaManager();        
+        private static readonly MediaManager instance = new MediaManager();
 
         public static MediaManager Instance {
             get {
                 return instance;
             }
+        }
+        static MediaManager()
+        {
         }
 
         private MediaManager()
@@ -216,7 +219,7 @@ namespace InfoBoard.Services
                     await DoDelay(currentMedia.timing);
                     //await Shell.Current.GoToAsync("..");
                     
-                    await Shell.Current.Navigation.PopAsync();
+                    await Shell.Current.Navigation.PopAsync(false);
                     //await DoDelay(1);
 
                     //await Application.Current.MainPage.Navigation.PopAsync();
@@ -247,7 +250,7 @@ namespace InfoBoard.Services
                         await DoDelay(currentMedia.timing);
                         //await Shell.Current.GoToAsync("..");
                                 
-                        await Shell.Current.Navigation.PopAsync();
+                        await Shell.Current.Navigation.PopAsync(false);
                         //await DoDelay(1);
 
                         //await Shell.Current.Navigation.PopAsync();
@@ -263,6 +266,7 @@ namespace InfoBoard.Services
                     }
                 }
 
+                //https://github.com/dotnet/maui/issues/9300
                 //INavigation nav = Shell.Current.Navigation;
                 //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                
                 Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.ToString()}");

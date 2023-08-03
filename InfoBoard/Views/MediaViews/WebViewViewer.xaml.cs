@@ -15,7 +15,6 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 		InitializeComponent();
         _logger = Utilities.Logger(nameof(WebViewViewer));
         _logger.LogInformation($"{nameof(WebViewViewer)} # Constructor Called");
-        
     }
 
     //public MiniMedia MyMedia {
@@ -42,6 +41,7 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     protected override void OnDisappearing() 
     {
         //this.Content = null;
+        //webView.r
         base.OnDisappearing();
         _logger.LogInformation($"Web view OnDisappearing, Name: {contextMedia.name}");
     }

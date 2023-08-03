@@ -1,8 +1,10 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -31,15 +33,25 @@ public class MainActivity : MauiAppCompatActivity
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
         AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+        Android.Runtime.AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser; 
 
         //Xamarin.Forms.Forms.Init(this, bundle);
         DisplayCrashReport();
 
         //var app = new App();
         //LoadApplication(app);
-    }  
- 
-#region Error handling
+    }
+
+    private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
+    {
+        var newExc = new Exception("AndroidEnvironment_UnhandledExceptionRaiser", e.Exception);
+        System.Diagnostics.Debug.WriteLine($"**********************************  AndroidEnvironment_UnhandledExceptionRaiser! Details: {e.Exception.ToString()}");
+        _logger.LogError($"**********************************  AndroidEnvironment_UnhandledExceptionRaiser! Details: {e.Exception.ToString()}");
+
+        LogUnhandledException(newExc);
+    }
+
+    #region Error handling
     private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
     {
         var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
@@ -72,7 +84,7 @@ public class MainActivity : MauiAppCompatActivity
         try
         {
             const string errorFileName = "Fatal.log";
-            var libraryPath = FileSystem.CacheDirectory; // iOS: Environment.SpecialFolder.Resources
+            var libraryPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");  // iOS: Environment.SpecialFolder.Resources
             var errorFilePath = Path.Combine(libraryPath, errorFileName);
             var errorMessage = String.Format("Time: {0}\r\nError: Unhandled Exception\r\n{1}",
             DateTime.Now, exception.ToString());
@@ -80,10 +92,11 @@ public class MainActivity : MauiAppCompatActivity
 
             // Log to Android Device Logging.
             Android.Util.Log.Error("Crash Report", errorMessage);
+            _logger.LogError($"**********************************  Error Logged ! Details at: {errorFilePath} Message {errorMessage}");
         }
-        catch
+        catch(Exception ex)
         {
-            // just suppress any error logging exceptions
+            _logger.LogError($"**********************************  LogUnhandledException Exception! Details: {ex.Message}");
         }
     }
 
@@ -95,7 +108,7 @@ public class MainActivity : MauiAppCompatActivity
     private void DisplayCrashReport()
     {
         const string errorFilename = "Fatal.log";
-        var libraryPath = FileSystem.CacheDirectory;
+        var libraryPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs"); ;
         var errorFilePath = Path.Combine(libraryPath, errorFilename);
 
         if (!File.Exists(errorFilePath))
