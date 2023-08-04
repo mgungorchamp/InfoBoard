@@ -21,15 +21,13 @@ namespace InfoBoard;
 
 public class MainActivity : MauiAppCompatActivity
 {
-    private static ILogger _logger;
+    
     // In MainActivity
     //Ref:https://peterno.wordpress.com/2015/04/15/unhandled-exception-handling-in-ios-and-android-with-xamarin/
     protected override void OnCreate(Bundle bundle)
     {
         base.OnCreate(bundle);
-        _logger = Utilities.Logger(nameof(MainActivity) + "MKG");
-        _logger.LogInformation($" +++++++++++++++++ > MainActivity  OnCreate! \n{App.Current.Id}");     
-
+    
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
         AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
@@ -46,7 +44,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("AndroidEnvironment_UnhandledExceptionRaiser", e.Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  AndroidEnvironment_UnhandledExceptionRaiser! Details: {e.Exception.ToString()}");
-        _logger.LogError($"**********************************  AndroidEnvironment_UnhandledExceptionRaiser! Details: {e.Exception.ToString()}");
+        
 
         LogUnhandledException(newExc);
     }
@@ -56,7 +54,6 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {unobservedTaskExceptionEventArgs.Exception.ToString()}");
-        _logger.LogError($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {unobservedTaskExceptionEventArgs.Exception.ToString()}");
 
         LogUnhandledException(newExc);
     }
@@ -65,7 +62,6 @@ public class MainActivity : MauiAppCompatActivity
         var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", e.Exception);
 
         System.Diagnostics.Debug.WriteLine($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
-        _logger.LogError($"********************************** FirstChance EXCEPTION! Details: {e.Exception.ToString()}");
 
         LogUnhandledException(newExc);
     }
@@ -74,7 +70,6 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! Details: {unhandledExceptionEventArgs.ExceptionObject.ToString()}");
-        _logger.LogError($"**********************************  Unhandled Exception! Details: {unhandledExceptionEventArgs.ExceptionObject.ToString()}");
 
         LogUnhandledException(newExc);
     }
@@ -92,11 +87,10 @@ public class MainActivity : MauiAppCompatActivity
 
             // Log to Android Device Logging.
             Android.Util.Log.Error("Crash Report", errorMessage);
-            _logger.LogError($"**********************************  Error Logged ! Details at: {errorFilePath} Message {errorMessage}");
         }
         catch(Exception ex)
         {
-            _logger.LogError($"**********************************  LogUnhandledException Exception! Details: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! {ex.Message}");
         }
     }
 
