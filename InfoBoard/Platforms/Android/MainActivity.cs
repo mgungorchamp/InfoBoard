@@ -29,9 +29,12 @@ public class MainActivity : MauiAppCompatActivity
         base.OnCreate(bundle);
     
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;        
+
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-        Android.Runtime.AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser; 
+
+        Android.Runtime.AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+        
 
         //Xamarin.Forms.Forms.Init(this, bundle);
         DisplayCrashReport();
