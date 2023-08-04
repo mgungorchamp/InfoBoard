@@ -213,7 +213,7 @@ namespace InfoBoard.Services
                     //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
 
                     ImageViewer.contextMedia = currentMedia;    
-                    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}");
+                    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", false);
                     //await Application.Current.MainPage.Navigation.PushAsync(new ImageViewer(), true);  
                     //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
                     await DoDelay(currentMedia.timing);
@@ -241,7 +241,7 @@ namespace InfoBoard.Services
                         };
                         //webPage.contextMedia = currentMedia;
                         WebViewViewer.contextMedia = currentMedia;
-                        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}");
+                        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", false);
                         
                       
                         //await Navigation.PushAsync(webPage, true);

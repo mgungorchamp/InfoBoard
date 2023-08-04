@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+// CAN BE DELETED NOT USED
 namespace InfoBoard.Platforms.Android
 {
     //https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/webview?pivots=devices-android#reload-content

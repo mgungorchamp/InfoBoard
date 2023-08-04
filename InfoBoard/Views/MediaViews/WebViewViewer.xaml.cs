@@ -24,28 +24,67 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     //}
     //https://learn.microsoft.com/en-us/answers/questions/1164621/shell-navigation-and-passing-parameter-values
     //https://stackoverflow.com/questions/72704895/net-maui-shell-navigation-is-it-possible-to-pass-a-query-parameter-and-auto-p
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+
+    //#1
+    protected override void OnAppearing()
     {
-        //WebView webView = new WebView();
+        
         webView.Source = contextMedia.path;
         webView.WidthRequest = contextMedia.display_width;
-        //this.Content = webView;
-        // = webView;
-        _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
+
         imageName.Text = contextMedia.name;
         imageTiming.Text = contextMedia.timing.ToString();
-        
-        base.OnNavigatedTo(args);
+
+        //await Task.Delay(TimeSpan.FromSeconds(2));
+
+        base.OnAppearing();
+        _logger.LogInformation($"Web view OnAppearing, Name: {contextMedia.name}");
+
     }
 
-    protected override void OnDisappearing() 
-    {
-        //this.Content = null;
-        //webView.r
-        base.OnDisappearing();
-        _logger.LogInformation($"Web view OnDisappearing, Name: {contextMedia.name}");
-    }
+    //protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    //{
+    //    //webView.Source = contextMedia.path;
+    //    //webView.WidthRequest = contextMedia.display_width;
 
+    //    //imageName.Text = contextMedia.name;
+    //    //imageTiming.Text = contextMedia.timing.ToString();
+
+    //    base.OnNavigatedTo(args);
+    //    _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
+    //}
+
+    ////protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
+    ////{
+    ////    webView.Source = null;
+    ////    webView.Resources.Clear();
+    ////    webView.Reload();
+
+    ////    base.OnNavigatingFrom(args);
+    ////    _logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
+    ////}
+
+    //protected override void OnDisappearing()
+    //{
+    ////    webView.Source = null;
+    ////    webView.Resources.Clear();
+    ////    webView.Reload();
+
+    //    base.OnDisappearing();
+    //    _logger.LogInformation($"Web view OnDisappearing, Name: {contextMedia.name}");
+    //}
+
+    ////When navigation away from this page completed - last thing to happen
+    //protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    //{
+    //    //webView.Source = null;
+    //    //webView.Resources.Clear();
+
+    //    //webView.Reload(); ****
+
+    //    base.OnNavigatedFrom(args);
+    //    _logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
+    //}
 
 
 

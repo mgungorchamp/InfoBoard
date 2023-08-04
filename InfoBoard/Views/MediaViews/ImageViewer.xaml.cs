@@ -35,6 +35,11 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
         base.OnNavigatedTo(args);
     }
 
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        mainPageImage.Source = null;
+        base.OnNavigatedFrom(args);
+    }
 
 
     //void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> message)
