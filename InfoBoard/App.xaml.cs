@@ -46,7 +46,7 @@ public partial class App : Application
     {
         Debug.WriteLine($"  ---------------- > App  DESTRUCTOR!//////// \n{App.Current.Id}");
     }
-    protected async override void OnStart()
+    protected override void OnStart()
     {
         //MediaManager manager = MediaManager.Instance;
         //await manager.GoTime();
