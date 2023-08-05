@@ -152,7 +152,7 @@ namespace InfoBoard.Services
                      $"URI : {uri.ToString()}\n" +
                      $"updateDeviceSettings MURAT");
             }
-            //await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(2));
         }
 
 
