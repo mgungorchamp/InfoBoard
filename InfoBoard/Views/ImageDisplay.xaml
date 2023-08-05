@@ -3,69 +3,77 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:InfoBoard.ViewModel"
              x:Class="InfoBoard.Views.ImageDisplay"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             BackgroundColor="PaleTurquoise" 
-             Title="Image Display">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"                
+             Title="Image Display"
+             BackgroundColor="Firebrick">
             
-    <!--<ContentPage.BindingContext>
+    <ContentPage.BindingContext>
         <viewmodel:ImageViewModel/>
-    </ContentPage.BindingContext>-->
+    </ContentPage.BindingContext>
 
-    
 
     <Grid>
-        <!--<toolkit:MediaElement 
-            x:Name="mediaElement"                    
-            Source="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            ShouldAutoPlay="True"
-            ShouldShowPlaybackControls="True" /
-        Source="{Binding ImageSource, TargetNullValue='https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg'}">            
-        >-->
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <!--<WebView 
-            x:Name="webViewTest"              
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"/>-->
-
 
         <Image 
                 x:Name="mainPageImage"
                 Aspect="AspectFit"                        
-                VerticalOptions="StartAndExpand"
-                HorizontalOptions="CenterAndExpand"
-                BackgroundColor="Orange"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand"                
                 IsVisible="{Binding ImageSourceVisible}"
-                Source="{Binding MediaSource, TargetNullValue='welcome.jpg'}">
+                Source="{Binding ImageMediaSource, TargetNullValue='welcome.jpg'}">
         </Image>
             <!--<Frame IsVisible="{Binding WebViewVisible}">-->
         <WebView 
                 x:Name="webView"  
-                BackgroundColor="Turquoise"
                 HorizontalOptions="FillAndExpand"      
                 VerticalOptions="FillAndExpand" 
                 WidthRequest="{Binding DisplayWidth}"
                 IsVisible="{Binding WebViewVisible}"
-                Source="{Binding MediaSource, TargetNullValue='https://vermontic.com/'}"/>
+                Source="{Binding WebMediaSource, TargetNullValue='https://vermontic.com/'}"/>
 
         <!--<VerticalStackLayout  VerticalOptions="Start" HorizontalOptions="Center" BackgroundColor="Aquamarine">-->
-            
-
         <!--</VerticalStackLayout>-->
 
         <Label 
-                Text="{Binding MediaInformation}"
-                TextColor="Orange"   
+                x:Name="imageName"               
                 IsVisible="true"
+            
+                TextColor="Orange"   
+                
                 VerticalOptions="EndAndExpand" 
-                HorizontalOptions="StartAndExpand"/>
+                HorizontalOptions="StartAndExpand"
+                Text="{Binding ImageName}"/>
+        <Label 
+                x:Name="imageTiming"               
+                IsVisible="true"
+                
+                TextColor="Chartreuse"   
+                FontAttributes="Bold"
+                
+                
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"
+                Text="{Binding ImageTiming}"/>
 
+        <Label 
+                Text="{Binding MediaInformation}"
+                IsVisible="true"
+                
+                TextColor="Orange" 
+                FontAttributes="Bold"                
+                FontSize="Large"
+                
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
 
-
+        <Image 
+                x:Name="noInternetImage"
+                Source="no_wifi.png"   
+                IsVisible="{Binding ShowNoInternetIcon}"
+                HeightRequest="77"
+                WidthRequest="77"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="EndAndExpand"/>
 
         <!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >

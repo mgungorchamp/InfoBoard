@@ -9,7 +9,7 @@
     Shell.TabBarIsVisible="False"
     Shell.FlyoutItemIsVisible="False"
     NavigationPage.HasBackButton="False"
-    NavigationPage.HasNavigationBar="False"
+    NavigationPage.HasNavigationBar="False" 
     Title="Guzel Board - Shell Title">
 
     <!--Shell.NavBarIsVisible="false"
@@ -18,16 +18,14 @@
 
     <Tab>
 
-
+        <ShellContent  
+            x:Name="imageDisplayItem"            
+            ContentTemplate="{DataTemplate views:ImageDisplay}"/>
 
         <ShellContent  
             x:Name="welcomeViewItem"
             ContentTemplate="{DataTemplate views:WelcomeView}"/>
-
-        <ShellContent  
-            x:Name="imageDisplayItem"
-            FlyoutItemIsVisible="False"
-            ContentTemplate="{DataTemplate views:ImageDisplay}"/>
+        
         <ShellContent     
             x:Name="registerViewItem"
             FlyoutItemIsVisible="False"

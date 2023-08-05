@@ -33,7 +33,7 @@ public partial class App : Application
 
 
         MainPage = new AppShell(); 
-        //MainPage = new NavigationPage(new WelcomeView());       
+        //MainPage = new NavigationPage(root: new WelcomeView());       
 
         // Following the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
         Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");
@@ -48,8 +48,8 @@ public partial class App : Application
     }
     protected async override void OnStart()
     {
-        MediaManager manager = MediaManager.Instance;
-        await manager.GoTime();
+        //MediaManager manager = MediaManager.Instance;
+        //await manager.GoTime();
 
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         DeviceDisplay.Current.KeepScreenOn = true;

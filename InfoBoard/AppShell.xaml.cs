@@ -72,15 +72,15 @@ public partial class AppShell : Shell
         catch (System.Runtime.InteropServices.COMException ex)
         {
             //_logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
-            //       $"Path: {currentMedia.path}\n" +
-            //       $"s3key: {currentMedia.s3key}\n");
+            //       $"Path: {media.path}\n" +
+            //       $"s3key: {media.s3key}\n");
 
             Debug.WriteLine($"AppShell #354 OnNavigated Exception {ex.Message}");
         }
         catch (System.UriFormatException ex)
         {
         //    _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
-        //           $"Path: {currentMedia.path}\n");
+        //           $"Path: {media.path}\n");
             Debug.WriteLine($"AppShell #934 OnNavigated Exception {ex.Message}");
         }
         catch (Exception ex)
@@ -91,9 +91,9 @@ public partial class AppShell : Shell
         //{
         //    Debug.WriteLine($"#879 Exception: {ex.Message}");
         //    _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
-        //        $"Path: {currentMedia.path}\n" +
-        //        $"s3key: {currentMedia.s3key}\n");
-        //    await DoDelay(currentMedia.timing);
+        //        $"Path: {media.path}\n" +
+        //        $"s3key: {media.s3key}\n");
+        //    await DoDelay(media.timing);
         //}
     }
 

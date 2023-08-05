@@ -9,22 +9,22 @@
                 Shell.FlyoutItemIsVisible="False"
              Title="Welcome..."             
              BackgroundColor="Black">
-    <!--<Grid>-->
+    <Grid>
 
-        <!--<Image 
+        <Image 
                 x:Name="homepageImage"
                 Aspect="AspectFit"                        
                 VerticalOptions="StartAndExpand"
                 HorizontalOptions="CenterAndExpand"                
                 Source="welcome.jpg">
-        </Image>-->
+        </Image>
         
-        <!--<Label 
+        <Label 
             Text="Welcome to GuzelBoard"
             FontAttributes="Bold"
             TextColor="Firebrick"
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
-            HorizontalOptions="CenterAndExpand" />-->
-    <!--</Grid>-->
+            HorizontalOptions="CenterAndExpand" />
+    </Grid>
 </ContentPage>

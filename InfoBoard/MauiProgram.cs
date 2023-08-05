@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using InfoBoard.ViewModel;
 using InfoBoard.Views;
 using InfoBoard.Views.MediaViews;
-using MetroLog.MicrosoftExtensions;
-using MetroLog.Operators;
 using Microsoft.Extensions.Logging;
 
 namespace InfoBoard;
