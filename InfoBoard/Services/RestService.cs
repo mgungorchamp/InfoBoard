@@ -15,7 +15,7 @@ namespace InfoBoard.Services
 {
     public class RestService
     {
-        //HttpClient _client;
+        static readonly HttpClient _client = new HttpClient();
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
 
@@ -35,7 +35,8 @@ namespace InfoBoard.Services
         {
             _logger = Utilities.Logger(nameof(RestService));
             //_client = new HttpClient();
-            //_client.Timeout = TimeSpan.FromSeconds(22);
+            //_client.Timeout = TimeSpan.FromSeconds(22); 
+            _client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -60,7 +61,7 @@ namespace InfoBoard.Services
             String mediaContent = null;
             try
             {
-                HttpClient _client = new HttpClient();
+                //HttpClient _client = new HttpClient();
                 HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
@@ -132,7 +133,7 @@ namespace InfoBoard.Services
             Uri uri = new Uri(string.Concat(Utilities.DEVICE_SETTINGS_URL, deviceKey));
             try
             {
-                HttpClient _client = new HttpClient();
+                //HttpClient _client = new HttpClient();
                 HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
@@ -188,7 +189,7 @@ namespace InfoBoard.Services
             try
             {
                 Uri uri = new Uri(Utilities.HANDSHAKE_URL);
-                HttpClient _client = new HttpClient();
+                //HttpClient _client = new HttpClient();
                 HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {

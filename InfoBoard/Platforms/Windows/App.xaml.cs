@@ -81,7 +81,8 @@ public partial class App : MauiWinUIApplication
             var errorFilePath = Path.Combine(libraryPath, errorFileName);
             var errorMessage = String.Format("Time: {0}\r\nError: Unhandled Exception\r\n{1}",
             DateTime.Now, exception.ToString());
-            File.WriteAllText(errorFilePath, errorMessage);
+            //File.WriteAllText(errorFilePath, errorMessage);
+            File.AppendAllText(errorFilePath, errorMessage);
             // Log to Android Device Logging.
             
             _logger.LogError($"**********************************  Error Logged ! Details at: {errorFilePath} Message {errorMessage}");

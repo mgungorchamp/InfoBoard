@@ -21,12 +21,39 @@ namespace InfoBoard.Services
         
         public async Task<DeviceSettings> loadDeviceSettings()
         {
-            DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
-            //No internet - return existing settings
-            if (!Utilities.isInternetAvailable())
-            {                
-                Debug.WriteLine($"**No internet - return existing settings");  
-                _logger.LogInformation($"**No internet - return existing settings");
+            try { 
+                DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
+                //No internet - return existing settings
+                if (!Utilities.isInternetAvailable())
+                {                
+                    Debug.WriteLine($"**No internet - return existing settings");  
+                    _logger.LogInformation($"**No internet - return existing settings");
+
+                    if (localDeviceSettings == null)
+                    {
+                        //Check if there is DeviceKey in local storage - second check
+                        return await secondCheckIfSettingsNull();
+                    }
+                    else
+                    {
+                        return localDeviceSettings;
+                    }
+                }
+
+                //if there is internet and device already registered
+                //update the settings from web and return latest settings
+                //Get latest device settings and update the local settings file
+                if (localDeviceSettings != null)
+                {
+                    RestService restService = RestService.Instance;
+
+                    await restService.updateDeviceSettings(localDeviceSettings.device_key);
+                    //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
+                    //Read the updated settings file and return the latest settings
+                    _logger.LogInformation($"SETTINGS #098 Updated from WebServer");
+                    return await readSettingsFromLocalJSON();
+                }
+                _logger.LogInformation($"INFO:44 Return existing settings loadDeviceSettings");
 
                 if (localDeviceSettings == null)
                 {
@@ -36,33 +63,13 @@ namespace InfoBoard.Services
                 else
                 {
                     return localDeviceSettings;
-                }
+                }            
             }
-
-            //if there is internet and device already registered
-            //update the settings from web and return latest settings
-            //Get latest device settings and update the local settings file
-            if (localDeviceSettings != null)
+            catch (Exception ex)
             {
-                RestService restService = RestService.Instance;
-
-                await restService.updateDeviceSettings(localDeviceSettings.device_key);
-                //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
-                //Read the updated settings file and return the latest settings
-                _logger.LogInformation($"SETTINGS #098 Updated from WebServer");
-                return await readSettingsFromLocalJSON();
+                _logger.LogError($"ERROR: 01 loadDeviceSettings Exception: {ex.Message}");
+                return null;
             }
-            _logger.LogInformation($"INFO:44 Return existing settings loadDeviceSettings");
-
-            if (localDeviceSettings == null)
-            {
-                //Check if there is DeviceKey in local storage - second check
-                return await secondCheckIfSettingsNull();
-            }
-            else
-            {
-                return localDeviceSettings;
-            }            
         }
 
         private async Task<DeviceSettings> secondCheckIfSettingsNull() 
