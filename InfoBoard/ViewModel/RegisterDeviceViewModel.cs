@@ -128,7 +128,8 @@ namespace InfoBoard.ViewModel
             OnPropertyChanged(nameof(Status));
 
             //Register Device
-            RestService restService = new RestService();
+            //RestService restService = new RestService();
+            RestService restService = RestService.Instance;
             string registrationMessage= await restService.registerDevice();
 
 

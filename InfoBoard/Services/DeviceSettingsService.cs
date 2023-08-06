@@ -44,7 +44,8 @@ namespace InfoBoard.Services
             //Get latest device settings and update the local settings file
             if (localDeviceSettings != null)
             {
-                RestService restService = new RestService();
+                RestService restService = RestService.Instance;
+
                 await restService.updateDeviceSettings(localDeviceSettings.device_key);
                 //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
                 //Read the updated settings file and return the latest settings
@@ -80,7 +81,7 @@ namespace InfoBoard.Services
 
                 //This is needed, if the device still remembers the old device key but actually 
                 //it has been removed from the server, we need to make sure about it, to reset the device key
-                RestService restService = new RestService();
+                RestService restService = RestService.Instance;
                 await restService.updateDeviceSettings(deviceKey);
 
                 DeviceSettings partialDeviceSettings = new DeviceSettings();

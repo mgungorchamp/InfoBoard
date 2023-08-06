@@ -19,10 +19,23 @@ namespace InfoBoard.Services
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
 
-        public RestService()
+
+        private static readonly RestService instance = new RestService();
+
+        public static RestService Instance {
+            get {
+                return instance;
+            }
+        }
+        static RestService()
+        {
+        } 
+
+        private RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
-            _client = new HttpClient();            
+            _client = new HttpClient();
+            _client.Timeout = TimeSpan.FromSeconds(22);
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -47,7 +60,7 @@ namespace InfoBoard.Services
             String mediaContent = null;
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(uri);
+                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
                 {
@@ -118,7 +131,7 @@ namespace InfoBoard.Services
             Uri uri = new Uri(string.Concat(Utilities.DEVICE_SETTINGS_URL, deviceKey));
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(uri);
+                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     DeviceSettings deviceSettings;
@@ -173,7 +186,7 @@ namespace InfoBoard.Services
             try
             {
                 Uri uri = new Uri(Utilities.HANDSHAKE_URL);
-                HttpResponseMessage response = await _client.GetAsync(uri);
+                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     RegisterationResult registerationResult;

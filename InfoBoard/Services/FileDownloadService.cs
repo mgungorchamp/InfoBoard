@@ -89,7 +89,9 @@ namespace InfoBoard.Services
         private async Task<List<MediaCategory>> getLatestMediaNamesFromServer()
         {
             //Get category names from the server - fileListFromServer
-            RestService restService = new RestService();
+            //RestService restService = new RestService();
+            RestService restService = RestService.Instance;
+
             await restService.updateMediaList();
 
             List<MediaCategory> fileList = await readMediaNamesFromLocalJSON();
