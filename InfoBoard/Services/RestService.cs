@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.PortableExecutable;
-using System.Text.Json;
-
+using System.Text.Json; 
 
 /*
  * https://guzelboard.com/views/login.php
@@ -35,8 +34,9 @@ namespace InfoBoard.Services
         {
             _logger = Utilities.Logger(nameof(RestService));
             //_client = new HttpClient();
-            //_client.Timeout = TimeSpan.FromSeconds(22); 
-            _client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
+            //_client.Timeout = TimeSpan.FromSeconds(50); 
+            //_client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
+            
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -62,7 +62,7 @@ namespace InfoBoard.Services
             try
             {
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
                 FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
                 {
@@ -134,7 +134,7 @@ namespace InfoBoard.Services
             try
             {
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     DeviceSettings deviceSettings;
@@ -190,7 +190,7 @@ namespace InfoBoard.Services
             {
                 Uri uri = new Uri(Utilities.HANDSHAKE_URL);
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     RegisterationResult registerationResult;
