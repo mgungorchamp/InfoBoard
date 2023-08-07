@@ -170,19 +170,25 @@ namespace InfoBoard.Services
                 {
                     Information info = new Information();
                     info.Title = "Assign Media Categories to Your Device";
-                    info.Message = "Welcome to GuzelBoard\n" +
+                    info.Message = $"Welcome to GuzelBoard\n" +
                         "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
                         "There is one last step that requires your attention.\n" +
-                        "Assign the categories that will be displayed on your device, via our web portal.\nhttps://guzelboard.com";
-                    var navigationParameter = new Dictionary<string, object>
+                        "Assign the categories that will be displayed on your device, via our web portal.\n";
+                    
+                    info.Message += Utilities.BASE_ADDRESS;
+
+                   var navigationParameter = new Dictionary<string, object>
                     {
                         { "PickCategories", info }
                     };
                     await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
 
-                    //Wait 10 seconds and call the function again                    
+                    //Show the message and navigate to main page
                     await DoDelay(15);
-                    await GoTime(); //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN
+
+                    //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN OR IF CATEGORIES ASSIGNED IT WILL START TO DISPLAY
+                    await Shell.Current.GoToAsync("..");  // This calls GoTime! 
+                    //await GoTime(); 
                     return;
                 }
                 currentMedia = getMedia();
@@ -195,15 +201,16 @@ namespace InfoBoard.Services
                     _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
                     Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
 
-                    imageViewModel.WebViewVisible = false;
-
                     imageViewModel.ImageMediaSource = getMediaPath(currentMedia); //  currentMedia.path = getMediaPath(currentMedia);
-                    imageViewModel.ImageSourceVisible = true;
 
+                    await DoDelay(1);
+                    imageViewModel.WebViewVisible = false;
+                    imageViewModel.ImageSourceVisible = true;
+#if DEBUG
                     imageViewModel.ImageName = currentMedia.name;
                     imageViewModel.ImageTiming = currentMedia.timing;
-                    imageViewModel.MediaInformation = "IMAGE";         
-
+                    imageViewModel.MediaInformation = "IMAGE";
+#endif
                     await DoDelay(currentMedia.timing);
                 }
                 else//IF WEBSITE
@@ -213,18 +220,18 @@ namespace InfoBoard.Services
                     {
                         _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
                         Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
-
-                        imageViewModel.ImageSourceVisible = false;
-
+                        
                         imageViewModel.WebMediaSource = currentMedia.path;
                         imageViewModel.DisplayWidth = currentMedia.display_width;
 
+                        await DoDelay(3);
+                        imageViewModel.ImageSourceVisible = false; 
                         imageViewModel.WebViewVisible = true;
-
+#if DEBUG
                         imageViewModel.ImageName = currentMedia.name;
                         imageViewModel.ImageTiming = currentMedia.timing;
                         imageViewModel.MediaInformation = "WEB SITE";
-
+#endif
                         await DoDelay(currentMedia.timing);
                         imageViewModel.ShowNoInternetIcon = false;
                     }
@@ -317,8 +324,7 @@ namespace InfoBoard.Services
 
                 //https://github.com/dotnet/maui/issues/9300
                 //INavigation nav = Shell.Current.Navigation;
-                //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                
-                Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.ToString()}");
+                //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                                
                 Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.Count}");
                 
 

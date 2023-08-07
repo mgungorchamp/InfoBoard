@@ -75,8 +75,18 @@ namespace InfoBoard.Services
                 if (response.IsSuccessStatusCode)
                 {
                     
-                    mediaContent = await response.Content.ReadAsStringAsync();                    
+                    mediaContent = await response.Content.ReadAsStringAsync();
+
+                    //Device Registered but no categories assigned
+                    if (mediaContent.Length < 10) // empty content received  []
+                    {
+                        _logger.LogInformation($"MEDIA API 33"+
+                                         $"Categories needs to be assigned to Device! Response : {mediaContent}\n");
+                        await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
+                        return;
+                    }
                     
+                    //Device Unregistered and expecting error message
                     if (mediaContent.Length < 100) 
                     {
                         try

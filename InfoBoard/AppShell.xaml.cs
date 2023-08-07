@@ -12,8 +12,9 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        //NavigationPage.SetHasNavigationBar(this, false);
-        //NavigationPage.SetHasBackButton(this, false);        
+        NavigationPage.SetHasNavigationBar(this, false);
+        NavigationPage.SetHasBackButton(this, false);
+        //
         Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 
         //Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));

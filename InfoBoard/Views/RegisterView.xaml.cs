@@ -15,7 +15,7 @@ public partial class RegisterView : ContentPage
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
         
-        RegisterDeviceViewModel registerDeviceViewModel = new();
+        //RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
 
         //qrImageButton.Source.cac

@@ -21,6 +21,7 @@ namespace InfoBoard.ViewModel
         private string imageName;
         private int imageTiming;
         private bool showNoInternetIcon;
+        private bool _itemVisible;
 
         //private Media media;
 
@@ -31,6 +32,13 @@ namespace InfoBoard.ViewModel
             webViewVisible = false;
             imageSourceVisible = true;
             showNoInternetIcon = false;
+            imageTiming = 2;
+#if DEBUG
+            _itemVisible = true;
+#else
+           _itemVisible = false;     
+#endif
+
         }
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -102,6 +110,13 @@ namespace InfoBoard.ViewModel
             _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
             MediaManager manager = MediaManager.Instance;
             manager.SetImageViewModel(this);
+            
+            //To start with a default image
+            imageTiming = 3;
+            _imageMediaSource = "welcome.jpg"; 
+            WebViewVisible = false;
+            ImageSourceVisible = true;
+
             await manager.GoTime();
         }
 
@@ -148,6 +163,16 @@ namespace InfoBoard.ViewModel
                 if (imageSourceVisible == value)
                     return;
                 imageSourceVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public bool ItemVisible {
+            get => _itemVisible;
+            set {
+                if (_itemVisible == value)
+                    return;
+                _itemVisible = value;
                 OnPropertyChanged();
             }
         }

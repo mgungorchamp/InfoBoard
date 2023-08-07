@@ -21,7 +21,9 @@ public partial class ImageDisplay : ContentPage
         
         InitializeComponent();
         //NavigationPage.SetHasNavigationBar(this, false);
-        
+        NavigationPage.SetHasNavigationBar(this, false);
+        NavigationPage.SetHasBackButton(this, false);
+
         //BindingContext = new ImageViewModel(); 
         //_imageViewModel.NavigationSet = this.Navigation;
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");

@@ -4,20 +4,23 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
     xmlns:views="clr-namespace:InfoBoard.Views"    
-    xmlns:mediaviews="clr-namespace:InfoBoard.Views.MediaViews"        
+    xmlns:mediaviews="clr-namespace:InfoBoard.Views.MediaViews"         
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+
+    <!--
+    Title="Guzel Board - Shell Title"
     Shell.NavBarIsVisible="false"
     Shell.TabBarIsVisible="False"
     Shell.FlyoutItemIsVisible="False"
     NavigationPage.HasBackButton="False"
     NavigationPage.HasNavigationBar="False" 
-    Title="Guzel Board - Shell Title">
-
-    <!--Shell.NavBarIsVisible="false"
+    
+    Shell.NavBarIsVisible="false"
     Shell.TabBarIsVisible="False"-->
 
 
-    <Tab>
-
+    <TabBar>
         <ShellContent  
             x:Name="imageDisplayItem"            
             ContentTemplate="{DataTemplate views:ImageDisplay}"/>
@@ -25,18 +28,18 @@
         <ShellContent  
             x:Name="welcomeViewItem"
             ContentTemplate="{DataTemplate views:WelcomeView}"/>
-        
+
         <ShellContent     
-            x:Name="registerViewItem"
-            FlyoutItemIsVisible="False"
+            x:Name="registerViewItem"            
             ContentTemplate="{DataTemplate views:RegisterView}"/>
 
+        <!--FlyoutItemIsVisible="False"-->
         <ShellContent     
             x:Name="informationViewItem"
-            FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate views:InformationView}"/>
+        <!--FlyoutItemIsVisible="False"-->
 
-        <!--MEDIA VIEWERS-->
+        <!--MEDIA VIEWERS NOT USED-->
         <ShellContent     
             x:Name="webViewViewerItem"
              FlyoutItemIsVisible="False"
@@ -67,8 +70,7 @@
             ContentTemplate="{DataTemplate views:AboutPage}"
             Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->
 
-     </Tab>
-
+    </TabBar>
 </Shell>
 
 <!--Title="Welcome"-->
