@@ -14,7 +14,13 @@ namespace InfoBoard.Services
 {
     public class RestService
     {
-        static readonly HttpClient _client = new HttpClient();
+        //https://doumer.me/improve-http-request-performance-in-dotnet-maui-xamarin/
+        //https://visualstudiomagazine.com/Blogs/Tool-Tracker/2019/09/mutliple-httpclients.aspx
+        static HttpClient _client = new HttpClient() 
+        { 
+            BaseAddress = new Uri(Utilities.BASE_ADDRESS)
+        };
+
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
 
@@ -55,14 +61,16 @@ namespace InfoBoard.Services
             {
                 //No internet - don't do anything
                 return; 
-            }          
+            }
 
             Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
+            string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");            
+
             String mediaContent = null;
             try
             {
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
                 FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
                 {
@@ -131,10 +139,12 @@ namespace InfoBoard.Services
             }
 
             Uri uri = new Uri(string.Concat(Utilities.DEVICE_SETTINGS_URL, deviceKey));
+            string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");
+
             try
             {
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     DeviceSettings deviceSettings;
@@ -189,8 +199,11 @@ namespace InfoBoard.Services
             try
             {
                 Uri uri = new Uri(Utilities.HANDSHAKE_URL);
+                string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");
+
+
                 //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(uri);//.ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     RegisterationResult registerationResult;

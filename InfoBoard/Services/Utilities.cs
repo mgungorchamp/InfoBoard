@@ -22,6 +22,9 @@ namespace InfoBoard.Services
 #endif
 
         public static string Scheme = "https"; // or http        
+
+        public static string BASE_ADDRESS = $"{Scheme}://{HostUrl}";
+
         public static string MEDIA_FILES_URL = "UnSet";
 
         public static string deviceKey = "NoDeviceKey";
