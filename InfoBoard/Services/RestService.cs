@@ -1,5 +1,6 @@
 ﻿using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
+using Sentry;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.PortableExecutable;
@@ -16,9 +17,12 @@ namespace InfoBoard.Services
     {
         //https://doumer.me/improve-http-request-performance-in-dotnet-maui-xamarin/
         //https://visualstudiomagazine.com/Blogs/Tool-Tracker/2019/09/mutliple-httpclients.aspx
-        static HttpClient _client = new HttpClient() 
+
+        static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
+        static HttpClient _client = new HttpClient(httpHandler) 
         { 
             BaseAddress = new Uri(Utilities.BASE_ADDRESS)
+            
         };
 
         JsonSerializerOptions _serializerOptions;

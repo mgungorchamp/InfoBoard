@@ -6,6 +6,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
 using CommunityToolkit.Maui.Alerts;
+using Sentry;
 
 namespace InfoBoard.Views;
 
@@ -58,6 +59,8 @@ public partial class ImageDisplay : ContentPage
 
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+
+        SentrySdk.CaptureMessage("Hello Sentry : inside Image Display OnAppearing");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
         await ((ImageViewModel)BindingContext).GoTimeNow();
