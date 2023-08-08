@@ -38,9 +38,24 @@ namespace InfoBoard.Services
          */
 
         //List<FileInformation> lastSavedFileList;
+
+        static HttpClient httpClient = new HttpClient();
+
+
         private readonly ILogger _logger;
 
-        public FileDownloadService()
+
+        private static readonly FileDownloadService instance = new FileDownloadService();
+
+        public static FileDownloadService Instance {
+            get {
+                return instance;
+            }
+        }
+        static FileDownloadService()
+        {
+        }
+        private FileDownloadService()
         {
             _logger = Utilities.Logger(nameof(FileDownloadService));
         }
@@ -264,8 +279,7 @@ namespace InfoBoard.Services
                 return;              
             }
             try {
-                //Download the category content as byte array from presigned URL
-                HttpClient httpClient = new HttpClient();
+                //Download the category content as byte array from presigned URL                
                 Uri uri = new Uri(media.path);
                 byte[] fileContent = await httpClient.GetByteArrayAsync(uri);
                 //Save it to local folder

@@ -40,7 +40,7 @@ namespace InfoBoard.Services
         {
             _logger = Utilities.Logger(nameof(RestService));
             //_client = new HttpClient();
-            //_client.Timeout = TimeSpan.FromSeconds(50); 
+            _client.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
             //_client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
             
             _serializerOptions = new JsonSerializerOptions
@@ -71,7 +71,7 @@ namespace InfoBoard.Services
             {
                 //HttpClient _client = new HttpClient();
                 HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
-                FileDownloadService fileDownloadService = new FileDownloadService();
+                FileDownloadService fileDownloadService = FileDownloadService.Instance;
                 if (response.IsSuccessStatusCode)
                 {
 

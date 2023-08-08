@@ -36,7 +36,7 @@ namespace InfoBoard.Services
         private MediaManager()
         {
             _logger = Utilities.Logger(nameof(MediaManager));
-            fileDownloadService = new FileDownloadService();
+            fileDownloadService = FileDownloadService.Instance;
 
             timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();

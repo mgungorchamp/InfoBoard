@@ -142,9 +142,9 @@ namespace InfoBoard.Services
                         return true;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    ; // Do nothing
+                    Console.WriteLine($"ERROR at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
                 }
             }
             return false;
