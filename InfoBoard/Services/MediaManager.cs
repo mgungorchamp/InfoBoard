@@ -145,11 +145,11 @@ namespace InfoBoard.Services
             await UpdateMediaEventAsync();           
 
             //Set up the timer for Syncronise Media Files             
-            timer4FileSync.Interval = TimeSpan.FromSeconds(17);//101
+            timer4FileSync.Interval = TimeSpan.FromSeconds(101);//101 17
             timer4FileSync.Tick += async (sender, e) => await UpdateMediaEventAsync();
             
             //Get latest settings from server - every 15 seconds
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(29);//107
+            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(107);//107 29
             timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
             
             //Start the timers
@@ -232,8 +232,8 @@ namespace InfoBoard.Services
                         imageViewModel.ImageTiming = currentMedia.timing;
                         imageViewModel.MediaInformation = "WEB SITE";
 #endif
-                        await DoDelay(currentMedia.timing);
                         imageViewModel.ShowNoInternetIcon = false;
+                        await DoDelay(currentMedia.timing);                        
                     }
                     else
                     {

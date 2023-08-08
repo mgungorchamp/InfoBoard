@@ -74,20 +74,20 @@ namespace InfoBoard.Services
                 FileDownloadService fileDownloadService = new FileDownloadService();
                 if (response.IsSuccessStatusCode)
                 {
-                    
+
                     mediaContent = await response.Content.ReadAsStringAsync();
 
                     //Device Registered but no categories assigned
                     if (mediaContent.Length < 10) // empty content received  []
                     {
-                        _logger.LogInformation($"MEDIA API 33"+
+                        _logger.LogInformation($"MEDIA API 33" +
                                          $"Categories needs to be assigned to Device! Response : {mediaContent}\n");
                         await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
                         return;
                     }
-                    
+
                     //Device Unregistered and expecting error message
-                    if (mediaContent.Length < 100) 
+                    if (mediaContent.Length < 100)
                     {
                         try
                         {
@@ -96,7 +96,7 @@ namespace InfoBoard.Services
 
                             if (errorWrapper?.error?.code == 3)
                             {
-                                _logger.LogInformation( $"MEDIA API 55# DEVICE REMOVED \n" +
+                                _logger.LogInformation($"MEDIA API 55# DEVICE REMOVED \n" +
                                                         $"Message from server: {errorWrapper.error.message} " +
                                                         $"Server Response: {mediaContent}");
                                 await fileDownloadService.resetMediaNamesInLocalJSonAndDeleteLocalFiles();
@@ -104,7 +104,7 @@ namespace InfoBoard.Services
                             }
                         }
                         catch (Exception ex2)
-                        {                          
+                        {
                             _logger.LogError($"MEDIA API 06 could not Deserialize\n" +
                                             $"Exception: {ex2.Message}\n" +
                                             $"API Response : {mediaContent}\n");
@@ -115,11 +115,18 @@ namespace InfoBoard.Services
                     List<MediaCategory> fileList = JsonSerializer.Deserialize<List<MediaCategory>>(mediaContent, _serializerOptions);
                     await fileDownloadService.saveCategoryListToLocalJSON(fileList);
                     _logger.LogInformation($"RestService API 736 Category (Media) List Updated\n");
-                    return;                    
+                    return;
                 }
             }
+            catch (System.Net.Sockets.SocketException ex) 
+            {
+                //https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.socketexception?view=net-7.0
+                Console.WriteLine($"2023-08#updateMediaList SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+                _logger.LogError($"2023-08#updateMediaList SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+
+            }
             catch (Exception ex3)
-            {                
+            {
                 Console.WriteLine($"22#FILES Posibiliy Server is having a bad day\n Exception: {ex3.Message}\n");
                 _logger.LogError($"\n22#FILES Posibiliy Server is having a bad day\n" +
                                  $"Exception: {ex3.Message}\n" +
@@ -180,6 +187,12 @@ namespace InfoBoard.Services
                                             $"DeviceSettings.error: {deviceSettings.error}");
                     }
                 }
+            }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                Console.WriteLine($"2023-08#updateDeviceSettings SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+                _logger.LogError($"2023-08#updateDeviceSettings SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+
             }
             catch (Exception ex)
             {
@@ -243,6 +256,13 @@ namespace InfoBoard.Services
                     }
                 }
             }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                Console.WriteLine($"2023-08#registerDevice SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+                _logger.LogError($"2023-08#registerDevice SocketException\n Exception: {ex.Message}\n Help Link: {ex.HelpLink} \n Target Site: {ex.TargetSite}\n");
+
+            }
+
             catch (Exception ex)
             {
                 Console.WriteLine(@"\tERROR {0} registerDevice MURAT", ex.Message);
