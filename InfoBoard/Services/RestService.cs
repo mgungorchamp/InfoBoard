@@ -74,6 +74,14 @@ namespace InfoBoard.Services
                 Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
                 string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");
 
+                String mediaContent = null;
+                try
+                {
+                    //HttpClient _client = new HttpClient();
+                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
+                    FileDownloadService fileDownloadService = new FileDownloadService();
+                    if (response.IsSuccessStatusCode)
+                    {
             String mediaContent = null;
             try
             {
