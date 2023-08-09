@@ -19,10 +19,10 @@ namespace InfoBoard.Services
         //https://visualstudiomagazine.com/Blogs/Tool-Tracker/2019/09/mutliple-httpclients.aspx
 
         static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
-        static HttpClient _client = new HttpClient(httpHandler) 
-        { 
+        static HttpClient _client = new HttpClient(httpHandler)
+        {
             BaseAddress = new Uri(Utilities.BASE_ADDRESS)
-            
+
         };
 
         JsonSerializerOptions _serializerOptions;
@@ -38,15 +38,15 @@ namespace InfoBoard.Services
         }
         static RestService()
         {
-        } 
+        }
 
         private RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
             //_client = new HttpClient();
             _client.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
-            //_client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
-            
+                                                       //_client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
+
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -74,22 +74,15 @@ namespace InfoBoard.Services
                 Uri uri = new Uri(string.Format(Utilities.MEDIA_FILES_URL, string.Empty));
                 string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");
 
+
                 String mediaContent = null;
                 try
                 {
                     //HttpClient _client = new HttpClient();
                     HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
-                    FileDownloadService fileDownloadService = new FileDownloadService();
+                    FileDownloadService fileDownloadService = FileDownloadService.Instance;
                     if (response.IsSuccessStatusCode)
                     {
-            String mediaContent = null;
-            try
-            {
-                //HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
-                FileDownloadService fileDownloadService = FileDownloadService.Instance;
-                if (response.IsSuccessStatusCode)
-                {
 
                         mediaContent = await response.Content.ReadAsStringAsync();
 
