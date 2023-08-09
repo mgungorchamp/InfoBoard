@@ -13,6 +13,7 @@ namespace InfoBoard.Services
         private IDispatcherTimer timer4MediaDisplaying;
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync;
+        private IDispatcherTimer timer4InternetCheck;
 
         private DeviceSettings deviceSettings;
         private FileDownloadService fileDownloadService;
@@ -41,6 +42,7 @@ namespace InfoBoard.Services
             timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
             timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
+            timer4InternetCheck = Application.Current?.Dispatcher.CreateTimer();
         }
 
         public void SetImageViewModel(ImageViewModel imageViewModel)
@@ -87,7 +89,16 @@ namespace InfoBoard.Services
             _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
         }
 
-      
+        private void StartTimer4InternetCheck()
+        {
+            timer4InternetCheck.IsRepeating = true;
+            timer4InternetCheck.Start();
+
+            //Set up the timer for Internet
+            timer4InternetCheck.Interval = TimeSpan.FromMinutes(10);//101 17
+            timer4InternetCheck.Tick += async (sender, e) => await UpdateMediaEventAsync();
+        }
+
 
         public async Task GoTime() 
         {          

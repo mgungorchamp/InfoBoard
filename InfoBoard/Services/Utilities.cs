@@ -1,5 +1,6 @@
 ﻿using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Text.Json;
 
@@ -7,6 +8,8 @@ namespace InfoBoard.Services
 {
     public static class Utilities
     {
+        //private static readonly ILogger _logger = Utilities.Logger(nameof(Utilities));
+        
         private static string LocalDirectory = "Media";
         // URL of REST service
         //public static string RestUrl = "https://dotnetmauitodorest.azurewebsites.net/api/todoitems/{0}";
@@ -126,6 +129,74 @@ namespace InfoBoard.Services
 
         public static bool isInternetAvailable()
         {
+            Debug.WriteLine("isInternetAvailable+!");
+            return false;
+            //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            //if (accessType == NetworkAccess.Internet)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            // with await
+            //var taskResult = Task.Run<bool>(async () => await checkInternetConnection());
+            //    return taskResult.Result;
+            
+            //}
+            //return false;
+        }
+
+
+        //https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient?view=net-7.0
+        // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
+        private static readonly HttpClient client = new HttpClient();
+        
+        public static bool HasInternetConnection = false;
+        static async Task<bool> checkInternetConnection()
+        {
+            // Call asynchronous network methods in a try/catch block to handle exceptions.
+            try
+            {
+
+                using HttpResponseMessage response = await client.GetAsync("https://guzelboard.com/");
+                
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                
+                response.EnsureSuccessStatusCode();
+
+                //HasInternetConnection = true;
+                Debug.WriteLine("isInternetAvailable-! TRUE");
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine("\nException Caught!");
+                Debug.WriteLine("Message :{0} ", e.Message);
+                //HasInternetConnection = false;
+                Debug.WriteLine("isInternetAvailable-! FALSE");
+                return false;
+            }
+            catch (IOException ex)
+            {
+                // For System.Net.Sockets.SocketException: 'Permission denied'
+                Debug.WriteLine($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}"); // Do nothing
+
+                return false;
+            }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                // For System.Net.Sockets.SocketException: 'Permission denied'
+                Debug.WriteLine($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}"); // Do nothing
+                return false;
+            }
+        }
+    }
+}
+
+
+/*
+  public static bool isInternetAvailable()
+        {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
@@ -142,12 +213,24 @@ namespace InfoBoard.Services
                         return true;
                     }
                 }
+                catch (IOException ex) {
+                    // For System.Net.Sockets.SocketException: 'Permission denied'
+                    Console.WriteLine($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}"); // Do nothing
+                    _logger.LogError($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}");
+                }
+                catch (System.Net.Sockets.SocketException ex)
+                {
+                    // For System.Net.Sockets.SocketException: 'Permission denied'
+                    Console.WriteLine($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}"); // Do nothing
+                    _logger.LogError($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}");
+                }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"ERROR at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
+                    Console.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
+                    _logger.LogError($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}");
                 }
             }
             return false;
         }
-    }
-}
+ 
+ */

@@ -79,7 +79,7 @@ namespace InfoBoard.Services
                 try
                 {
                     //HttpClient _client = new HttpClient();
-                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
+                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);                    
                     FileDownloadService fileDownloadService = FileDownloadService.Instance;
                     if (response.IsSuccessStatusCode)
                     {
