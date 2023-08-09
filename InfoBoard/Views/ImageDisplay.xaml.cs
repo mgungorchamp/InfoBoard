@@ -2,22 +2,18 @@ using InfoBoard.ViewModel;
 using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
-using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
-using CommunityToolkit.Maui.Alerts;
-using Sentry;
 
 namespace InfoBoard.Views;
 
 public partial class ImageDisplay : ContentPage
 {
-    
 
+    private readonly IHttpClientFactory _httpClientFactory;
     //ImageViewModel _imageViewModel;
     private readonly ILogger _logger;
-    public ImageDisplay()
+    public ImageDisplay(IHttpClientFactory httpClientFactory)
     {
+        _httpClientFactory = httpClientFactory;
         _logger = Utilities.Logger(nameof(ImageDisplay));
         
         InitializeComponent();
@@ -30,6 +26,8 @@ public partial class ImageDisplay : ContentPage
         Debug.WriteLine("\n\n++++++++++++++ ImageDisplay Constructor\n\n");
         _logger.LogInformation("\n++++++++++++++ ImageDisplay Constructor");
     }
+
+    
     ~ImageDisplay() 
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
@@ -60,10 +58,10 @@ public partial class ImageDisplay : ContentPage
         Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
         _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
-        SentrySdk.CaptureMessage("Hello Sentry : inside Image Display OnAppearing");
+        //SentrySdk.CaptureMessage("Hello Sentry : inside Image Display OnAppearing");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
-        await ((ImageViewModel)BindingContext).GoTimeNow();
+        await ((ImageViewModel)BindingContext).GoTimeNow(_httpClientFactory);
     }
 
      

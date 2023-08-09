@@ -130,7 +130,7 @@ namespace InfoBoard.Services
         public static bool isInternetAvailable()
         {
             Debug.WriteLine("isInternetAvailable+!");
-            return false;
+            return true;
             //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             //if (accessType == NetworkAccess.Internet)
             //{

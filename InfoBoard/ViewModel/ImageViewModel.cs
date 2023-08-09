@@ -105,11 +105,12 @@ namespace InfoBoard.ViewModel
 
         //}
 
-        public async Task GoTimeNow()
+        public async Task GoTimeNow(IHttpClientFactory _httpClientFactory)
         {
             _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
             MediaManager manager = MediaManager.Instance;
             manager.SetImageViewModel(this);
+            manager.SetHttpClientFactory(_httpClientFactory);   
             
             //To start with a default image
             imageTiming = 3;

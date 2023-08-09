@@ -4,13 +4,12 @@ using InfoBoard.Views;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-
 namespace InfoBoard.Services
 {
     public class MediaManager
     {       
         private readonly ILogger _logger;
-        private IDispatcherTimer timer4MediaDisplaying;
+        //private IDispatcherTimer timer4MediaDisplaying;
         private IDispatcherTimer timer4FileSync;
         private IDispatcherTimer timer4DeviceSettingsSync;
         private IDispatcherTimer timer4InternetCheck;
@@ -39,7 +38,7 @@ namespace InfoBoard.Services
             _logger = Utilities.Logger(nameof(MediaManager));
             fileDownloadService = FileDownloadService.Instance;
 
-            timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
+            //timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
             timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
             timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
             timer4InternetCheck = Application.Current?.Dispatcher.CreateTimer();
@@ -50,12 +49,18 @@ namespace InfoBoard.Services
             this.imageViewModel = imageViewModel;
         }
 
+        public IHttpClientFactory _httpClientFactory;
+        public void SetHttpClientFactory(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory; 
+        }
+
         private void StartTimersNow4MediaDisplayAndFilesAndSettings()
         {
             _logger.LogInformation("\t\t+++ START StartTimersNow4MediaDisplayAndFilesAndSettings() is called");
 
-            timer4MediaDisplaying.IsRepeating = true;
-            timer4MediaDisplaying.Start();
+            //timer4MediaDisplaying.IsRepeating = true;
+            //timer4MediaDisplaying.Start();
 
             StartTimer4FilesAndDeviceSettings();
         } 
@@ -63,8 +68,8 @@ namespace InfoBoard.Services
         {
             _logger.LogInformation("\t\t--- STOP StopTimersNow4MediaDisplayAndFilesAndSettings() is called");
             
-            timer4MediaDisplaying.IsRepeating = false;
-            timer4MediaDisplaying.Stop();
+            //timer4MediaDisplaying.IsRepeating = false;
+            //timer4MediaDisplaying.Stop();
 
             StopTimer4FilesAndDeviceSettings();
         }

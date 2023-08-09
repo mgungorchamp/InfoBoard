@@ -30,7 +30,7 @@ public partial class App : MauiWinUIApplication
         AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-        Microsoft.UI.Xaml.Application.Current.UnhandledException += Current_UnhandledException; 
+        Microsoft.UI.Xaml.Application.Current.UnhandledException += Current_UnhandledException;
     }
 
     private void Current_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)

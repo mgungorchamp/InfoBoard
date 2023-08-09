@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Text.Json; 
+using System.Text.Json;
 using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
 
@@ -18,15 +18,16 @@ namespace InfoBoard.Services
                 return instance;
             }
         }
-        
+
         public async Task<DeviceSettings> loadDeviceSettings()
         {
-            try { 
+            try
+            {
                 DeviceSettings localDeviceSettings = await readSettingsFromLocalJSON();
                 //No internet - return existing settings
                 if (!Utilities.isInternetAvailable())
-                {                
-                    Debug.WriteLine($"**No internet - return existing settings");  
+                {
+                    Debug.WriteLine($"**No internet - return existing settings");
                     _logger.LogInformation($"**No internet - return existing settings");
 
                     if (localDeviceSettings == null)
@@ -63,7 +64,7 @@ namespace InfoBoard.Services
                 else
                 {
                     return localDeviceSettings;
-                }            
+                }
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace InfoBoard.Services
             }
         }
 
-        private async Task<DeviceSettings> secondCheckIfSettingsNull() 
+        private async Task<DeviceSettings> secondCheckIfSettingsNull()
         {
             //Check if there is DeviceKey in local storage - second check
             string deviceKey = await readDeviceKeyFromFile();
@@ -100,206 +101,267 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
-            //await Task.Delay(TimeSpan.FromSeconds(2));
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                string fileName = "DeviceSettings.json";
-                string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                if (File.Exists(fullPathJsonFileName))
-                {                    
-                    string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
-                    if (jsonString.Length < 20)
-                    {
-                        _logger.LogWarning($"ERROR#802 SETTINGS FILE  readSettingsFromLocalJSON \n" +
-                            $"File Content:{jsonString}\n");
-                        return null;
-                    }
-
-                    DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
-
-                    //To update the media files url
-                    Utilities.updateMediaFilesUrl(deviceSettings.device_key);
-
-                    if (deviceSettings?.device_key == null)
-                    {
-                        _logger.LogWarning($"SETTINGS#785 Device Key is Null readSettingsFromLocalJSON");
-                        return null;
-                    }
-                    _logger.LogInformation($"SETTINGS#33 Read from Local file: {jsonString}");    
-                    return deviceSettings;
-                }
-                else
+                //await Task.Delay(TimeSpan.FromSeconds(2));
+                try
                 {
-                    _logger.LogWarning($"\"ERROR#569 SETTINGS Returning null for settings readSettingsFromLocalJSON - most likely file does not exist\n" +
-                                       $"File Name: {fullPathJsonFileName}");
-                    return null;
+                    string fileName = "DeviceSettings.json";
+                    string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                    if (File.Exists(fullPathJsonFileName))
+                    {
+                        string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
+                        if (jsonString.Length < 20)
+                        {
+                            _logger.LogWarning($"ERROR#802 SETTINGS FILE  readSettingsFromLocalJSON \n" +
+                                $"File Content:{jsonString}\n");
+                            return null;
+                        }
+
+                        DeviceSettings deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(jsonString);
+
+                        //To update the media files url
+                        Utilities.updateMediaFilesUrl(deviceSettings.device_key);
+
+                        if (deviceSettings?.device_key == null)
+                        {
+                            _logger.LogWarning($"SETTINGS#785 Device Key is Null readSettingsFromLocalJSON");
+                            return null;
+                        }
+                        _logger.LogInformation($"SETTINGS#33 Read from Local file: {jsonString}");
+                        return deviceSettings;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"\"ERROR#569 SETTINGS Returning null for settings readSettingsFromLocalJSON - most likely file does not exist\n" +
+                                           $"File Name: {fullPathJsonFileName}");
+                        return null;
+                    }
                 }
-            } 
-            catch(Exception ex) {
-                Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
-                _logger.LogError($"ERROR#926 SETTINGS readSettingsFromLocalJSON\n" +
-                    $"Exception: {ex.Message}");
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"{ex.Message} readSettingsFromLocalJSON  MURAT");
+                    _logger.LogError($"ERROR#926 SETTINGS readSettingsFromLocalJSON\n" +
+                        $"Exception: {ex.Message}");
+                }
+                _logger.LogWarning($"SETTINGS#66 NULL settings returned readSettingsFromLocalJSON - MURAT ");
+                return null;
             }
-            _logger.LogWarning($"SETTINGS#66 NULL settings returned readSettingsFromLocalJSON - MURAT ");
-            return null;
+            finally
+            {
+                //Very important to release
+                semaphoreSlim.Release();
+            }
         }
 
         public async Task saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                //To update the media files url
-                Utilities.updateMediaFilesUrl(deviceSettings.device_key);
-
-                string fileName = "DeviceSettings.json";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
-
-                if(jsonString.Length < 20)
+                JsonSerializerOptions _serializerOptions;
+                _serializerOptions = new JsonSerializerOptions
                 {
-                    _logger.LogError($"ERROR#882 SETTINGS FILE  saveSettingsToLocalAsJSON \n" +
-                                               $"jsonString:{jsonString}\n" +
-                                               $"device_key:{deviceSettings.device_key}");
-                    return;
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                try
+                {
+                    //To update the media files url
+                    Utilities.updateMediaFilesUrl(deviceSettings.device_key);
+
+                    string fileName = "DeviceSettings.json";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                    string jsonString = JsonSerializer.Serialize<DeviceSettings>(deviceSettings);
+
+                    if (jsonString.Length < 20)
+                    {
+                        _logger.LogError($"ERROR#882 SETTINGS FILE  saveSettingsToLocalAsJSON \n" +
+                                                   $"jsonString:{jsonString}\n" +
+                                                   $"device_key:{deviceSettings.device_key}");
+                        return;
+                    }
+
+                    await File.WriteAllTextAsync(fullPathFileName, jsonString);
+                    _logger.LogInformation($"SETTINGS#987 Settings Updated saveSettingsToLocalAsJSON\n" +
+                                           $"jsonString: {jsonString}");
+
+                    //await Task.Delay(TimeSpan.FromSeconds(2));
+
                 }
+                catch (Exception ex)
+                {
 
-                await File.WriteAllTextAsync(fullPathFileName, jsonString);
-                _logger.LogInformation($"SETTINGS#987 Settings Updated saveSettingsToLocalAsJSON\n" +
-                                       $"jsonString: {jsonString}");
-
-                //await Task.Delay(TimeSpan.FromSeconds(2));
-
-            } 
-            catch (Exception ex) 
-            {
-                
-                Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
-                _logger.LogError($"ERROR # 682 SETTINGS saveSettingsToLocalAsJSON has issues MURAT\n" +
-                                $"Exception: {ex.Message}");
+                    Console.WriteLine(ex.ToString() + "saveSettingsToLocalAsJSON has issues MURAT");
+                    _logger.LogError($"ERROR # 682 SETTINGS saveSettingsToLocalAsJSON has issues MURAT\n" +
+                                    $"Exception: {ex.Message}");
+                }
             }
+            finally
+            {
+                //Very important to release
+                semaphoreSlim.Release();
+            }
+
         }
-        
+
         public async Task resetLocalSettingsFile()
         {
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                //To update the media files url
-                Utilities.updateMediaFilesUrl("UNREGISTERED");
+                JsonSerializerOptions _serializerOptions;
+                _serializerOptions = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                try
+                {
+                    //To update the media files url
+                    Utilities.updateMediaFilesUrl("UNREGISTERED");
 
-                string fileName = "DeviceSettings.json";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                string jsonString = "UNREGISTERED";
-                await File.WriteAllTextAsync(fullPathFileName, jsonString);
+                    string fileName = "DeviceSettings.json";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                    string jsonString = "UNREGISTERED";
+                    await File.WriteAllTextAsync(fullPathFileName, jsonString);
 
-                //await Task.Delay(TimeSpan.FromSeconds(2));
-                _logger.LogCritical("Local file has resetted resetLocalSettingsFile");
+                    //await Task.Delay(TimeSpan.FromSeconds(2));
+                    _logger.LogCritical("Local file has resetted resetLocalSettingsFile");
 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
+                    _logger.LogError(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                Console.WriteLine(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
-                _logger.LogError(ex.ToString() + "resetLocalSettingsFile has issues MURAT");
+                //Very important to release
+                semaphoreSlim.Release();
             }
         }
 
 
         public async Task saveDeviceKeyToFile(string deviceKey)
-        {           
+        {
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                //To update the media files url
-                Utilities.updateMediaFilesUrl(deviceKey);
-                Utilities.deviceKey = deviceKey;
+                try
+                {
+                    //To update the media files url
+                    Utilities.updateMediaFilesUrl(deviceKey);
+                    Utilities.deviceKey = deviceKey;
 
 
-                string fileName = "DeviceKey.txt";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                
+                    string fileName = "DeviceKey.txt";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
 
-                await File.WriteAllTextAsync(fullPathFileName, deviceKey);
-                _logger.LogInformation($"SETTINGS#147 Device Registered\n" +
-                                       $"deviceKey: {deviceKey}");
 
-                //await Task.Delay(TimeSpan.FromSeconds(2));
+                    await File.WriteAllTextAsync(fullPathFileName, deviceKey);
+                    _logger.LogInformation($"SETTINGS#147 Device Registered\n" +
+                                           $"deviceKey: {deviceKey}");
 
+                    //await Task.Delay(TimeSpan.FromSeconds(2));
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
+                    _logger.LogError(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
+                }
             }
-            catch (Exception ex)
+            finally
             {
-
-                Console.WriteLine(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
-                _logger.LogError(ex.ToString() + "saveDeviceKeyToFile has issues MURAT");
+                //Very important to release
+                semaphoreSlim.Release();
             }
         }
 
         public async Task<string> readDeviceKeyFromFile()
         {
-            string deviceKey = "UNKNOWN";
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
-            {     
-                string fileName = "DeviceKey.txt";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-
-                if (File.Exists(fullPathFileName))
-                {
-                    deviceKey = await File.ReadAllTextAsync(fullPathFileName);
-                    _logger.LogInformation($"SETTINGS#365 Device Key Read from File\n" +
-                                       $"deviceKey: {deviceKey}");
-
-                    if(deviceKey.Length < 5)
-                        return "UNKNOWN";
-
-                    //To update the media files url
-                    Utilities.updateMediaFilesUrl(deviceKey);
-                }
-            }
-            catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString() + "readDeviceKeyFromFile has issues MURAT");
-                _logger.LogError(ex.ToString() + "DEVICE KEY ERROR #459 readDeviceKeyFromFile has issues MURAT");
+                string deviceKey = "UNKNOWN";
+                try
+                {
+                    string fileName = "DeviceKey.txt";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+
+                    if (File.Exists(fullPathFileName))
+                    {
+                        deviceKey = await File.ReadAllTextAsync(fullPathFileName);
+                        _logger.LogInformation($"SETTINGS#365 Device Key Read from File\n" +
+                                           $"deviceKey: {deviceKey}");
+
+                        if (deviceKey.Length < 5)
+                            return "UNKNOWN";
+
+                        //To update the media files url
+                        Utilities.updateMediaFilesUrl(deviceKey);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString() + "readDeviceKeyFromFile has issues MURAT");
+                    _logger.LogError(ex.ToString() + "DEVICE KEY ERROR #459 readDeviceKeyFromFile has issues MURAT");
+                }
+                return deviceKey;
             }
-            return deviceKey;
+            finally
+            {
+                //Very important to release
+                semaphoreSlim.Release();
+            }
         }
 
         public async Task resetDeviceKeyInFile()
         {
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                string deviceKey = "UNREGISTERED";
-                //To update the media files url
-                Utilities.updateMediaFilesUrl(deviceKey);
-                Utilities.deviceKey = deviceKey;
+                try
+                {
+                    string deviceKey = "UNREGISTERED";
+                    //To update the media files url
+                    Utilities.updateMediaFilesUrl(deviceKey);
+                    Utilities.deviceKey = deviceKey;
 
-                string fileName = "DeviceKey.txt";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                    string fileName = "DeviceKey.txt";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
 
 
-                await File.WriteAllTextAsync(fullPathFileName, deviceKey);
-                _logger.LogInformation($"SETTINGS#258 Device UnRegistered\n" +
-                                       $"deviceKey: {deviceKey}");
+                    await File.WriteAllTextAsync(fullPathFileName, deviceKey);
+                    _logger.LogInformation($"SETTINGS#258 Device UnRegistered\n" +
+                                           $"deviceKey: {deviceKey}");
 
-                //await Task.Delay(TimeSpan.FromSeconds(2));
+                    //await Task.Delay(TimeSpan.FromSeconds(2));
 
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
+                    _logger.LogError(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
+                }
             }
-            catch (Exception ex)
+            finally
             {
-
-                Console.WriteLine(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
-                _logger.LogError(ex.ToString() + "resetDeviceKeyInFile has issues MURAT");
+                //Very important to release
+                semaphoreSlim.Release();
             }
         }
-
     }
 }
 

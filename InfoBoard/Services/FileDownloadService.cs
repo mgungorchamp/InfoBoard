@@ -3,7 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Storage;
 using System.Collections;
 using System.Linq;
-using System.Text.Json; 
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
 //using Windows.Media.Protection.PlayReady;
@@ -131,17 +132,17 @@ namespace InfoBoard.Services
         {
 
             //If any of the local files missing - corrupted - try downloading all files
-            List<MediaCategory> mediaListFromLocal = await readMediaNamesFromLocalJsonCheckDiscrepancy();            
+            List<MediaCategory> mediaListFromLocal = await readMediaNamesFromLocalJsonCheckDiscrepancy();
             if (mediaListFromLocal == null)
             {
-                return await downloadAllFilesFromServer();                
+                return await downloadAllFilesFromServer();
             }
 
             List<MediaCategory> fileListFromServer = await getLatestMediaNamesFromServer();
 
             //If fileListFromServer null just abort the operations
             //Since the device unregistered, and files has been deleted from local folder
-            if (fileListFromServer == null) 
+            if (fileListFromServer == null)
             {
                 _logger.LogInformation($"#SYNC#2: fileListFromServer is null");
                 return null; // NULL                 
@@ -215,7 +216,7 @@ namespace InfoBoard.Services
 
         private async Task<List<MediaCategory>> readMediaNamesFromLocalJsonCheckDiscrepancy()
         {
-            List<MediaCategory> categoryListFromLocal =  await readMediaNamesFromLocalJSON();
+            List<MediaCategory> categoryListFromLocal = await readMediaNamesFromLocalJSON();
             // check if any of the local files missing - corrupted - return null
             // Get the folder where the images are stored.
             //string appDataPath = FileSystem.AppDataDirectory;
@@ -225,7 +226,7 @@ namespace InfoBoard.Services
                 foreach (Media media in category.media ?? Enumerable.Empty<Media>())
                 {
                     //If the media type is not a file - continue
-                    if(media.type != "file")
+                    if (media.type != "file")
                     {
                         continue;
                     }
@@ -240,7 +241,7 @@ namespace InfoBoard.Services
             }
             return categoryListFromLocal;
         }
-               
+
 
         private async Task downloadMediaFilesToLocalDirectory(List<MediaCategory> categoryList)
         {
@@ -255,8 +256,9 @@ namespace InfoBoard.Services
                         await downloadMediaFileToLocalDirectory(media);
                     }
                 }
-            } 
-            catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine("downloadMediaFilesToLocalDirectory Done: Download Exception: MURAT");
                 _logger.LogError($"#77 downloadMediaFilesToLocalDirectory Download Exception: MURAT\n {ex.Message}");
             }
@@ -274,11 +276,12 @@ namespace InfoBoard.Services
 
             //We are using s3key as the category name and its unique therefore
             // we don't need to dowload the category
-            if (File.Exists(localFullFileName)) 
+            if (File.Exists(localFullFileName))
             {
-                return;              
+                return;
             }
-            try {
+            try
+            {
                 //Download the category content as byte array from presigned URL                
                 Uri uri = new Uri(media.path);
                 byte[] fileContent = await httpClient.GetByteArrayAsync(uri);
@@ -286,7 +289,7 @@ namespace InfoBoard.Services
                 await File.WriteAllBytesAsync(localFullFileName, fileContent);
                 _logger.LogInformation($"\t#DOW#1: Downloading file: {media.s3key}");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine($"downloadMediaFileToLocalDirectory  has issues MURAT\n {ex.Message}");
                 _logger.LogError($"#99-LOAD Exception downloadMediaFileToLocalDirectory\n {ex.Message}");
@@ -308,104 +311,135 @@ namespace InfoBoard.Services
                 File.Delete(localFullFileName);
                 _logger.LogInformation($"\t#DEL#1: Deleted local file: {media.s3key}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("File cannot be deleted: deleteLocalMediaFile  has issues MURAT");
                 _logger.LogError($"#33 File cannot be deleted: deleteLocalMediaFile  has issues MURAT\n {ex.Message}");
             }
         }
-         
+
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
-        public async Task saveCategoryListToLocalJSON(List<MediaCategory> fileList) 
+        public async Task saveCategoryListToLocalJSON(List<MediaCategory> fileList)
         {
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                string fileName = "FileInformation.json";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-                string jsonString = JsonSerializer.Serialize<List<MediaCategory>>(fileList);
-                await File.WriteAllTextAsync(fullPathFileName, jsonString);
-                //lastSavedFileList = categoryList;
+                JsonSerializerOptions _serializerOptions;
+                _serializerOptions = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                try
+                {
+                    string fileName = "FileInformation.json";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                    string jsonString = JsonSerializer.Serialize<List<MediaCategory>>(fileList);
+                    await File.WriteAllTextAsync(fullPathFileName, jsonString);
+                    //lastSavedFileList = categoryList;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("saveCategoryListToLocalJSON  has issues MURAT");
+                    _logger.LogError($"#11 saveCategoryListToLocalJSON  has issues MURAT\n {ex.Message}");
+                }
             }
-            catch(Exception ex)
+            finally
             {
-                Console.WriteLine("saveCategoryListToLocalJSON  has issues MURAT");
-                _logger.LogError($"#11 saveCategoryListToLocalJSON  has issues MURAT\n {ex.Message}");
+                //Very important to release
+                semaphoreSlim.Release();
             }
         }
 
         public async Task resetMediaNamesInLocalJSonAndDeleteLocalFiles()
-        {            
+        {
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                //Delete all the files from local directory
-                List<MediaCategory> fileListFromLocal = await readMediaNamesFromLocalJSON();
-                foreach (MediaCategory category in fileListFromLocal ?? Enumerable.Empty<MediaCategory>()) //https://blog.jonschneider.com/2014/09/c-shorten-null-check-around-foreach.html?lr=1
+                try
                 {
-                    foreach (Media media in category.media ?? Enumerable.Empty<Media>())
-                        deleteLocalMediaFile(media);
+                    //Delete all the files from local directory
+                    List<MediaCategory> fileListFromLocal = await readMediaNamesFromLocalJSON();
+                    foreach (MediaCategory category in fileListFromLocal ?? Enumerable.Empty<MediaCategory>()) //https://blog.jonschneider.com/2014/09/c-shorten-null-check-around-foreach.html?lr=1
+                    {
+                        foreach (Media media in category.media ?? Enumerable.Empty<Media>())
+                            deleteLocalMediaFile(media);
+                    }
+                    _logger.LogInformation($"# 88D All local files deleted");
+
+                    string fileName = "FileInformation.json";
+                    string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+
+                    string jsonString = "RESETED";
+                    await File.WriteAllTextAsync(fullPathFileName, jsonString);
+                    //lastSavedFileList = null;
+
+                    _logger.LogInformation($"\n#55 Media File RESETTED\n");
                 }
-                _logger.LogInformation($"# 88D All local files deleted");
-
-                string fileName = "FileInformation.json";
-                string fullPathFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
-
-                string jsonString = "RESETED";
-                await File.WriteAllTextAsync(fullPathFileName, jsonString);
-                //lastSavedFileList = null;
-
-                _logger.LogInformation($"\n#55 Media File RESETTED\n");
+                catch (Exception ex)
+                {
+                    Console.WriteLine("resetMediaNamesToLocalJSON  has issues MURAT");
+                    _logger.LogError($"#55 resetMediaNamesToLocalJSON  has issues MURAT\n {ex.Message}");
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                Console.WriteLine("resetMediaNamesToLocalJSON  has issues MURAT");
-                _logger.LogError($"#55 resetMediaNamesToLocalJSON  has issues MURAT\n {ex.Message}");
+                //Very important to release
+                semaphoreSlim.Release();
             }
         }
 
         //Read local JSON category - if exist - if not return empty categoryList
+
         private async Task<List<MediaCategory>> readMediaNamesFromLocalJSON()
         {
-            //No need to read from local category, if this saved recently 
-            //If not contine to read from category.
-            //if(lastSavedFileList != null)
-            //    return lastSavedFileList;
-
-            JsonSerializerOptions _serializerOptions;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
-            List<MediaCategory> categoryList = null;
+            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            await semaphoreSlim.WaitAsync();
             try
             {
-                string fileName = "FileInformation.json";
-                string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
+                //No need to read from local category, if this saved recently 
+                //If not contine to read from category.
+                //if(lastSavedFileList != null)
+                //    return lastSavedFileList;
 
-                if (File.Exists(fullPathJsonFileName))
+                JsonSerializerOptions _serializerOptions;
+                _serializerOptions = new JsonSerializerOptions
                 {
-                    string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
-                    //Return - If all the pictures removed from the server but category exist in local directory
-                    if (jsonString.Length < 50)
-                        return null;
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                List<MediaCategory> categoryList = null;
+                try
+                {
+                    string fileName = "FileInformation.json";
+                    string fullPathJsonFileName = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, fileName);
 
-                    categoryList = JsonSerializer.Deserialize<List<MediaCategory>>(jsonString);
+                    if (File.Exists(fullPathJsonFileName))
+                    {
+                        string jsonString = await File.ReadAllTextAsync(fullPathJsonFileName);
+                        //Return - If all the pictures removed from the server but category exist in local directory
+                        if (jsonString.Length < 50)
+                            return null;
+
+                        categoryList = JsonSerializer.Deserialize<List<MediaCategory>>(jsonString);
+                    }
+                    //No need to read again
+                    //lastSavedFileList = categoryList;
                 }
-                //No need to read again
-                //lastSavedFileList = categoryList;
+                catch (Exception ex)
+                {
+                    Console.WriteLine("readMediaNamesFromLocalJSON  has issues MURAT");
+                    _logger.LogError($"#22 readMediaNamesFromLocalJSON  has issues MURAT\n {ex.Message}");
+                }
+                return categoryList;
             }
-            catch(Exception ex)
+            finally
             {
-                Console.WriteLine("readMediaNamesFromLocalJSON  has issues MURAT");
-                _logger.LogError($"#22 readMediaNamesFromLocalJSON  has issues MURAT\n {ex.Message}");
+                //Very important to release
+                semaphoreSlim.Release();
             }
-            return categoryList;
         }
     }
 }

@@ -23,29 +23,36 @@ public static class MauiProgram
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement() // https://devblogs.microsoft.com/dotnet/announcing-dotnet-maui-communitytoolkit-mediaelement/
 
-            // Add this section anywhere on the builder:
-            .UseSentry(options => {
-                // The DSN is the only required setting.
-                options.Dsn = "https://1f8a812ef42b21a539e74b6455bb2084@o4505670907592704.ingest.sentry.io/4505670910607360";
+            //// Add this section anywhere on the builder:
+            //.UseSentry(options => {
+            //    // The DSN is the only required setting.
+            //    options.Dsn = "https://1f8a812ef42b21a539e74b6455bb2084@o4505670907592704.ingest.sentry.io/4505670910607360";
 
-                // Use debug mode if you want to see what the SDK is doing.
-                // Debug messages are written to stdout with Console.Writeline,
-                // and are viewable in your IDE's debug console or with 'adb logcat', etc.
-                // This option is not recommended when deploying your application.
-                options.Debug = true;
+            //    // Use debug mode if you want to see what the SDK is doing.
+            //    // Debug messages are written to stdout with Console.Writeline,
+            //    // and are viewable in your IDE's debug console or with 'adb logcat', etc.
+            //    // This option is not recommended when deploying your application.
+            //    options.Debug = true;
 
-                // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-                // We recommend adjusting this value in production.
-                options.TracesSampleRate = 1.0;                
-                // Other Sentry options can be set here.
-            })
+            //    // Set TracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+            //    // We recommend adjusting this value in production.
+            //    options.TracesSampleRate = 1.0;                
+            //    // Other Sentry options can be set here.
+            //})
 
 
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });       
+            });
+
+
+        //https://github.com/yogigrantz/MAUIWithHttpClientFactory/blob/main/MAUIMultiPage/MainPage.xaml.cs
+        builder.Services.AddHttpClient();   // with david
+        
+
+
 
         builder.Services.AddSingleton<ImageDisplay>();
         //builder.Services.AddSingleton<WebSiteView>();
@@ -59,6 +66,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<InformationView>();
 
+       
         //builder.Services.AddTransient<ImageViewModel>();
 
 

@@ -1,10 +1,8 @@
 ﻿using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
-using Sentry;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Text.Json;
+
 
 /*
  * https://guzelboard.com/views/login.php
@@ -18,12 +16,15 @@ namespace InfoBoard.Services
         //https://doumer.me/improve-http-request-performance-in-dotnet-maui-xamarin/
         //https://visualstudiomagazine.com/Blogs/Tool-Tracker/2019/09/mutliple-httpclients.aspx
 
-        static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
-        static HttpClient _client = new HttpClient(httpHandler)
-        {
-            BaseAddress = new Uri(Utilities.BASE_ADDRESS)
 
-        };
+        MediaManager manager = MediaManager.Instance;
+        //static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
+        HttpClient _httpClient;
+        //static HttpClient _httpClient = new HttpClient() // new HttpClient(httpHandler)
+        //{
+        //    BaseAddress = new Uri(Utilities.BASE_ADDRESS)
+
+        //};
 
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
@@ -43,9 +44,13 @@ namespace InfoBoard.Services
         private RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
-            //_client = new HttpClient();
-            _client.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
-                                                       //_client.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
+            
+            _httpClient = manager._httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri(Utilities.BASE_ADDRESS);  
+
+            //_httpClient = new HttpClient();
+            _httpClient.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
+                                                       //_httpClient.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
 
             _serializerOptions = new JsonSerializerOptions
             {
@@ -78,8 +83,8 @@ namespace InfoBoard.Services
                 String mediaContent = null;
                 try
                 {
-                    //HttpClient _client = new HttpClient();
-                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);                    
+                    //HttpClient _httpClient = new HttpClient();
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiServiceUrl);//.ConfigureAwait(false);                    
                     FileDownloadService fileDownloadService = FileDownloadService.Instance;
                     if (response.IsSuccessStatusCode)
                     {
@@ -192,8 +197,8 @@ namespace InfoBoard.Services
 
                 try
                 {
-                    //HttpClient _client = new HttpClient();
-                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
+                    //HttpClient _httpClient = new HttpClient();
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
                         DeviceSettings deviceSettings;
@@ -281,8 +286,8 @@ namespace InfoBoard.Services
                     string apiServiceUrl = uri.AbsoluteUri.Replace(Utilities.BASE_ADDRESS, "");
 
 
-                    //HttpClient _client = new HttpClient();
-                    HttpResponseMessage response = await _client.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
+                    //HttpClient _httpClient = new HttpClient();
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiServiceUrl);//.ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
                         RegisterationResult registerationResult;
@@ -364,7 +369,7 @@ namespace InfoBoard.Services
 //    Uri uri = new Uri(string.Concat(Constants.DEVICE_SETTINGS_URL, deviceKey));
 //    try
 //    {
-//        HttpResponseMessage response = await _client.GetAsync(uri);
+//        HttpResponseMessage response = await _httpClient.GetAsync(uri);
 //        if (response.IsSuccessStatusCode)
 //        {
 //            DeviceSettings deviceSettings;
