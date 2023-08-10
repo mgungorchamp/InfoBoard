@@ -106,7 +106,7 @@ namespace InfoBoard.Services
             timer4InternetCheck.Start();
 
             //Set up the timer for Internet
-            timer4InternetCheck.Interval = TimeSpan.FromMinutes(5);//
+            timer4InternetCheck.Interval = TimeSpan.FromMinutes(1);// Every Minute
             timer4InternetCheck.Tick += async (sender, e) => await Utilities.UpdateInternetStatus();
             _logger.LogInformation("+++ START Timer 4 Internet Connection Check\n");
         }
@@ -124,7 +124,7 @@ namespace InfoBoard.Services
             try
             {
                 Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
-                //StartTimer4InternetCheck();
+                StartTimer4InternetCheck();
                 //Stop timer - if running
                 StopTimersNow4MediaDisplayAndFilesAndSettings();
 
