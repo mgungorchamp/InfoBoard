@@ -17,18 +17,13 @@ namespace InfoBoard.Services
         //https://visualstudiomagazine.com/Blogs/Tool-Tracker/2019/09/mutliple-httpclients.aspx
 
 
-        MediaManager manager = MediaManager.Instance;
+        //MediaManager manager = MediaManager.Instance;
         //static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
         HttpClient _httpClient;
         //static HttpClient _httpClient = new HttpClient() // new HttpClient(httpHandler)
-        //{
-        //    BaseAddress = new Uri(Utilities.BASE_ADDRESS)
-
-        //};
-
+        
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
-
 
         private static readonly RestService instance = new RestService();
 
@@ -45,10 +40,9 @@ namespace InfoBoard.Services
         {
             _logger = Utilities.Logger(nameof(RestService));
             
-            _httpClient = manager._httpClientFactory.CreateClient();
+            _httpClient = Utilities._httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri(Utilities.BASE_ADDRESS);  
 
-            //_httpClient = new HttpClient();
             _httpClient.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
                                                        //_httpClient.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
 

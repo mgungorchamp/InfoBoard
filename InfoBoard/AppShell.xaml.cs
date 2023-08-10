@@ -30,6 +30,8 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
+        Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+
         //Shell.Current.CurrentItem = imageDisplayItem;
 
         //Routing.RegisterRoute(nameof(Views.NotePage), typeof(Views.NotePage));
@@ -50,7 +52,16 @@ public partial class AppShell : Shell
         // saveFilesToLocalDirectory.fetchAndSave();
         //Task.Run(() => downloader.downloadMediaFiles()).Wait();
 
+        Task.Run(async () => await Utilities.UpdateInternetStatus());
     }
+
+    void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+       //Utilities.UpdateInternetStatus();
+       // with await
+       Task.Run(async () => await Utilities.UpdateInternetStatus());
+    }
+
 
     //To prevent the app from changing view when the back button is pressed via mouse or remote control
     //protected override bool OnBackButtonPressed()
@@ -97,6 +108,8 @@ public partial class AppShell : Shell
         //    await DoDelay(media.timing);
         //}
     }
+
+    
 
     //https://gist.github.com/mattjohnsonpint/7b385b7a2da7059c4a16562bc5ddb3b7
 }

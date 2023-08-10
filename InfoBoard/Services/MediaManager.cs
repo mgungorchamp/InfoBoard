@@ -49,11 +49,12 @@ namespace InfoBoard.Services
             this.imageViewModel = imageViewModel;
         }
 
-        public IHttpClientFactory _httpClientFactory;
-        public void SetHttpClientFactory(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory; 
-        }
+        //public IHttpClientFactory _httpClientFactory;
+        //public void SetHttpClientFactory(IHttpClientFactory httpClientFactory)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //    //fileDownloadService.SetHttpClientFactoryToCreateHttpClient(httpClientFactory);  
+        //}
 
         private void StartTimersNow4MediaDisplayAndFilesAndSettings()
         {
@@ -96,12 +97,25 @@ namespace InfoBoard.Services
 
         private void StartTimer4InternetCheck()
         {
+            if(timer4InternetCheck.IsRunning)
+            {
+                return;
+            }
+
             timer4InternetCheck.IsRepeating = true;
             timer4InternetCheck.Start();
 
             //Set up the timer for Internet
-            timer4InternetCheck.Interval = TimeSpan.FromMinutes(10);//101 17
-            timer4InternetCheck.Tick += async (sender, e) => await UpdateMediaEventAsync();
+            timer4InternetCheck.Interval = TimeSpan.FromMinutes(5);//
+            timer4InternetCheck.Tick += async (sender, e) => await Utilities.UpdateInternetStatus();
+            _logger.LogInformation("+++ START Timer 4 Internet Connection Check\n");
+        }
+
+        private void StopTimer4InternetCheck()
+        {
+            timer4InternetCheck.IsRepeating = false;
+            timer4InternetCheck.Stop();          
+            _logger.LogInformation("--- STOP Timer 4 Internet Connection Check\n");
         }
 
 
@@ -110,6 +124,7 @@ namespace InfoBoard.Services
             try
             {
                 Debug.WriteLine("\n\n+++ GoTime() is called\n\n");
+                //StartTimer4InternetCheck();
                 //Stop timer - if running
                 StopTimersNow4MediaDisplayAndFilesAndSettings();
 

@@ -9,7 +9,8 @@ namespace InfoBoard.Services
     public static class Utilities
     {
         //private static readonly ILogger _logger = Utilities.Logger(nameof(Utilities));
-        
+        static public IHttpClientFactory _httpClientFactory;
+
         private static string LocalDirectory = "Media";
         // URL of REST service
         //public static string RestUrl = "https://dotnetmauitodorest.azurewebsites.net/api/todoitems/{0}";
@@ -127,110 +128,74 @@ namespace InfoBoard.Services
         }
 
 
-        public static bool isInternetAvailable()
-        {
-            Debug.WriteLine("isInternetAvailable+!");
-            return true;
-            //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            //if (accessType == NetworkAccess.Internet)
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            // with await
-            //var taskResult = Task.Run<bool>(async () => await checkInternetConnection());
-            //    return taskResult.Result;
-            
-            //}
-            //return false;
-        }
+        private static bool HasInternetConnection = true;
 
-
-        //https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient?view=net-7.0
-        // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
-        private static readonly HttpClient client = new HttpClient();
-        
-        public static bool HasInternetConnection = false;
-        static async Task<bool> checkInternetConnection()
-        {
-            // Call asynchronous network methods in a try/catch block to handle exceptions.
-            try
-            {
-
-                using HttpResponseMessage response = await client.GetAsync("https://guzelboard.com/");
-                
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                
-                response.EnsureSuccessStatusCode();
-
-                //HasInternetConnection = true;
-                Debug.WriteLine("isInternetAvailable-! TRUE");
-                return true;
-            }
-            catch (HttpRequestException e)
-            {
-                Debug.WriteLine("\nException Caught!");
-                Debug.WriteLine("Message :{0} ", e.Message);
-                //HasInternetConnection = false;
-                Debug.WriteLine("isInternetAvailable-! FALSE");
-                return false;
-            }
-            catch (IOException ex)
-            {
-                // For System.Net.Sockets.SocketException: 'Permission denied'
-                Debug.WriteLine($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}"); // Do nothing
-
-                return false;
-            }
-            catch (System.Net.Sockets.SocketException ex)
-            {
-                // For System.Net.Sockets.SocketException: 'Permission denied'
-                Debug.WriteLine($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}"); // Do nothing
-                return false;
-            }
-        }
-    }
-}
-
-
-/*
-  public static bool isInternetAvailable()
+        public static async Task UpdateInternetStatus()
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                return true;
+                HasInternetConnection = true;
+                return;
             }
             else
             {
                 Ping ping = new Ping();
                 try
                 {
-                    PingReply reply = ping.Send("8.8.8.8", 3000);
+                    PingReply reply = await ping.SendPingAsync("8.8.8.8", 3000);
                     if (reply.Status == IPStatus.Success)
                     {
-                        return true;
+                        HasInternetConnection = true;
+                        return;
                     }
-                }
-                catch (IOException ex) {
-                    // For System.Net.Sockets.SocketException: 'Permission denied'
-                    Console.WriteLine($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}"); // Do nothing
-                    _logger.LogError($"ERROR #IA01 at Utilities isInternetAvailable IOException: {ex.Message}");
-                }
-                catch (System.Net.Sockets.SocketException ex)
-                {
-                    // For System.Net.Sockets.SocketException: 'Permission denied'
-                    Console.WriteLine($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}"); // Do nothing
-                    _logger.LogError($"ERROR #IA02 at Utilities isInternetAvailable System.Net.Sockets.SocketException: {ex.Message}");
-                }
+                }               
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
-                    _logger.LogError($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}");
+                    Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
                 }
             }
-            return false;
+            HasInternetConnection = false;
         }
+
+        public static bool isInternetAvailable()
+        {
+            return HasInternetConnection;
+        }
+
+
+        //https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient?view=net-7.0
+        // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
+               
+        //public static async Task UpdateInternetStatus()
+        //{
+        //    Debug.WriteLine("isInternetAvailable+!");
+        //    NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+        //    if (accessType == NetworkAccess.Internet)
+        //    {
+        //        HasInternetConnection = true;
+        //    }
+        //    else
+        //    {   // Call asynchronous network methods in a try/catch block to handle exceptions.
+        //        try
+        //        {
+        //            using HttpResponseMessage response = await client.GetAsync("https://google.com/");
+        //            response.EnsureSuccessStatusCode();
+        //            Debug.WriteLine("isInternetAvailable-! TRUE");
+        //            HasInternetConnection = true;
+        //        }
+        //        catch (HttpRequestException e)
+        //        {
+        //            Debug.WriteLine("\nException Caught!");
+        //            Debug.WriteLine("Message :{0} ", e.Message);
+        //            Debug.WriteLine("isInternetAvailable-! FALSE");
+        //            HasInternetConnection = false;
+        //        }               
+        //    }
+        //}
+    }
+}
+
+
  
- */
+ 

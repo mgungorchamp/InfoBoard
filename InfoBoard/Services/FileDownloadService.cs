@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Storage;
 using System.Collections;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
@@ -40,11 +41,9 @@ namespace InfoBoard.Services
 
         //List<FileInformation> lastSavedFileList;
 
-        static HttpClient httpClient = new HttpClient();
-
+        HttpClient httpClient;
 
         private readonly ILogger _logger;
-
 
         private static readonly FileDownloadService instance = new FileDownloadService();
 
@@ -58,8 +57,11 @@ namespace InfoBoard.Services
         }
         private FileDownloadService()
         {
-            _logger = Utilities.Logger(nameof(FileDownloadService));
+            _logger = Utilities.Logger(nameof(FileDownloadService));           
+            httpClient = Utilities._httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(5);
         }
+        
 
         public async Task<List<MediaCategory>> synchroniseMediaFiles()
         {
