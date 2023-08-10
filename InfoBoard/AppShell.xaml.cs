@@ -30,7 +30,7 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
-        Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+
 
         //Shell.Current.CurrentItem = imageDisplayItem;
 
@@ -52,15 +52,22 @@ public partial class AppShell : Shell
         // saveFilesToLocalDirectory.fetchAndSave();
         //Task.Run(() => downloader.downloadMediaFiles()).Wait();
 
-        Task.Run(async () => await Utilities.UpdateInternetStatus());
+        //Task.Run(async () => await Utilities.UpdateInternetStatus());
+        //Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
     }
 
-    void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
-    {
-       //Utilities.UpdateInternetStatus();
-       // with await
-       Task.Run(async () => await Utilities.UpdateInternetStatus());
-    }
+    //void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    //{
+    //    Utilities.UpdateInternetStatusDIFFERENT();
+    //    //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+    //    //if (accessType == NetworkAccess.Internet)        
+    //    //    Utilities.HasInternetConnection = true;        
+    //    //else
+    //    //    Utilities.HasInternetConnection = false;
+    //    //Utilities.UpdateInternetStatus();
+    //    // with await
+    //    //Task.Run(async () => await Utilities.UpdateInternetStatus());
+    //}
 
 
     //To prevent the app from changing view when the back button is pressed via mouse or remote control

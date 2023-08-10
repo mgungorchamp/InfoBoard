@@ -114,7 +114,7 @@ namespace InfoBoard.ViewModel
             MediaManager manager = MediaManager.Instance;
             manager.SetImageViewModel(this);
             //manager.SetHttpClientFactory(_httpClientFactory);
-           
+            
 
             //To start with a default image
             imageTiming = 3;
