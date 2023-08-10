@@ -158,6 +158,36 @@ namespace InfoBoard.Services
             HasInternetConnection = false;
         }
 
+
+        public static void UpdateInternetStatusDIFFERENT()
+        {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                HasInternetConnection = true;
+                return;
+            }
+            else
+            {
+                Ping ping = new Ping();
+                try
+                {
+                    PingReply reply = ping.Send("8.8.8.8", 3000);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        HasInternetConnection = true;
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
+                }
+            }
+            HasInternetConnection = false;
+        }
+
+
         public static bool isInternetAvailable()
         {
             return HasInternetConnection;

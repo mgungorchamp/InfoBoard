@@ -197,6 +197,8 @@ namespace InfoBoard.Services
         {
             try
             {
+                imageViewModel.ShowNoInternetIcon = !Utilities.isInternetAvailable();
+
                 if (allMedia == null || allMedia.Count == 0)
                 {
                     Information info = new Information();
@@ -263,17 +265,18 @@ namespace InfoBoard.Services
                         imageViewModel.ImageTiming = currentMedia.timing;
                         imageViewModel.MediaInformation = "WEB SITE";
 #endif
-                        imageViewModel.ShowNoInternetIcon = false;
                         await DoDelay(currentMedia.timing);                        
                     }
                     else
                     {
                         //No Internet
                         //MediaInformation += "\tNo internet connection!";
-                        imageViewModel.ShowNoInternetIcon = true;
+                        //imageViewModel.ShowNoInternetIcon = true;
                         await DoDelay(1);
                     }
                 }
+
+                
 
 
 
