@@ -84,7 +84,7 @@ public class MainActivity : MauiAppCompatActivity
             const string errorFileName = "Fatal.log";
             var libraryPath = FileSystem.CacheDirectory ;//Android.OS.Environment.DownloadCacheDirectory.Path;   // iOS: Environment.SpecialFolder.Resources
             var errorFilePath = Path.Combine(libraryPath, errorFileName);
-            var errorMessage = String.Format("Time: {0}\r\nError: Unhandled Exception\r\n{1}",
+            var errorMessage = String.Format("\nTime: {0}\r\nError: Unhandled Exception\r\n{1}",
             DateTime.Now, exception.ToString());
             File.WriteAllText(errorFilePath, errorMessage);
 

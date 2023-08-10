@@ -85,11 +85,11 @@ public partial class App : MauiWinUIApplication
             File.AppendAllText(errorFilePath, errorMessage);
             // Log to Android Device Logging.
             
-            _logger.LogError($"**********************************  Error Logged ! Details at: {errorFilePath} Message {errorMessage}");
+            _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"**********************************  LogUnhandledException Exception! Details: {ex.Message}");
+            _logger.LogError($"**********************************  LogUnhandledException \nException! Details: {ex.Message}");
         }
     }
     [Conditional("DEBUG")]
