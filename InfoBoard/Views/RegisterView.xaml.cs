@@ -17,7 +17,7 @@ public partial class RegisterView : ContentPage
         
         //RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
-
+        adressLabel.Text = "Activate via " + Utilities.BASE_ADDRESS;
         //qrImageButton.Source.cac
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
