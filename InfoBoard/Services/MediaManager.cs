@@ -9,10 +9,15 @@ namespace InfoBoard.Services
     public class MediaManager
     {       
         private readonly ILogger _logger;
-        //private IDispatcherTimer timer4MediaDisplaying;
-        private IDispatcherTimer timer4FileSync;
-        private IDispatcherTimer timer4DeviceSettingsSync;
-        private IDispatcherTimer timer4InternetCheck;
+        //Ref: https://www.ilkayilknur.com/a-new-modern-timer-api-in-dotnet-6-periodictimer
+        //Ref https://github.com/dotnet/maui/wiki/Memory-Leaks
+        //****private IDispatcherTimer timer4MediaDisplaying;
+        //private IDispatcherTimer timer4FileSync;
+        //private IDispatcherTimer timer4DeviceSettingsSync;
+        //private IDispatcherTimer timer4InternetCheck;
+        //
+        PeriodicTimer timer4Media;
+        PeriodicTimer timer4Settings;
 
         private DeviceSettings deviceSettings;
         private FileDownloadService fileDownloadService;
@@ -39,9 +44,9 @@ namespace InfoBoard.Services
             fileDownloadService = FileDownloadService.Instance;
 
             //timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
-            timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
-            timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
-            timer4InternetCheck = Application.Current?.Dispatcher.CreateTimer();
+            //timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
+            //timer4DeviceSettingsSync = Application.Current?.Dispatcher.CreateTimer();
+            //timer4InternetCheck = Application.Current?.Dispatcher.CreateTimer();
         }
 
         public void SetImageViewModel(ImageViewModel imageViewModel)
@@ -64,7 +69,7 @@ namespace InfoBoard.Services
             //timer4MediaDisplaying.Start();
 
             StartTimer4FilesAndDeviceSettings();
-        } 
+        }
         public void StopTimersNow4MediaDisplayAndFilesAndSettings()
         {
             _logger.LogInformation("\t\t--- STOP StopTimersNow4MediaDisplayAndFilesAndSettings() is called");
@@ -77,46 +82,86 @@ namespace InfoBoard.Services
 
         private void StopTimer4FilesAndDeviceSettings() 
         {
-            timer4FileSync.IsRepeating = false;
-            timer4FileSync.Stop();
 
-            timer4DeviceSettingsSync.IsRepeating = false;
-            timer4DeviceSettingsSync.Stop();
+            //timer4FileSync.IsRepeating = false;
+            //timer4FileSync.Stop();
+
+            //timer4DeviceSettingsSync.IsRepeating = false;
+            //timer4DeviceSettingsSync.Stop();
+            
+
+            timer4Media?.Dispose();
+            timer4Media = null;
+            timer4Settings?.Dispose();
+            timer4Settings = null;  
+
             _logger.LogInformation("\t\t--- STOP Timer 4 Files And DeviceSettings is called\n");
         }
 
-        private void StartTimer4FilesAndDeviceSettings()
+        private async void StartTimer4FilesAndDeviceSettings()
         {
-            timer4FileSync.IsRepeating = true;
-            timer4FileSync.Start();
+            timer4Media = new PeriodicTimer(TimeSpan.FromSeconds(29));
+            timer4Settings = new PeriodicTimer(TimeSpan.FromSeconds(37));
 
-            timer4DeviceSettingsSync.IsRepeating = true;
-            timer4DeviceSettingsSync.Start();
+            // Wire it to fire an event after the specified period
+            while (timer4Media != null && await timer4Media.WaitForNextTickAsync())
+            {
+                //Console.WriteLine($"Firing at {DateTime.Now}");
+                await UpdateMediaEventAsync();
+            }
+
+            //Get latest settings from server - every 15 seconds
+            //timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(107);//107 29
+            //timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
+
+            // Wire it to fire an event after the specified period
+            while (timer4Settings != null && await timer4Settings.WaitForNextTickAsync())
+            {
+                //Console.WriteLine($"Firing at {DateTime.Now}");
+                await UpdateDeviceSettingsEventAsync();
+            }
+
+
+            //timer4FileSync.IsRepeating = true;
+            //timer4FileSync.Start();
+
+            //timer4DeviceSettingsSync.IsRepeating = true;
+            //timer4DeviceSettingsSync.Start();
             _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
         }
 
-        private void StartTimer4InternetCheck()
+        private async void StartTimer4InternetCheck()
         {
-            if(timer4InternetCheck.IsRunning)
+            using (var timer = new PeriodicTimer(TimeSpan.FromSeconds(10)))
             {
-                return;
+                // Wire it to fire an event after the specified period
+                while (await timer.WaitForNextTickAsync())
+                {
+                    //Console.WriteLine($"Firing at {DateTime.Now}");
+                    await Utilities.UpdateInternetStatus();
+                }
             }
 
-            timer4InternetCheck.IsRepeating = true;
-            timer4InternetCheck.Start();
+            //if (timer4InternetCheck.IsRunning)
+            //{
+            //    return;
+            //}
 
-            //Set up the timer for Internet
-            timer4InternetCheck.Interval = TimeSpan.FromMinutes(1);// Every Minute
-            timer4InternetCheck.Tick += async (sender, e) => await Utilities.UpdateInternetStatus();
-            _logger.LogInformation("+++ START Timer 4 Internet Connection Check\n");
+            //timer4InternetCheck.IsRepeating = true;
+            //timer4InternetCheck.Start();
+
+            ////Set up the timer for Internet
+            //timer4InternetCheck.Interval = TimeSpan.FromMinutes(1);// Every Minute
+            //timer4InternetCheck.Tick += async (sender, e) => await Utilities.UpdateInternetStatus();
+            //_logger.LogInformation("+++ START Timer 4 Internet Connection Check\n");
         }
 
-        private void StopTimer4InternetCheck()
-        {
-            timer4InternetCheck.IsRepeating = false;
-            timer4InternetCheck.Stop();          
-            _logger.LogInformation("--- STOP Timer 4 Internet Connection Check\n");
-        }
+        //private void StopTimer4InternetCheck()
+        //{
+        //    timer4InternetCheck.IsRepeating = false;
+        //    timer4InternetCheck.Stop();          
+        //    _logger.LogInformation("--- STOP Timer 4 Internet Connection Check\n");
+        //}
 
 
         public async Task GoTime() 
@@ -170,19 +215,14 @@ namespace InfoBoard.Services
             categoryList = await fileDownloadService.synchroniseMediaFiles();
             allMedia = fileDownloadService.combineAllMediItemsFromCategory(categoryList);
         }
-       
+
+        
         private async void SetupAndStartTimers4MediaAndSettings()
         {
             await UpdateMediaEventAsync();           
 
-            //Set up the timer for Syncronise Media Files             
-            timer4FileSync.Interval = TimeSpan.FromSeconds(101);//101 17
-            timer4FileSync.Tick += async (sender, e) => await UpdateMediaEventAsync();
-            
-            //Get latest settings from server - every 15 seconds
-            timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(107);//107 29
-            timer4DeviceSettingsSync.Tick += async (sender, e) => await UpdateDeviceSettingsEventAsync();
-            
+           
+
             //Start the timers
             StartTimersNow4MediaDisplayAndFilesAndSettings();
 
@@ -370,11 +410,11 @@ namespace InfoBoard.Services
                     return;
                 }
                 //If internet is not available stop file syncronisation
-                if (!Utilities.isInternetAvailable() && timer4FileSync.IsRunning)
+                if (!Utilities.isInternetAvailable() && timer4Media != null)
                 {
                     StopTimer4FilesAndDeviceSettings();
                 }
-                else if (Utilities.isInternetAvailable() && !timer4FileSync.IsRunning)
+                else if (Utilities.isInternetAvailable() && timer4Media == null)
                 {
                     StartTimer4FilesAndDeviceSettings();
                 }
