@@ -101,8 +101,8 @@ namespace InfoBoard.Services
         //Read local JSON file - if exist - if not return NULL 
         private async Task<DeviceSettings> readSettingsFromLocalJSON()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 //await Task.Delay(TimeSpan.FromSeconds(2));
@@ -152,14 +152,14 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
         public async Task saveSettingsToLocalAsJSON(DeviceSettings deviceSettings)
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 JsonSerializerOptions _serializerOptions;
@@ -203,15 +203,15 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
 
         }
 
         public async Task resetLocalSettingsFile()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 JsonSerializerOptions _serializerOptions;
@@ -243,15 +243,15 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
 
         public async Task saveDeviceKeyToFile(string deviceKey)
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 try
@@ -282,14 +282,14 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
         public async Task<string> readDeviceKeyFromFile()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 string deviceKey = "UNKNOWN";
@@ -321,14 +321,14 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
         public async Task resetDeviceKeyInFile()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 try
@@ -359,7 +359,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
     }

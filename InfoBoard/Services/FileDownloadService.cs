@@ -323,8 +323,8 @@ namespace InfoBoard.Services
         //Ref: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/how-to?pivots=dotnet-8-0
         public async Task saveCategoryListToLocalJSON(List<MediaCategory> fileList)
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 JsonSerializerOptions _serializerOptions;
@@ -350,14 +350,14 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
         public async Task resetMediaNamesInLocalJSonAndDeleteLocalFiles()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 try
@@ -389,7 +389,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
@@ -397,8 +397,8 @@ namespace InfoBoard.Services
 
         private async Task<List<MediaCategory>> readMediaNamesFromLocalJSON()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 //No need to read from local category, if this saved recently 
@@ -440,7 +440,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
     }

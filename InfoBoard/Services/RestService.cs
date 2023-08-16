@@ -60,8 +60,8 @@ namespace InfoBoard.Services
         //https://guzelboard.com/api/categories.php?device_key=a9cbf288fdd3f70e0264d3784dab810a
         public async Task updateMediaList()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 if (!Utilities.isInternetAvailable())
@@ -163,7 +163,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
@@ -176,8 +176,8 @@ namespace InfoBoard.Services
          */
         public async Task updateDeviceSettings(string deviceKey)
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 //No internet - return 
@@ -251,7 +251,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
 
@@ -265,8 +265,8 @@ namespace InfoBoard.Services
 
         public async Task<string> registerDevice()
         {
-            SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-            await semaphoreSlim.WaitAsync();
+            //SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+            //await semaphoreSlim.WaitAsync();
             try
             {
                 if (!Utilities.isInternetAvailable())
@@ -342,7 +342,7 @@ namespace InfoBoard.Services
             finally
             {
                 //Very important to release
-                semaphoreSlim.Release();
+                //semaphoreSlim.Release();
             }
         }
     }
