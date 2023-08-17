@@ -98,6 +98,8 @@ namespace InfoBoard.Services
 
         private async void StartTimer4FilesAndDeviceSettings()
         {
+            _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
+
             timer4MediaAndSettings = new PeriodicTimer(TimeSpan.FromSeconds(33));           
 
             // Wire it to fire an event after the specified period
@@ -118,7 +120,7 @@ namespace InfoBoard.Services
 
             //timer4DeviceSettingsSync.IsRepeating = true;
             //timer4DeviceSettingsSync.Start();
-            _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
+            //_logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
         }
 
         private async void StartTimer4InternetCheck()
