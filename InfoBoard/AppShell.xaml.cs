@@ -15,7 +15,7 @@ public partial class AppShell : Shell
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
         //
-        Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
+        //Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 
         //Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
 
@@ -24,11 +24,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(InformationView), typeof(InformationView));
 
         //Viewers for Media
-        Routing.RegisterRoute(nameof(WebViewViewer), typeof(WebViewViewer));
-        Routing.RegisterRoute(nameof(ImageViewer), typeof(ImageViewer));
+        //Routing.RegisterRoute(nameof(WebViewViewer), typeof(WebViewViewer));
+        //Routing.RegisterRoute(nameof(ImageViewer), typeof(ImageViewer));
 
 
-        Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
+        //Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));
 
 
 
