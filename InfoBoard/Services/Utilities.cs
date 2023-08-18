@@ -130,7 +130,7 @@ namespace InfoBoard.Services
 
         private static bool HasInternetConnection = true;
 
-        public static async Task UpdateInternetStatus()
+        public static void UpdateInternetStatus()
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
@@ -138,23 +138,23 @@ namespace InfoBoard.Services
                 HasInternetConnection = true;
                 return;
             }
-            else
-            {
-                Ping ping = new Ping();
-                try
-                {
-                    PingReply reply = await ping.SendPingAsync("8.8.8.8", 3000);
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        HasInternetConnection = true;
-                        return;
-                    }
-                }               
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
-                }
-            }
+            //else
+            //{
+            //    Ping ping = new Ping();
+            //    try
+            //    {
+            //        PingReply reply = await ping.SendPingAsync("8.8.8.8", 3000);
+            //        if (reply.Status == IPStatus.Success)
+            //        {
+            //            HasInternetConnection = true;
+            //            return;
+            //        }
+            //    }               
+            //    catch (Exception ex)
+            //    {
+            //        Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
+            //    }
+            //}
             HasInternetConnection = false;
         }
 

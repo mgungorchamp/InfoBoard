@@ -131,7 +131,8 @@ namespace InfoBoard.Services
                 while (await timer.WaitForNextTickAsync())
                 {
                     //Console.WriteLine($"Firing at {DateTime.Now}");
-                    await Utilities.UpdateInternetStatus();
+                    //await Utilities.UpdateInternetStatus();
+                    Utilities.UpdateInternetStatus();
                 }
             }
 
