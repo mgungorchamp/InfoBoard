@@ -60,9 +60,9 @@ public static class MauiProgram
 
 
         //builder.Services.AddSingleton<EmptyPage>();
-        builder.Services.AddSingleton<ImageViewer>();
-        builder.Services.AddSingleton<WebViewViewer>();
-        builder.Services.AddSingleton<WelcomeView>();
+        //builder.Services.AddSingleton<ImageViewer>();
+        //builder.Services.AddSingleton<WebViewViewer>();
+        //builder.Services.AddSingleton<WelcomeView>();
 
         builder.Services.AddSingleton<InformationView>();
 
