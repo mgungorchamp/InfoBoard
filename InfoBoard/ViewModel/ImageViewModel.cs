@@ -25,6 +25,8 @@ namespace InfoBoard.ViewModel
 
         //private Media media;
 
+        MediaManager manager = new MediaManager();
+
         public ImageViewModel()
         {
             _logger = Utilities.Logger(nameof(ImageViewModel));
@@ -93,7 +95,7 @@ namespace InfoBoard.ViewModel
         //            MediaInformation = "WEB SITE";
 
         //            await mediaManager.DoDelay(media.timing);
-                   
+
         //        }
         //        else
         //        {
@@ -105,14 +107,17 @@ namespace InfoBoard.ViewModel
 
         //}
 
-        public async Task GoTimeNow(IHttpClientFactory _httpClientFactory)
+        
+        public async Task GoTimeNow(/*IHttpClientFactory _httpClientFactory*/)
         {
             _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
 
-            Utilities._httpClientFactory = _httpClientFactory;
+            //Utilities._httpClientFactory = _httpClientFactory;
 
-            MediaManager manager = MediaManager.Instance;
+            //MediaManager manager = MediaManager.Instance;
+           
             manager.SetImageViewModel(this);
+           
             //manager.SetHttpClientFactory(_httpClientFactory);
             
 
@@ -128,7 +133,7 @@ namespace InfoBoard.ViewModel
         public void StopTimersNow()
         {
             _logger.LogInformation("\n\n--- StopTimersNow4MediaDisplayAndFilesAndSettings() is called\n\n");
-            MediaManager manager = MediaManager.Instance;
+            //MediaManager manager = MediaManager.Instance;
             manager.StopTimersNow4MediaDisplayAndFilesAndSettings();
         }
 

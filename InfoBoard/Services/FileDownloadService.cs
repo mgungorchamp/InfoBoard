@@ -45,17 +45,17 @@ namespace InfoBoard.Services
 
         private readonly ILogger _logger;
 
-        private static readonly FileDownloadService instance = new FileDownloadService();
+        //private static readonly FileDownloadService instance = new FileDownloadService();
 
-        public static FileDownloadService Instance {
-            get {
-                return instance;
-            }
-        }
-        static FileDownloadService()
-        {
-        }
-        private FileDownloadService()
+        //public static FileDownloadService Instance {
+        //    get {
+        //        return instance;
+        //    }
+        //}
+        //static FileDownloadService()
+        //{
+        //}
+        public FileDownloadService()
         {
             _logger = Utilities.Logger(nameof(FileDownloadService));           
             httpClient = Utilities._httpClientFactory.CreateClient();
@@ -108,7 +108,8 @@ namespace InfoBoard.Services
         {
             //Get category names from the server - fileListFromServer
             //RestService restService = new RestService();
-            RestService restService = RestService.Instance;
+            //RestService restService = RestService.Instance;
+            RestService restService = new RestService();
 
             await restService.updateMediaList();
 

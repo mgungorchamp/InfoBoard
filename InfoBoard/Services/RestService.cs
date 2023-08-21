@@ -25,18 +25,18 @@ namespace InfoBoard.Services
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
 
-        private static readonly RestService instance = new RestService();
+        //private static readonly RestService instance = new RestService();
 
-        public static RestService Instance {
-            get {
-                return instance;
-            }
-        }
-        static RestService()
-        {
-        }
+        //public static RestService Instance {
+        //    get {
+        //        return instance;
+        //    }
+        //}
+        //static RestService()
+        //{
+        //}
 
-        private RestService()
+        public RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
             
@@ -79,7 +79,8 @@ namespace InfoBoard.Services
                 {
                     //HttpClient _httpClient = new HttpClient();
                     HttpResponseMessage response = await _httpClient.GetAsync(apiServiceUrl);//.ConfigureAwait(false);                    
-                    FileDownloadService fileDownloadService = FileDownloadService.Instance;
+                    //FileDownloadService fileDownloadService = FileDownloadService.Instance;
+                    FileDownloadService fileDownloadService = new FileDownloadService();
                     if (response.IsSuccessStatusCode)
                     {
 
@@ -200,7 +201,8 @@ namespace InfoBoard.Services
                         deviceSettings = JsonSerializer.Deserialize<DeviceSettings>(content, _serializerOptions);
 
 
-                        DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                        //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                        DeviceSettingsService deviceSettingsService = new DeviceSettingsService();
 
                         //If error is null, there is no error then update the settings
                         if (deviceSettings.error == null)
@@ -295,7 +297,8 @@ namespace InfoBoard.Services
                             //Registeration succesful and request full settings and save it to local settings
                             await updateDeviceSettings(registerationResult.device_key);
 
-                            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                            //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+                            DeviceSettingsService deviceSettingsService = new DeviceSettingsService();
                             await deviceSettingsService.saveDeviceKeyToFile(registerationResult.device_key);
 
                             _logger.LogInformation("DEVICE REGISTERED #22: Registration succesfully completed!");

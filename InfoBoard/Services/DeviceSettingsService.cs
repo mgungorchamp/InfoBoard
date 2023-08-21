@@ -7,17 +7,17 @@ namespace InfoBoard.Services
 {
     public sealed class DeviceSettingsService
     {
-        private static readonly DeviceSettingsService instance = new DeviceSettingsService();
+        //private static readonly DeviceSettingsService instance = new DeviceSettingsService();
         private readonly ILogger _logger;
-        private DeviceSettingsService()
+        public DeviceSettingsService()
         {
             _logger = Utilities.Logger(nameof(DeviceSettingsService));
         }
-        public static DeviceSettingsService Instance {
-            get {
-                return instance;
-            }
-        }
+        //public static DeviceSettingsService Instance {
+        //    get {
+        //        return instance;
+        //    }
+        //}
 
         public async Task<DeviceSettings> loadDeviceSettings()
         {
@@ -46,7 +46,8 @@ namespace InfoBoard.Services
                 //Get latest device settings and update the local settings file
                 if (localDeviceSettings != null)
                 {
-                    RestService restService = RestService.Instance;
+                    //RestService restService = RestService.Instance;
+                    RestService restService = new RestService();
 
                     await restService.updateDeviceSettings(localDeviceSettings.device_key);
                     //_logger.LogInformation($"LD-01-DS ** updateDeviceSettings  Device Name: {localDeviceSettings.name}");
@@ -89,7 +90,8 @@ namespace InfoBoard.Services
 
                 //This is needed, if the device still remembers the old device key but actually 
                 //it has been removed from the server, we need to make sure about it, to reset the device key
-                RestService restService = RestService.Instance;
+                //RestService restService = RestService.Instance;
+                RestService restService = new RestService();
                 await restService.updateDeviceSettings(deviceKey);
 
                 DeviceSettings partialDeviceSettings = new DeviceSettings();

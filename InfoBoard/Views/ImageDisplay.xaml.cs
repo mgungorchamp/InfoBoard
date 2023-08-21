@@ -14,6 +14,9 @@ public partial class ImageDisplay : ContentPage
     public ImageDisplay(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
+        
+        Utilities._httpClientFactory = httpClientFactory;
+
         _logger = Utilities.Logger(nameof(ImageDisplay));
         
         InitializeComponent();
@@ -44,7 +47,7 @@ public partial class ImageDisplay : ContentPage
         base.OnAppearing();
 
         SetWebViewBehavior();
-        DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
+        //DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
 
         // Set the KeepScreenOn property to true to prevent the screen from turning off
         //DeviceDisplay.Current.KeepScreenOn = true;
@@ -63,7 +66,7 @@ public partial class ImageDisplay : ContentPage
         //SentrySdk.CaptureMessage("Hello Sentry : inside Image Display OnAppearing");
 
         //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
-        await ((ImageViewModel)BindingContext).GoTimeNow(_httpClientFactory);
+        await ((ImageViewModel)BindingContext).GoTimeNow(/*_httpClientFactory*/);
     }
 
      
@@ -87,10 +90,10 @@ public partial class ImageDisplay : ContentPage
 
     //Ref: https://dev.to/vhugogarcia/responsive-flyout-in-net-maui-4ll1
     //https://responsiveviewer.org/
-    private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
-    {
-        SetWebViewBehavior();
-    }
+    //private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+    //{
+    //    SetWebViewBehavior();
+    //}
     private void SetWebViewBehavior()
     {
         //// Get the screen points 

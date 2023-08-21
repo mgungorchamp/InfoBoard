@@ -26,21 +26,23 @@ namespace InfoBoard.Services
         private Media currentMedia;
         private ImageViewModel imageViewModel;
 
-        private static readonly MediaManager instance = new MediaManager();
+        //private static readonly MediaManager instance = new MediaManager();
 
-        public static MediaManager Instance {
-            get {
-                return instance;
-            }
-        }
-        static MediaManager()
-        {
-        }
+        //public static MediaManager Instance {
+        //    get {
+        //        return instance;
+        //    }
+        //}
+        //static MediaManager()
+        //{
+        //}
 
-        private MediaManager()
+        public MediaManager()
         {
             _logger = Utilities.Logger(nameof(MediaManager));
-            fileDownloadService = FileDownloadService.Instance;
+            //fileDownloadService = FileDownloadService.Instance;
+            fileDownloadService = new FileDownloadService();
+
 
             //timer4MediaDisplaying = Application.Current?.Dispatcher.CreateTimer();
             //timer4FileSync = Application.Current?.Dispatcher.CreateTimer();
@@ -197,7 +199,8 @@ namespace InfoBoard.Services
         private async Task<DeviceSettings> UpdateDeviceSettingsEventAsync()
         {
             //Load Device Settings
-            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+            //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;
+            DeviceSettingsService deviceSettingsService = new DeviceSettingsService();
             deviceSettings = await deviceSettingsService.loadDeviceSettings();
             return deviceSettings;
         }
@@ -444,7 +447,7 @@ namespace InfoBoard.Services
 
 
 
-        private static Random random = new Random();
+        //private static Random random = new Random();
         int index = 0;
         private Media getMedia()
         {
