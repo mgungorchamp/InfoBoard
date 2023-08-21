@@ -260,8 +260,10 @@ namespace InfoBoard.Services
 
                         //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN OR IF CATEGORIES ASSIGNED IT WILL START TO DISPLAY
                         await Shell.Current.GoToAsync("..");  // This calls GoTime! 
-                                                              //await GoTime(); 
-                        return;
+
+                        continue;
+                        //await GoTime(); 
+                        //return;
                     }
                     currentMedia = getMedia();
 
