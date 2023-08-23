@@ -3,6 +3,7 @@ using InfoBoard.ViewModel;
 using InfoBoard.Views;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Runtime;
 
 namespace InfoBoard.Services
 {
@@ -307,6 +308,14 @@ namespace InfoBoard.Services
                             imageViewModel.MediaInformation = "WEB SITE";
 #endif
                             await DoDelay(currentMedia.timing);
+
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
+                            Debug.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
+                            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            GC.Collect();
+                            Debug.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
                         }
                         else
                         {
