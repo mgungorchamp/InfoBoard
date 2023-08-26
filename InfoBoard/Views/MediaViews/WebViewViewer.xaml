@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:InfoBoard.Models"
+             x:Class="InfoBoard.Views.MediaViews.WebViewViewer"
+             BackgroundColor="Black"
+                        
+             Title="WebViewViewer">
+    <!--NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False"-->
+    
+    <!--<ContentPage.BindingContext>
+        <models:Media/>
+    </ContentPage.BindingContext>-->
+    <Grid x:Name="myGrid">
+        <WebView 
+                x:Name="webView"                              
+                VerticalOptions="FillAndExpand"     
+                HorizontalOptions="FillAndExpand"  
+               />
+
+        <Label 
+                x:Name="imageName"
+               
+                TextColor="Orange"   
+                IsVisible="true"
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+        <Label 
+                x:Name="imageTiming"
+               
+                FontAttributes="Bold"
+                TextColor="Chartreuse"   
+                IsVisible="true"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+
+        <Label 
+            Text="WEB VIEW"
+            FontAttributes="Bold"
+            TextColor="Cornsilk"
+            FontSize="Large"
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="CenterAndExpand" />
+    </Grid>
+</ContentPage>
+
+<!--Source="{Binding path, TargetNullValue='https://vermontic.com/'}"
+     Text="{Binding name}"
+     Text="{Binding timing}"
+    WidthRequest="{Binding display_width}"-->

@@ -41,8 +41,8 @@
                 FontAttributes="Bold"   
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />
-                <Label               
-                Text="Activate via guzelboard.com"
+                <Label       
+                x:Name="adressLabel"                
                 FontSize="Default"
                 VerticalOptions="Center" 
                 HorizontalOptions="StartAndExpand" />

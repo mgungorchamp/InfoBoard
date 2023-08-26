@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InfoBoard.Views.WelcomeView"
+             NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False"
+                Shell.NavBarIsVisible="false"
+                Shell.TabBarIsVisible="False"
+                Shell.FlyoutItemIsVisible="False"
+             Title="Welcome..."             
+             BackgroundColor="Black">
+    <Grid>
+
+        <Image 
+                x:Name="homepageImage"
+                Aspect="AspectFit"                        
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="CenterAndExpand"                
+                Source="welcome.jpg">
+        </Image>
+        
+        <Label 
+            Text="Welcome to GuzelBoard"
+            FontAttributes="Bold"
+            TextColor="Firebrick"
+            FontSize="Large"
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="CenterAndExpand" />
+    </Grid>
+</ContentPage>

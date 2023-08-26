@@ -1,5 +1,6 @@
 ﻿using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Text.Json;
 
@@ -7,6 +8,9 @@ namespace InfoBoard.Services
 {
     public static class Utilities
     {
+        //private static readonly ILogger _logger = Utilities.Logger(nameof(Utilities));
+        static public IHttpClientFactory _httpClientFactory;
+
         private static string LocalDirectory = "Media";
         // URL of REST service
         //public static string RestUrl = "https://dotnetmauitodorest.azurewebsites.net/api/todoitems/{0}";
@@ -14,13 +18,24 @@ namespace InfoBoard.Services
         // URL of REST service (Android does not use localhost)
         // Use http cleartext for local deployment. Change to https for production
         //public static string LocalhostUrl = DeviceInfo.Platform == DevicePlatform.Android ? "10.0.2.2" : "localhost";
-        public static string HostUrl = "guzelboard.com";
+
+#if DEBUG
+        public static string HostUrl = "infopanel.vermontic.com";
+#else        
+        public static string HostUrl = "app.guzelboard.com";
+#endif
+
         public static string Scheme = "https"; // or http        
+
+        public static string BASE_ADDRESS = $"{Scheme}://{HostUrl}";
+
         public static string MEDIA_FILES_URL = "UnSet";
 
         public static string deviceKey = "NoDeviceKey";
 
-        //https://guzelboard.com/api/categories.php?device_key=DEVICE_KEY
+        public static int maximumDisplayWidth = -1;
+
+        //https://HostUrl/api/categories.php?device_key=DEVICE_KEY
         public static void updateMediaFilesUrl(string device_key)
         {
             MEDIA_FILES_URL = $"{Scheme}://{HostUrl}/api/categories.php?device_key={device_key}";
@@ -28,7 +43,7 @@ namespace InfoBoard.Services
 
         public static string TEMPORARY_CODE;
 
-        //https://guzelboard.com/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
+        //https://HostUrl/api/handshake.php?temporary_code=a3b8z2&device_type=MVP&version=1
         public static string HANDSHAKE_URL;
         private static void updateHandshakeUrl(string temporaryCode)
         {
@@ -108,17 +123,49 @@ namespace InfoBoard.Services
             options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
         }));
 
-        public static ILogger Logger(string categoryName) {
+        public static ILogger Logger(string categoryName) {            
             return loggerFactory.CreateLogger(categoryName);
         }
 
 
-        public static bool isInternetAvailable()
+        private static bool HasInternetConnection = true;
+
+        public static void UpdateInternetStatus()
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                return true;
+                HasInternetConnection = true;
+                return;
+            }
+            //else
+            //{
+            //    Ping ping = new Ping();
+            //    try
+            //    {
+            //        PingReply reply = await ping.SendPingAsync("8.8.8.8", 3000);
+            //        if (reply.Status == IPStatus.Success)
+            //        {
+            //            HasInternetConnection = true;
+            //            return;
+            //        }
+            //    }               
+            //    catch (Exception ex)
+            //    {
+            //        Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
+            //    }
+            //}
+            HasInternetConnection = false;
+        }
+
+
+        public static void UpdateInternetStatusDIFFERENT()
+        {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                HasInternetConnection = true;
+                return;
             }
             else
             {
@@ -128,15 +175,57 @@ namespace InfoBoard.Services
                     PingReply reply = ping.Send("8.8.8.8", 3000);
                     if (reply.Status == IPStatus.Success)
                     {
-                        return true;
+                        HasInternetConnection = true;
+                        return;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    ; // Do nothing
+                    Debug.WriteLine($"ERROR #IA03 at Utilities isInternetAvailable Exception: {ex.Message}"); // Do nothing
                 }
             }
-            return false;
+            HasInternetConnection = false;
         }
+
+
+        public static bool isInternetAvailable()
+        {
+            return HasInternetConnection;
+        }
+
+
+        //https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient?view=net-7.0
+        // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
+               
+        //public static async Task UpdateInternetStatus()
+        //{
+        //    Debug.WriteLine("isInternetAvailable+!");
+        //    NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+        //    if (accessType == NetworkAccess.Internet)
+        //    {
+        //        HasInternetConnection = true;
+        //    }
+        //    else
+        //    {   // Call asynchronous network methods in a try/catch block to handle exceptions.
+        //        try
+        //        {
+        //            using HttpResponseMessage response = await client.GetAsync("https://google.com/");
+        //            response.EnsureSuccessStatusCode();
+        //            Debug.WriteLine("isInternetAvailable-! TRUE");
+        //            HasInternetConnection = true;
+        //        }
+        //        catch (HttpRequestException e)
+        //        {
+        //            Debug.WriteLine("\nException Caught!");
+        //            Debug.WriteLine("Message :{0} ", e.Message);
+        //            Debug.WriteLine("isInternetAvailable-! FALSE");
+        //            HasInternetConnection = false;
+        //        }               
+        //    }
+        //}
     }
 }
+
+
+ 
+ 

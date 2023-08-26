@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:InfoBoard.Models"
+             x:Class="InfoBoard.Views.MediaViews.ImageViewer"
+             Title="ImageViewer"           
+             BackgroundColor="Firebrick">
+    <!--NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False"-->
+    
+    
+    <!--<ContentPage.BindingContext>
+        <models:Media/>
+    </ContentPage.BindingContext>-->
+    <Grid>
+        <Image 
+                x:Name="mainPageImage"
+                Aspect="AspectFit"                        
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand">
+            <!--Source="{Binding path, TargetNullValue='welcome.jpg'}"-->
+            
+        </Image> 
+
+        <Label 
+                x:Name="imageName"               
+                TextColor="WhiteSmoke"   
+                IsVisible="true"
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+        <Label 
+                x:Name="imageTiming"
+               
+                FontAttributes="Bold"
+                TextColor="Chartreuse"   
+                IsVisible="true"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+
+        <Image 
+                x:Name="noInternetImage"
+                Source="no_wifi.png"   
+                IsVisible="false"
+                HeightRequest="77"
+                WidthRequest="77"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="EndAndExpand"/>
+
+        <Label 
+            Text="IMAGE VIEW"
+            FontAttributes="Bold"
+            TextColor="LawnGreen"
+            FontSize="Large"
+            VerticalOptions="EndAndExpand" 
+            HorizontalOptions="CenterAndExpand" />
+    </Grid>
+</ContentPage>
+
+<!--Text="{Binding name}"-->
+
+<!--Text="{Binding timing}"-->

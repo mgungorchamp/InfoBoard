@@ -15,9 +15,9 @@ public partial class RegisterView : ContentPage
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
         
-        RegisterDeviceViewModel registerDeviceViewModel = new();
+        //RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
-
+        adressLabel.Text = "Activate via " + Utilities.BASE_ADDRESS;
         //qrImageButton.Source.cac
         //attemptRegisteringDevice();
         //updateQrCodeImageAndRegisterDevice();
@@ -33,6 +33,7 @@ public partial class RegisterView : ContentPage
     {
         _logger.LogInformation($"\n\tRegisterView On Appearing\n");
         base.OnAppearing();
+        
         ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
     }
 

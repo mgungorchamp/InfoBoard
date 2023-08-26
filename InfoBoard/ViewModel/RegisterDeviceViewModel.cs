@@ -41,7 +41,7 @@ namespace InfoBoard.ViewModel
                  execute: async () =>
                  {
                     // Navigate to the specified URL in the system browser.
-                     await Launcher.Default.OpenAsync($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
+                     await Launcher.Default.OpenAsync($"{Utilities.Scheme}://{Utilities.HostUrl}/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
 
                  });
 
@@ -129,10 +129,12 @@ namespace InfoBoard.ViewModel
 
             //Register Device
             RestService restService = new RestService();
+            //RestService restService = RestService.Instance;
             string registrationMessage= await restService.registerDevice();
 
 
-            DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;            
+            //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;            
+            DeviceSettingsService deviceSettingsService = new DeviceSettingsService();  
             DeviceSettings deviceSettings = await deviceSettingsService.loadDeviceSettings();
 
             if(deviceSettings == null)
@@ -153,7 +155,7 @@ namespace InfoBoard.ViewModel
                         $"\nand going to front page!";
             OnPropertyChanged(nameof(Status));
             _logger.LogInformation($"Registration Succesful**RegisterDeviceViewModel**: {registrationMessage}");
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            //await Task.Delay(TimeSpan.FromSeconds(3));
             //Ref: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/alerts/toast?tabs=android
             //var toast = Toast.Make("Updating MediaInfo Files... going back to front page!");
             //await toast.Show();
@@ -162,7 +164,8 @@ namespace InfoBoard.ViewModel
             //await Task.Delay(TimeSpan.FromSeconds(7));
             //change to ImageDisplayView               
             //await imageViewModel.GoTimeNow();
-            await Shell.Current.GoToAsync(nameof(ImageDisplay));
+            //
+            await Shell.Current.GoToAsync(".."); //await Shell.Current.GoToAsync(nameof(ImageDisplay));
             counter = 1;
             _status = "Welcome!";
 
@@ -192,7 +195,7 @@ namespace InfoBoard.ViewModel
             //Give full path to API with QR Code 
             //string qrCodeContent = Constants.HANDSHAKE_URL + Constants.TEMPORARY_CODE;
             //createQrCrCodeImage(Utilities.HANDSHAKE_URL);
-            createQrCrCodeImage($"https://guzelboard.com/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
+            createQrCrCodeImage($"{Utilities.Scheme}://{Utilities.HostUrl}/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
             //_qrImageButton = Path.Combine(Utilities.MEDIA_DIRECTORY_PATH, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
             QRImageButton = Path.Combine(FileSystem.CacheDirectory, Utilities.QR_IMAGE_NAME_4_TEMP_CODE);
 

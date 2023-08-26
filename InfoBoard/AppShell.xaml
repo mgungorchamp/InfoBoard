@@ -4,28 +4,60 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
     xmlns:views="clr-namespace:InfoBoard.Views"    
-    Shell.NavBarIsVisible="false"
+    xmlns:mediaviews="clr-namespace:InfoBoard.Views.MediaViews"         
+    Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
 
+    <!--
+    Title="Guzel Board - Shell Title"
+    Shell.NavBarIsVisible="false"
+    Shell.TabBarIsVisible="False"
+    Shell.FlyoutItemIsVisible="False"
+    NavigationPage.HasBackButton="False"
+    NavigationPage.HasNavigationBar="False" 
+    
+    Shell.NavBarIsVisible="false"
+    Shell.TabBarIsVisible="False"-->
+
+
     <TabBar>
-
-
-
-        
-        
         <ShellContent  
-            x:Name="imageDisplayItem"
-            ContentTemplate="{DataTemplate views:ImageDisplay}"/>
+            x:Name="imageDisplayItem"            
+            ContentTemplate="{DataTemplate views:ImageDisplay}"/>       
+
         <ShellContent     
-            x:Name="registerViewItem"
+            x:Name="registerViewItem"            
             ContentTemplate="{DataTemplate views:RegisterView}"/>
+
+        <!--FlyoutItemIsVisible="False"-->
+        <ShellContent     
+            x:Name="informationViewItem"
+            ContentTemplate="{DataTemplate views:InformationView}"/>
+        <!--FlyoutItemIsVisible="False"-->
+
+        <!--MEDIA VIEWERS NOT USED--><!--
+        <ShellContent     
+            x:Name="webViewViewerItem"
+             FlyoutItemIsVisible="False"
+            ContentTemplate="{DataTemplate mediaviews:WebViewViewer}"/>
+
+        <ShellContent     
+            x:Name="imageViewerItem"
+             FlyoutItemIsVisible="False"
+            ContentTemplate="{DataTemplate mediaviews:ImageViewer}"/>
+
+        --><!--BELOW CAN BE DELETED --><!--
+        <ShellContent  
+         x:Name="welcomeViewItem"
+         ContentTemplate="{DataTemplate views:WelcomeView}"/>
+
         <ShellContent  
             x:Name="aboutPageItem"
             ContentTemplate="{DataTemplate views:AboutPage}"/>
 
         <ShellContent  
             x:Name="webViewItem"
-            ContentTemplate="{DataTemplate views:WebSiteView}"/>
+            ContentTemplate="{DataTemplate views:WebSiteView}"/>-->
 
         <!--<ShellContent
             Title="Notes"
@@ -35,10 +67,9 @@
         <ShellContent
             Title="About"
             ContentTemplate="{DataTemplate views:AboutPage}"
-            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->        
-       
-    </TabBar>
+            Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->
 
+    </TabBar>
 </Shell>
 
 <!--Title="Welcome"-->
