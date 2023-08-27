@@ -92,31 +92,54 @@ public partial class ImageDisplay : ContentPage
 
     WebView web = new WebView();
 
-    public void AddWebView(string targetUrl, int widthRequest)
+    public async Task AddWebView(string targetUrl, int widthRequest)
     {
+        resetContent();
         //web = new WebView();
 
         web.WidthRequest = widthRequest;
-        web.HorizontalOptions = LayoutOptions.FillAndExpand;
-        web.VerticalOptions = LayoutOptions.FillAndExpand;
+        web.HorizontalOptions = LayoutOptions.Fill;
+        web.VerticalOptions = LayoutOptions.Fill;
         web.Source = new UrlWebViewSource
         {
             Url = targetUrl,
         };
         //myGrid.Children.Add(web);
         //Debug.WriteLine($"Grid Count Before Adding {myGrid.Count()}");
-        web.IsVisible = true;
+        //MediaManager manager = MediaManager.Instance;
+        //await manager.DoDelay(2);
+        //web.IsVisible = true;
+        //image.IsVisible = false;
         //myGrid.Add(web);
         Content = web;
 
     }
-    public void PopWebView()
+    Image image = new Image();
+    public async Task AddImage(string imagePath)
+    {
+        resetContent();
+
+        image.Aspect = Aspect.AspectFit;
+        image.HorizontalOptions = LayoutOptions.Fill;
+        image.VerticalOptions = LayoutOptions.Fill;
+        image.Source = imagePath;
+        //myGrid.Children.Add(web);
+        //Debug.WriteLine($"Grid Count Before Adding {myGrid.Count()}");
+        //MediaManager manager = MediaManager.Instance;
+        //await manager.DoDelay(1);
+        //image.IsVisible = true;
+        //web.IsVisible = false;
+        //myGrid.Add(web);
+        Content = image;
+
+    }
+    public void resetContent()
     {
         //myGrid.Children.Clear();
         //myGrid.Children.RemoveAt(myGrid.Children.Count - 1);
                
        // myGrid.RemoveAt(myGrid.Count - 1);
-        web.IsVisible = false;
+        
         web.Cookies = null;
         web.Source = null;
         Content = null;

@@ -284,7 +284,10 @@ namespace InfoBoard.Services
 
                         imageViewModel.ImageMediaSource = getMediaPath(currentMedia); //  currentMedia.path = getMediaPath(currentMedia);
 
-                        await DoDelay(1);
+                        //SHOW IMAGE
+                        await imageDisplay.AddImage(getMediaPath(currentMedia));
+
+                        //await DoDelay(1);
                         imageViewModel.WebViewVisible = false;
                         imageViewModel.ImageSourceVisible = true;
 #if DEBUG
@@ -306,9 +309,9 @@ namespace InfoBoard.Services
                             imageViewModel.DisplayWidth = currentMedia.display_width;
 
                             //SHOW WEB VIEW
-                            imageDisplay.AddWebView(currentMedia.path, currentMedia.display_width);
+                            await imageDisplay.AddWebView(currentMedia.path, currentMedia.display_width);
 
-                            await DoDelay(3);
+                            //await DoDelay(3);
                             imageViewModel.ImageSourceVisible = false;
                             imageViewModel.WebViewVisible = true;
 #if DEBUG
@@ -319,7 +322,7 @@ namespace InfoBoard.Services
                             await DoDelay(currentMedia.timing);
 
                             //POP WEB VIEW
-                            imageDisplay.PopWebView();
+                            //imageDisplay.resetContent();
 
                             //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
 #if DEBUG && WINDOWS
