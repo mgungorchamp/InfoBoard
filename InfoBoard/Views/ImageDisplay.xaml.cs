@@ -53,15 +53,18 @@ public partial class ImageDisplay : ContentPage
         //DeviceDisplay.Current.KeepScreenOn = true;
         DeviceDisplay.Current.KeepScreenOn = true;
 
-        
+        MediaManager manager = MediaManager.Instance;        
+        manager.SetImageDisplay(this);
+
+
 
         //Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
 
         //var toast = Toast.Make($"Appearing! ImageDisplay");
         //await toast.Show();
 
-        Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
-        _logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        //Debug.WriteLine($"On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        //_logger.LogInformation($"\n------------On Appearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
 
         //SentrySdk.CaptureMessage("Hello Sentry : inside Image Display OnAppearing");
 
@@ -82,10 +85,46 @@ public partial class ImageDisplay : ContentPage
         //var toast = Toast.Make("Disappearing! ImageDisplay");
         //await toast.Show();
 
-        Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
-        _logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        
+        //Debug.WriteLine($"OnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");
+        //_logger.LogInformation($"\nOnDisappearing ImageDisplay:\n{mainPageImage.Source} \nApp.Current.Id{App.Current.Id}\nPage ID:{this.Id}");        
     }
 
+
+    WebView web = new WebView();
+
+    public void AddWebView(string targetUrl, int widthRequest)
+    {
+        //web = new WebView();
+
+        web.WidthRequest = widthRequest;
+        web.HorizontalOptions = LayoutOptions.FillAndExpand;
+        web.VerticalOptions = LayoutOptions.FillAndExpand;
+        web.Source = new UrlWebViewSource
+        {
+            Url = targetUrl,
+        };
+        //myGrid.Children.Add(web);
+        //Debug.WriteLine($"Grid Count Before Adding {myGrid.Count()}");
+        web.IsVisible = true;
+        //myGrid.Add(web);
+        Content = web;
+
+    }
+    public void PopWebView()
+    {
+        //myGrid.Children.Clear();
+        //myGrid.Children.RemoveAt(myGrid.Children.Count - 1);
+               
+       // myGrid.RemoveAt(myGrid.Count - 1);
+        web.IsVisible = false;
+        web.Cookies = null;
+        web.Source = null;
+        Content = null;
+        //web = null;
+        //myGrid.Clear();
+
+        //Debug.WriteLine($"Grid Count After Removing {myGrid.Count()}");
+    }
 
 
     //Ref: https://dev.to/vhugogarcia/responsive-flyout-in-net-maui-4ll1

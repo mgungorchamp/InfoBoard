@@ -26,19 +26,20 @@ namespace InfoBoard.Services
         private List<Media> allMedia;
         private Media currentMedia;
         private ImageViewModel imageViewModel;
+        private ImageDisplay imageDisplay;
 
-        //private static readonly MediaManager instance = new MediaManager();
+        private static readonly MediaManager instance = new MediaManager();
 
-        //public static MediaManager Instance {
-        //    get {
-        //        return instance;
-        //    }
-        //}
-        //static MediaManager()
-        //{
-        //}
+        public static MediaManager Instance {
+            get {
+                return instance;
+            }
+        }
+        static MediaManager()
+        {
+        }
 
-        public MediaManager()
+        private MediaManager()
         {
             _logger = Utilities.Logger(nameof(MediaManager));
             //fileDownloadService = FileDownloadService.Instance;
@@ -54,6 +55,11 @@ namespace InfoBoard.Services
         public void SetImageViewModel(ImageViewModel imageViewModel)
         {
             this.imageViewModel = imageViewModel;
+        }
+
+        public void SetImageDisplay(ImageDisplay imageDisplay)
+        {
+            this.imageDisplay = imageDisplay;
         }
 
         //public IHttpClientFactory _httpClientFactory;
@@ -299,6 +305,9 @@ namespace InfoBoard.Services
                             imageViewModel.WebMediaSource = currentMedia.path;
                             imageViewModel.DisplayWidth = currentMedia.display_width;
 
+                            //SHOW WEB VIEW
+                            imageDisplay.AddWebView(currentMedia.path, currentMedia.display_width);
+
                             await DoDelay(3);
                             imageViewModel.ImageSourceVisible = false;
                             imageViewModel.WebViewVisible = true;
@@ -308,6 +317,9 @@ namespace InfoBoard.Services
                             imageViewModel.MediaInformation = "WEB SITE";
 #endif
                             await DoDelay(currentMedia.timing);
+
+                            //POP WEB VIEW
+                            imageDisplay.PopWebView();
 
                             //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
 #if DEBUG && WINDOWS

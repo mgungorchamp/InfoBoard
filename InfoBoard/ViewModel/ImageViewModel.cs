@@ -25,7 +25,7 @@ namespace InfoBoard.ViewModel
 
         //private Media media;
 
-        MediaManager manager = new MediaManager();
+        //MediaManager manager;// = new MediaManager();
 
         public ImageViewModel()
         {
@@ -114,12 +114,12 @@ namespace InfoBoard.ViewModel
 
             //Utilities._httpClientFactory = _httpClientFactory;
 
-            //MediaManager manager = MediaManager.Instance;
-           
+            MediaManager manager = MediaManager.Instance;           
             manager.SetImageViewModel(this);
-           
-            //manager.SetHttpClientFactory(_httpClientFactory);
             
+
+            //manager.SetHttpClientFactory(_httpClientFactory);
+
 
             //To start with a default image
             imageTiming = 3;
@@ -133,7 +133,7 @@ namespace InfoBoard.ViewModel
         public void StopTimersNow()
         {
             _logger.LogInformation("\n\n--- StopTimersNow4MediaDisplayAndFilesAndSettings() is called\n\n");
-            //MediaManager manager = MediaManager.Instance;
+            MediaManager manager = MediaManager.Instance;
             manager.StopTimersNow4MediaDisplayAndFilesAndSettings();
         }
 

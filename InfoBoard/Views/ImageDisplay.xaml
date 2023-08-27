@@ -13,7 +13,7 @@
     </ContentPage.BindingContext>
 
 
-    <Grid>
+    <!--<Grid x:Name="myGrid">
 
         <Image 
                 x:Name="mainPageImage"
@@ -23,17 +23,17 @@
                 IsVisible="{Binding ImageSourceVisible}"
                 Source="{Binding ImageMediaSource, TargetNullValue='welcome.jpg'}">
         </Image>
-            <!--<Frame IsVisible="{Binding WebViewVisible}">-->
-        <WebView 
+            --><!--<Frame IsVisible="{Binding WebViewVisible}">-->
+        <!--<WebView 
                 x:Name="webView"  
                 HorizontalOptions="FillAndExpand"      
                 VerticalOptions="FillAndExpand" 
                 WidthRequest="{Binding DisplayWidth}"
                 IsVisible="{Binding WebViewVisible}"
-                Source="{Binding WebMediaSource, TargetNullValue='https://vermontic.com/'}"/>
+                Source="{Binding WebMediaSource, TargetNullValue='https://vermontic.com/'}"/>-->
 
         <!--<VerticalStackLayout  VerticalOptions="Start" HorizontalOptions="Center" BackgroundColor="Aquamarine">-->
-        <!--</VerticalStackLayout>-->
+        <!--</VerticalStackLayout>--><!--
 
         <Label 
                 x:Name="imageName"               
@@ -76,15 +76,15 @@
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="EndAndExpand"/>
 
-        <!--<Image  x:Name="mainPageImage"
+        --><!--<Image  x:Name="mainPageImage"
             Aspect="AspectFit" >
             <Image.Source>
                 <FileImageSource File="{Binding ImageSource, TargetNullValue='welcome.jpg'}" />
             </Image.Source>
-        </Image>-->
+        </Image>--><!--
         
       
-    </Grid>
+    </Grid>-->
 </ContentPage>
 
 <!-- <Image.Source>-->
