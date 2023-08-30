@@ -116,12 +116,20 @@ namespace InfoBoard.Services
             return directoryInfo;
         }
 
-
+#if WINDOWS
         private static ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddStreamingFileLogger(options =>
         {
-            options.RetainDays = 2;               
+            options.RetainDays = 2;            
             options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
         }));
+#else
+        private static ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddStreamingFileLogger(options =>
+        {
+            options.RetainDays = 2;
+            options.MinLevel = LogLevel.Warning;
+            options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
+        }));
+#endif
 
         public static ILogger Logger(string categoryName) {            
             return loggerFactory.CreateLogger(categoryName);

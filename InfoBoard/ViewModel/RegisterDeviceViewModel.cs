@@ -189,6 +189,7 @@ namespace InfoBoard.ViewModel
             Utilities.resetTemporaryCodeAndHandshakeURL();
 
             RegisterationKey = Utilities.TEMPORARY_CODE;
+            _logger.LogInformation($"TEMPORARY_CODE: {Utilities.TEMPORARY_CODE}");
 
             Utilities.QR_IMAGE_NAME_4_TEMP_CODE = $"qrCode_{Utilities.TEMPORARY_CODE}.png";
 
