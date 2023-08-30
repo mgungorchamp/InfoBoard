@@ -122,7 +122,10 @@ namespace InfoBoard.Services
             options.RetainDays = 2;            
             options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
         }));
-#else
+#endif
+
+#if ANDROID //&& !DEBUG
+
         private static ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddStreamingFileLogger(options =>
         {
             options.RetainDays = 2;
