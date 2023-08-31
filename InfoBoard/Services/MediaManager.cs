@@ -1,9 +1,10 @@
 ﻿using InfoBoard.Models;
 using InfoBoard.ViewModel;
 using InfoBoard.Views;
+using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Runtime;
+
 
 namespace InfoBoard.Services
 {
@@ -24,14 +25,16 @@ namespace InfoBoard.Services
 
         private List<MediaCategory> categoryList;
         private List<Media> allMedia;
-        private Media currentMedia;
+        public Media currentMedia;
         private ImageViewModel imageViewModel;
-        private ImageDisplay imageDisplay;
+        //private ImageDisplay imageDisplay;
 
         private static readonly MediaManager instance = new MediaManager();
 
-        public static MediaManager Instance {
-            get {
+        public static MediaManager Instance
+        {
+            get
+            {
                 return instance;
             }
         }
@@ -59,7 +62,7 @@ namespace InfoBoard.Services
 
         public void SetImageDisplay(ImageDisplay imageDisplay)
         {
-            this.imageDisplay = imageDisplay;
+            //this.imageDisplay = imageDisplay;
         }
 
         //public IHttpClientFactory _httpClientFactory;
@@ -232,6 +235,7 @@ namespace InfoBoard.Services
 
             //await Shell.Current.Navigation.PopToRootAsync();
             //await Application.Current.MainPage.Navigation.PushAsync(new EmptyPage(), false);
+            //await DisplayMediaEvent();//FIRST TIME CALL
             await DisplayMediaEvent();//FIRST TIME CALL
         }
 
@@ -239,92 +243,99 @@ namespace InfoBoard.Services
 
         private async Task DisplayMediaEvent()//(object sender, EventArgs e)
         {
-            while (true)
+            Debug.WriteLine("Displaying media");
+            try
             {
-                try
+                imageViewModel.ShowNoInternetIcon = !Utilities.isInternetAvailable();
+
+                if (allMedia == null || allMedia.Count == 0)
                 {
-                    imageViewModel.ShowNoInternetIcon = !Utilities.isInternetAvailable();
+                    Information info = new Information();
+                    info.Title = "Assign Media Categories to Your Device";
+                    info.Message = $"Welcome to GuzelBoard\n" +
+                        "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
+                        "There is one last step that requires your attention.\n" +
+                        "Assign the categories that will be displayed on your device, via our web portal.\n";
 
-                    if (allMedia == null || allMedia.Count == 0)
-                    {
-                        Information info = new Information();
-                        info.Title = "Assign Media Categories to Your Device";
-                        info.Message = $"Welcome to GuzelBoard\n" +
-                            "Congratulations! If you're reading this message, it means you've successfully completed the device registration process. Well done!\n" +
-                            "There is one last step that requires your attention.\n" +
-                            "Assign the categories that will be displayed on your device, via our web portal.\n";
+                    info.Message += Utilities.BASE_ADDRESS;
 
-                        info.Message += Utilities.BASE_ADDRESS;
-
-                        var navigationParameter = new Dictionary<string, object>
+                    var navigationParameter = new Dictionary<string, object>
                         {
                             { "PickCategories", info }
                         };
-                        await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
+                    await Shell.Current.GoToAsync(nameof(InformationView), true, navigationParameter);
 
-                        //Show the message and navigate to main page
-                        await DoDelay(15);
+                    //Show the message and navigate to main page
+                    await DoDelay(15);
 
-                        //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN OR IF CATEGORIES ASSIGNED IT WILL START TO DISPLAY
-                        await Shell.Current.GoToAsync("..");  // This calls GoTime! 
+                    //IF THE DEVICE REMOVED FROM THE PORTAL - IT WILL BE REGISTERED AGAIN OR IF CATEGORIES ASSIGNED IT WILL START TO DISPLAY
+                    await Shell.Current.GoToAsync("..");  // This calls GoTime! 
 
-                        continue;
-                        //await GoTime(); 
-                        //return;
-                    }
-                    currentMedia = getMedia();
+                    //continue;
+                    await GoTime();
+                    //return;
+                }
+                currentMedia = getMedia();
 
-                    //imageViewModel.Media = currentMedia;
-                    //imageViewModel.displayMedia();
+                //imageViewModel.Media = currentMedia;
+                //imageViewModel.displayMedia();
 
-                    if (currentMedia.type == "file")
+                if (currentMedia.type == "file")
+                {
+                    _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
+                    Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
+
+                    imageViewModel.ImageMediaSource = getMediaPath(currentMedia); //  currentMedia.path = getMediaPath(currentMedia);
+
+                    //SHOW IMAGE
+                    //await imageDisplay.AddImage(getMediaPath(currentMedia));
+                    currentMedia.path = getMediaPath(currentMedia);
+                    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", false);
+
+                    await DoDelay(1);
+                    imageViewModel.WebViewVisible = false;
+                    imageViewModel.ImageSourceVisible = true;
+#if DEBUG
+                    imageViewModel.ImageName = currentMedia.name;
+                    imageViewModel.ImageTiming = currentMedia.timing;
+                    imageViewModel.MediaInformation = "IMAGE";
+#endif
+                    await DoDelay(currentMedia.timing);
+                    //DoReallyDelay(currentMedia.timing);
+                    await Shell.Current.Navigation.PopAsync(false);
+                }
+                else//IF WEBSITE
+                {
+                    //If not internet, don't try to show websites.
+                    if (Utilities.isInternetAvailable())
                     {
-                        _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
-                        Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
+                        _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
+                        Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
 
-                        imageViewModel.ImageMediaSource = getMediaPath(currentMedia); //  currentMedia.path = getMediaPath(currentMedia);
+                        imageViewModel.WebMediaSource = currentMedia.path;
+                        imageViewModel.DisplayWidth = currentMedia.display_width;
 
-                        //SHOW IMAGE
-                        await imageDisplay.AddImage(getMediaPath(currentMedia));
+                        //SHOW WEB VIEW
+                        //await imageDisplay.AddWebView(currentMedia.path, currentMedia.display_width);
+                        //await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", false);
+                        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", animate: false);
 
-                        //await DoDelay(1);
-                        imageViewModel.WebViewVisible = false;
-                        imageViewModel.ImageSourceVisible = true;
+                        await DoDelay(3);
+                        imageViewModel.ImageSourceVisible = false;
+                        imageViewModel.WebViewVisible = true;
 #if DEBUG
                         imageViewModel.ImageName = currentMedia.name;
                         imageViewModel.ImageTiming = currentMedia.timing;
-                        imageViewModel.MediaInformation = "IMAGE";
+                        imageViewModel.MediaInformation = "WEB SITE";
 #endif
                         await DoDelay(currentMedia.timing);
-                    }
-                    else//IF WEBSITE
-                    {
-                        //If not internet, don't try to show websites.
-                        if (Utilities.isInternetAvailable())
-                        {
-                            _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
-                            Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
+                        //DoReallyDelay(currentMedia.timing);
+                        await Shell.Current.Navigation.PopAsync(false);
 
-                            imageViewModel.WebMediaSource = currentMedia.path;
-                            imageViewModel.DisplayWidth = currentMedia.display_width;
+                        //POP WEB VIEW
+                        //imageDisplay.resetContent();
 
-                            //SHOW WEB VIEW
-                            await imageDisplay.AddWebView(currentMedia.path, currentMedia.display_width);
-
-                            //await DoDelay(3);
-                            imageViewModel.ImageSourceVisible = false;
-                            imageViewModel.WebViewVisible = true;
-#if DEBUG
-                            imageViewModel.ImageName = currentMedia.name;
-                            imageViewModel.ImageTiming = currentMedia.timing;
-                            imageViewModel.MediaInformation = "WEB SITE";
-#endif
-                            await DoDelay(currentMedia.timing);
-
-                            //POP WEB VIEW
-                            //imageDisplay.resetContent();
-
-                            //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
+                        //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
 #if DEBUG && WINDOWS
                             Debug.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
                             //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
@@ -333,142 +344,142 @@ namespace InfoBoard.Services
                             GC.Collect();
                             Debug.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
 #endif
-                        }
-                        else
-                        {
-                            //No Internet
-                            //MediaInformation += "\tNo internet connection!";
-                            //imageViewModel.ShowNoInternetIcon = true;
-                            await DoDelay(1);
-                        }
                     }
-
-
-
-
-
-
-
-                    //if (currentMedia.type == "file")
-                    //{
-                    //    currentMedia.path = getMediaPath(currentMedia);
-                    //    _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
-                    //    Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
-
-                    //    MiniMedia miniMedia = new MiniMedia(currentMedia);
-                    //    var mediaParameter = new Dictionary<string, object>
-                    //    {
-                    //        { "MyMedia", miniMedia }
-                    //    };
-
-                    //    //await Shell.Current.GoToAsync("..");
-                    //    //Shell.Current.CurrentPage;
-                    //    //Shell.Current.
-
-
-                    //    //await Shell.Current.Navigation.PopAsync();
-                    //    //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
-
-                    //    ImageViewer.contextMedia = currentMedia;    
-                    //    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", false);
-                    //    //await Application.Current.MainPage.Navigation.PushAsync(new ImageViewer(), true);  
-                    //    //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
-                    //    await DoDelay(currentMedia.timing);
-                    //    //await Shell.Current.GoToAsync("..");
-
-                    //    await Shell.Current.Navigation.PopAsync(false);
-                    //    //await DoDelay(1);
-
-                    //    //await Application.Current.MainPage.Navigation.PopAsync();
-                    //    //await Application.Current.MainPage.Navigation.PopToRootAsync();
-                    //    //await Shell.Current.GoToAsync($"//{nameof(WelcomeView)}");
-                    //}
-                    //else//IF WEBSITE
-                    //{
-                    //    //If not internet, don't try to show websites.
-                    //    if (Utilities.isInternetAvailable())
-                    //    {
-                    //        _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
-                    //        Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
-
-                    //        MiniMedia miniMedia = new MiniMedia(currentMedia);
-                    //        var mediaParameter = new Dictionary<string, object>
-                    //        {
-                    //            { "MyMedia", miniMedia }
-                    //        };
-                    //        //webPage.contextMedia = media;
-                    //        WebViewViewer.contextMedia = currentMedia;
-                    //        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", false);
-
-
-                    //        //await Navigation.PushAsync(webPage, true);
-                    //        //await Application.Current.MainPage.Navigation.PushAsync(new WebViewViewer(), true);
-                    //        //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
-                    //        await DoDelay(currentMedia.timing);
-                    //        //await Shell.Current.GoToAsync("..");
-
-                    //        await Shell.Current.Navigation.PopAsync(false);
-                    //        //await DoDelay(1);
-
-                    //        //await Shell.Current.Navigation.PopAsync();
-                    //        //await Application.Current.MainPage.Navigation.PopToRootAsync();
-
-                    //        /*In user interface design, “modal” refers to something that requires user interaction before the application can continue.*/
-                    //    }
-                    //    else
-                    //    {
-                    //        //No Internet
-                    //        //MediaInformation += "\tNo internet connection!";                        
-                    //        await DoDelay(1);
-                    //    }
-                    //}
-
-                    //https://github.com/dotnet/maui/issues/9300
-                    //INavigation nav = Shell.Current.Navigation;
-                    //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                                
-                    Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.Count}");
-
-
-                    //No settings found (device removed) - register device and update deviceSettings
-                    if (deviceSettings == null)
+                    else
                     {
-                        allMedia.Clear();
-                        await GoTime(); // DEVICE REMOVED GO TO REGISTER
-                        return;
-                    }
-                    //If internet is not available stop file syncronisation
-                    if (!Utilities.isInternetAvailable() && timer4MediaAndSettings != null)
-                    {
-                        StopTimer4FilesAndDeviceSettings();
-                    }
-                    else if (Utilities.isInternetAvailable() && timer4MediaAndSettings == null)
-                    {
-                        StartTimer4FilesAndDeviceSettings();
+                        //No Internet
+                        //MediaInformation += "\tNo internet connection!";
+                        //imageViewModel.ShowNoInternetIcon = true;
+                        await DoDelay(1);
                     }
                 }
-                //Ref https://learning.oreilly.com/library/view/c-cookbook/0596003390/ch05s09.html
-                catch (System.Runtime.InteropServices.COMException ce)
+
+
+
+
+
+
+
+                //if (currentMedia.type == "file")
+                //{
+                //    currentMedia.path = getMediaPath(currentMedia);
+                //    _logger.LogInformation($"Navigating to Image View @: {currentMedia.name}");
+                //    Debug.WriteLine($"Navigating to Image View @: {currentMedia.name}");
+
+                //    MiniMedia miniMedia = new MiniMedia(currentMedia);
+                //    var mediaParameter = new Dictionary<string, object>
+                //    {
+                //        { "MyMedia", miniMedia }
+                //    };
+
+                //    //await Shell.Current.GoToAsync("..");
+                //    //Shell.Current.CurrentPage;
+                //    //Shell.Current.
+
+
+                //    //await Shell.Current.Navigation.PopAsync();
+                //    //await Shell.Current.Navigation.PushAsync(page(ImageViewer), true);
+
+                //    ImageViewer.contextMedia = currentMedia;    
+                //    await Shell.Current.GoToAsync($"{nameof(ImageViewer)}", false);
+                //    //await Application.Current.MainPage.Navigation.PushAsync(new ImageViewer(), true);  
+                //    //await Shell.Current.GoToAsync(nameof(ImageViewer), true, mediaParameter);
+                //    await DoDelay(currentMedia.timing);
+                //    //await Shell.Current.GoToAsync("..");
+
+                //    await Shell.Current.Navigation.PopAsync(false);
+                //    //await DoDelay(1);
+
+                //    //await Application.Current.MainPage.Navigation.PopAsync();
+                //    //await Application.Current.MainPage.Navigation.PopToRootAsync();
+                //    //await Shell.Current.GoToAsync($"//{nameof(WelcomeView)}");
+                //}
+                //else//IF WEBSITE
+                //{
+                //    //If not internet, don't try to show websites.
+                //    if (Utilities.isInternetAvailable())
+                //    {
+                //        _logger.LogInformation($"Navigating to Web Media #: {currentMedia.name}");
+                //        Debug.WriteLine($"Navigating to Web Media #: {currentMedia.name}");
+
+                //        MiniMedia miniMedia = new MiniMedia(currentMedia);
+                //        var mediaParameter = new Dictionary<string, object>
+                //        {
+                //            { "MyMedia", miniMedia }
+                //        };
+                //        //webPage.contextMedia = media;
+                //        WebViewViewer.contextMedia = currentMedia;
+                //        await Shell.Current.GoToAsync($"{nameof(WebViewViewer)}", false);
+
+
+                //        //await Navigation.PushAsync(webPage, true);
+                //        //await Application.Current.MainPage.Navigation.PushAsync(new WebViewViewer(), true);
+                //        //await Shell.Current.GoToAsync(nameof(WebViewViewer), true, mediaParameter);
+                //        await DoDelay(currentMedia.timing);
+                //        //await Shell.Current.GoToAsync("..");
+
+                //        await Shell.Current.Navigation.PopAsync(false);
+                //        //await DoDelay(1);
+
+                //        //await Shell.Current.Navigation.PopAsync();
+                //        //await Application.Current.MainPage.Navigation.PopToRootAsync();
+
+                //        /*In user interface design, “modal” refers to something that requires user interaction before the application can continue.*/
+                //    }
+                //    else
+                //    {
+                //        //No Internet
+                //        //MediaInformation += "\tNo internet connection!";                        
+                //        await DoDelay(1);
+                //    }
+                //}
+
+                //https://github.com/dotnet/maui/issues/9300
+                //INavigation nav = Shell.Current.Navigation;
+                //Debug.WriteLine($"URL PATH Count: {Navigation.NavigationStack.Count}");                                
+                Debug.WriteLine($"URL PATH Count: {Shell.Current.Navigation.NavigationStack.Count}");
+
+
+                //No settings found (device removed) - register device and update deviceSettings
+                if (deviceSettings == null)
                 {
-                    _logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
-                           $"Path: {currentMedia.path}\n" +
-                           $"s3key: {currentMedia.s3key}\n");
+                    allMedia.Clear();
+                    await GoTime(); // DEVICE REMOVED GO TO REGISTER
+                    return;
                 }
-                catch (System.UriFormatException exFormat)
+                //If internet is not available stop file syncronisation
+                if (!Utilities.isInternetAvailable() && timer4MediaAndSettings != null)
                 {
-                    _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
-                           $"Path: {currentMedia.path}\n");
+                    StopTimer4FilesAndDeviceSettings();
                 }
-                catch (Exception ex)
+                else if (Utilities.isInternetAvailable() && timer4MediaAndSettings == null)
                 {
-                    Debug.WriteLine($"#879 Exception: {ex.Message}");
-                    _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
-                        $"Path: {currentMedia.path}\n" +
-                        $"s3key: {currentMedia.s3key}\n");
-                    await DoDelay(currentMedia.timing);
+                    StartTimer4FilesAndDeviceSettings();
                 }
-                //await Shell.Current.Navigation.PopToRootAsync();
-                //await DisplayMediaEvent(); //RECURSIVE CALL
             }
+            //Ref https://learning.oreilly.com/library/view/c-cookbook/0596003390/ch05s09.html
+            catch (System.Runtime.InteropServices.COMException ce)
+            {
+                _logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
+                       $"Path: {currentMedia.path}\n" +
+                       $"s3key: {currentMedia.s3key}\n");
+            }
+            catch (System.UriFormatException exFormat)
+            {
+                _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
+                       $"Path: {currentMedia.path}\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"#879 Exception: {ex.Message}");
+                _logger.LogError($"\n\t #879 Exception: {ex.Message}\n" +
+                    $"Path: {currentMedia.path}\n" +
+                    $"s3key: {currentMedia.s3key}\n");
+                await DoDelay(currentMedia.timing);
+            }
+            //await Shell.Current.Navigation.PopToRootAsync();
+            await DisplayMediaEvent(); //RECURSIVE CALL
+
         }
 
 
@@ -508,6 +519,10 @@ namespace InfoBoard.Services
         public async Task DoDelay(int seconds)
         {
             await Task.Delay(TimeSpan.FromSeconds(seconds));
+        }
+        public void DoReallyDelay(int seconds)
+        {
+            Task.Delay(TimeSpan.FromSeconds(seconds)).Wait();
         }
 
         public string getMediaPath(Media media)

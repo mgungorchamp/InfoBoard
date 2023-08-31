@@ -17,15 +17,15 @@ public partial class AppShell : Shell
         //
         //Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
 
-        //Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
+        Routing.RegisterRoute(nameof(WelcomeView), typeof(WelcomeView));
 
-        Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
+        //Routing.RegisterRoute(nameof(ImageDisplay), typeof(ImageDisplay));
         Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
         Routing.RegisterRoute(nameof(InformationView), typeof(InformationView));
 
         //Viewers for Media
-        //Routing.RegisterRoute(nameof(WebViewViewer), typeof(WebViewViewer));
-        //Routing.RegisterRoute(nameof(ImageViewer), typeof(ImageViewer));
+        Routing.RegisterRoute(nameof(WebViewViewer), typeof(WebViewViewer));
+        Routing.RegisterRoute(nameof(ImageViewer), typeof(ImageViewer));
 
 
         //Routing.RegisterRoute(nameof(WebSiteView), typeof(WebSiteView));

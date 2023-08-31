@@ -46,16 +46,19 @@ public partial class App : Application
     {
         Debug.WriteLine($"  ---------------- > App  DESTRUCTOR!//////// \n{App.Current.Id}");
     }
-    protected override void OnStart()
+    ImageViewModel imageViewModel = new ImageViewModel();
+    protected async override void OnStart()
     {
+        base.OnStart();
         //MediaManager manager = MediaManager.Instance;
         //await manager.GoTime();
 
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         DeviceDisplay.Current.KeepScreenOn = true;
 
-        Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");
-        base.OnStart();
+        Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");    
+
+        await imageViewModel.GoTimeNow();
     }
 
 

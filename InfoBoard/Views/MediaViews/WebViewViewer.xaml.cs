@@ -28,7 +28,10 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     //#1
     protected override void OnAppearing()
     {
-        
+        base.OnAppearing();
+        MediaManager manager = MediaManager.Instance;
+        contextMedia = manager.currentMedia;
+
         webView.Source = contextMedia.path;
         webView.WidthRequest = contextMedia.display_width;
 
@@ -37,54 +40,62 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         //await Task.Delay(TimeSpan.FromSeconds(2));
 
-        base.OnAppearing();
         _logger.LogInformation($"Web view OnAppearing, Name: {contextMedia.name}");
 
     }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        //webView.Cookies = null;
+        //webView.Source = null;
+        ////Content = null;
+        ////    webView.Source = null;
+        //    webView.Resources.Clear();
+        //   webView.Reload();
 
-    //protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    //{
-    //    //webView.Source = contextMedia.path;
-    //    //webView.WidthRequest = contextMedia.display_width;
+        
+    }
 
-    //    //imageName.Text = contextMedia.name;
-    //    //imageTiming.Text = contextMedia.timing.ToString();
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        //webView.Source = contextMedia.path;
+        //webView.WidthRequest = contextMedia.display_width;
 
-    //    base.OnNavigatedTo(args);
-    //    _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
-    //}
+        //imageName.Text = contextMedia.name;
+        //imageTiming.Text = contextMedia.timing.ToString();
 
-    ////protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
-    ////{
-    ////    webView.Source = null;
-    ////    webView.Resources.Clear();
-    ////    webView.Reload();
+        base.OnNavigatedTo(args);
+        _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
+        webView.IsVisible = true;
+    }
 
-    ////    base.OnNavigatingFrom(args);
-    ////    _logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
-    ////}
+    protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
+    {
+        //webView.Source = null;
+        //webView.Resources.Clear();
+        //webView.Reload();
 
-    //protected override void OnDisappearing()
-    //{
-    ////    webView.Source = null;
-    ////    webView.Resources.Clear();
-    ////    webView.Reload();
+        base.OnNavigatingFrom(args);
+        //_logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
+        webView.IsVisible = false;
+    }
 
-    //    base.OnDisappearing();
-    //    _logger.LogInformation($"Web view OnDisappearing, Name: {contextMedia.name}");
-    //}
+
 
     ////When navigation away from this page completed - last thing to happen
-    //protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    //{
-    //    //webView.Source = null;
-    //    //webView.Resources.Clear();
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        
+        //webView.Resources.Clear();
 
-    //    //webView.Reload(); ****
+        //webView.Reload(); ****
 
-    //    base.OnNavigatedFrom(args);
-    //    _logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
-    //}
+        base.OnNavigatedFrom(args);
+        //_logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
+        //webView.Source = null;
+        //webView.Reload();
+        webView.IsVisible = false;
+    }
 
 
 

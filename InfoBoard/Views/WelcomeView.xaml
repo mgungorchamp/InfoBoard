@@ -9,7 +9,7 @@
                 Shell.FlyoutItemIsVisible="False"
              Title="Welcome..."             
              BackgroundColor="Black">
-    <Grid>
+    <!--<Grid>
 
         <Image 
                 x:Name="homepageImage"
@@ -26,5 +26,5 @@
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="CenterAndExpand" />
-    </Grid>
+    </Grid>-->
 </ContentPage>

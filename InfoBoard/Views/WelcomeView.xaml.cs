@@ -3,15 +3,21 @@ using InfoBoard.ViewModel;
 using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace InfoBoard.Views;
 
 public partial class WelcomeView : ContentPage
 {
     private readonly ILogger _logger;
-    public WelcomeView()
-	{
+
+    private readonly IHttpClientFactory _httpClientFactory;
+    //ImageViewModel imageViewModel = new ImageViewModel();
+    public WelcomeView(IHttpClientFactory httpClientFactory)
+    {
 		InitializeComponent();
+
+        Utilities._httpClientFactory = httpClientFactory;
 
         _logger = Utilities.Logger(nameof(WelcomeView));
         _logger.LogInformation($"{nameof(WelcomeView)} # Constructor Called");
@@ -26,11 +32,10 @@ public partial class WelcomeView : ContentPage
 
     protected override void OnAppearing()
     {
-        
+        base.OnAppearing();
+
         try
         {
-           
-
             // Set the KeepScreenOn property to true to prevent the screen from turning off        
             //DeviceDisplay.Current.KeepScreenOn = true;
 
@@ -45,16 +50,37 @@ public partial class WelcomeView : ContentPage
             //manager.SetNavigation(Navigation);
             //_ = manager.GoTime();
 
-            
+
+            //DeviceDisplay.Current.KeepScreenOn = true;
+
+            //Utilities.maximumDisplayWidth = (int) (DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density);
+
+            //var toast = Toast.Make($"Appearing! ImageDisplay");
+            //await toast.Show();
+            //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
+           // await imageViewModel.GoTimeNow();
+
+
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             _logger.LogError($"WELCOME #275 Exception: {ex.Message}\n");
-        }
-
-        base.OnAppearing();
+        }       
 
     }
-    
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        // Set the KeepScreenOn property to false if user put our application behind
+        //DeviceDisplay.Current.KeepScreenOn = false;
+
+        //imageViewModel.StopTimersNow();
+
+        //var toast = Toast.Make("Disappearing! ImageDisplay");
+        //await toast.Show();
+    }
+
 }

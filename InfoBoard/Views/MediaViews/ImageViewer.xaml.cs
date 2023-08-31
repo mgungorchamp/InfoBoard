@@ -9,7 +9,7 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
 {
     private readonly ILogger _logger;
     //private MiniMedia contextMedia;
-    public static Media contextMedia;
+    //public static Media contextMedia;
     public ImageViewer()
 	{
 		InitializeComponent();
@@ -27,6 +27,8 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
     //https://stackoverflow.com/questions/72704895/net-maui-shell-navigation-is-it-possible-to-pass-a-query-parameter-and-auto-p
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
+        MediaManager manager = MediaManager.Instance;
+        Media contextMedia = manager.currentMedia; 
         noInternetImage.IsVisible = !Utilities.isInternetAvailable();
         mainPageImage.Source = contextMedia.path;
         _logger.LogInformation($"Image view OnNavigatedTo, Name: {contextMedia.name}");

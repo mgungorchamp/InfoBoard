@@ -22,8 +22,12 @@
 
     <TabBar>
         <ShellContent  
+            x:Name="welcomeViewItem"
+            ContentTemplate="{DataTemplate views:WelcomeView}"/>
+        
+        <!--<ShellContent  
             x:Name="imageDisplayItem"            
-            ContentTemplate="{DataTemplate views:ImageDisplay}"/>       
+            ContentTemplate="{DataTemplate views:ImageDisplay}"/>-->       
 
         <ShellContent     
             x:Name="registerViewItem"            
@@ -35,7 +39,7 @@
             ContentTemplate="{DataTemplate views:InformationView}"/>
         <!--FlyoutItemIsVisible="False"-->
 
-        <!--MEDIA VIEWERS NOT USED--><!--
+        <!--MEDIA VIEWERS NOT USED-->
         <ShellContent     
             x:Name="webViewViewerItem"
              FlyoutItemIsVisible="False"
@@ -46,10 +50,8 @@
              FlyoutItemIsVisible="False"
             ContentTemplate="{DataTemplate mediaviews:ImageViewer}"/>
 
-        --><!--BELOW CAN BE DELETED --><!--
-        <ShellContent  
-         x:Name="welcomeViewItem"
-         ContentTemplate="{DataTemplate views:WelcomeView}"/>
+        <!--BELOW CAN BE DELETED --><!--
+       
 
         <ShellContent  
             x:Name="aboutPageItem"
