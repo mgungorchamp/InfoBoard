@@ -43,15 +43,30 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         imageName.Text = contextMedia.name;
         imageTiming.Text = contextMedia.timing.ToString();
-
+     
         //await Task.Delay(TimeSpan.FromSeconds(2));
-
-        this.Content = webView;
-
+        // this.Content = webView;
         _logger.LogInformation($"Web view OnAppearing, Name: {contextMedia.name}");
         Debug.WriteLine($"1 - OnAppearing");
 
     }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        //webView.Source = contextMedia.path;
+        //webView.WidthRequest = contextMedia.display_width;
+
+        //imageName.Text = contextMedia.name;
+        //imageTiming.Text = contextMedia.timing.ToString();
+
+        base.OnNavigatedTo(args);
+        _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
+        //webView.IsVisible = true;
+        this.Content = webView;
+        Debug.WriteLine($"2 - OnNavigatedTo");
+    }
+
+   
 
     protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
     {
@@ -61,7 +76,7 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         base.OnNavigatingFrom(args);
         //_logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
-        webView.IsVisible = false;
+        //webView.IsVisible = false;
         Debug.WriteLine($"A - OnNavigatingFrom");
     }
     protected override void OnDisappearing()
@@ -84,28 +99,15 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
         //_logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
         //webView.Source = null;
         //webView.Reload();
-        webView.IsVisible = false;
-        webView.Cookies = null;
-        webView.Source = null;
-        Content = null;
+        //webView.IsVisible = false;
+        //webView.Cookies = null;
+        //webView.Source = null;
+        //Content = null;
         Debug.WriteLine($"C - OnNavigatedFrom");
     }
 
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        //webView.Source = contextMedia.path;
-        //webView.WidthRequest = contextMedia.display_width;
-
-        //imageName.Text = contextMedia.name;
-        //imageTiming.Text = contextMedia.timing.ToString();
-
-        base.OnNavigatedTo(args);
-        _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
-        webView.IsVisible = true;
-        Debug.WriteLine($"2 - OnNavigatedTo");
-    }
-
+   
 
 
 

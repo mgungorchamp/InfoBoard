@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.MediaViews.ImageViewer"
-             Title="ImageViewer"           
-             BackgroundColor="Firebrick">
+             BackgroundColor="Black"
+             Title="ImageViewer">
+
+    <!--BackgroundColor="Firebrick"-->
     <!--NavigationPage.HasBackButton="False"
              NavigationPage.HasNavigationBar="False"-->
     

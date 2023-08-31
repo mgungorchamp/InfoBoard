@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:InfoBoard.Models"
              x:Class="InfoBoard.Views.MediaViews.WebViewViewer"
-             BackgroundColor="Black"
-                        
+             BackgroundColor="Black"                        
              Title="WebViewViewer">
+    <!--BackgroundColor="Black"-->
     <!--NavigationPage.HasBackButton="False"
              NavigationPage.HasNavigationBar="False"-->
     
