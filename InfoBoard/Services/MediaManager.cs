@@ -112,16 +112,21 @@ namespace InfoBoard.Services
         {
             _logger.LogInformation("\t\t+++ START Timer 4 Files And DeviceSettings is called\n");
 
-            timer4MediaAndSettings = new PeriodicTimer(TimeSpan.FromSeconds(33));
+            timer4MediaAndSettings = new PeriodicTimer(TimeSpan.FromSeconds(33));           
 
-            // Wire it to fire an event after the specified period
-            while (timer4MediaAndSettings != null && await timer4MediaAndSettings.WaitForNextTickAsync())
+            await Task.Run(async () =>
             {
-                //Console.WriteLine($"Firing at {DateTime.Now}");
-                await UpdateMediaEventAsync();
-                await DoDelay(3);
-                await UpdateDeviceSettingsEventAsync();
-            }
+                // Wire it to fire an event after the specified period
+                while (timer4MediaAndSettings != null && await timer4MediaAndSettings.WaitForNextTickAsync())
+                {
+                    //Console.WriteLine($"Firing at {DateTime.Now}");
+                    await UpdateMediaEventAsync();
+                    await DoDelay(3);
+                    await UpdateDeviceSettingsEventAsync();
+                }
+
+            });
+            // https://content.bytehide.com/task-run-csharp/
 
             //Get latest settings from server - every 15 seconds
             //timer4DeviceSettingsSync.Interval = TimeSpan.FromSeconds(107);//107 29
@@ -236,6 +241,7 @@ namespace InfoBoard.Services
             //await Shell.Current.Navigation.PopToRootAsync();
             //await Application.Current.MainPage.Navigation.PushAsync(new EmptyPage(), false);
             //await DisplayMediaEvent();//FIRST TIME CALL
+
             await DisplayMediaEvent();//FIRST TIME CALL
         }
 
