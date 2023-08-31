@@ -20,7 +20,8 @@
     Shell.TabBarIsVisible="False"-->
 
 
-    <TabBar>
+    <Tab>
+        <!--<TabBar>-->
         <ShellContent  
             x:Name="welcomeViewItem"
             ContentTemplate="{DataTemplate views:WelcomeView}"/>
@@ -71,7 +72,7 @@
             ContentTemplate="{DataTemplate views:AboutPage}"
             Icon="{OnPlatform 'icon_about.png', iOS='icon_about_ios.png', MacCatalyst='icon_about_ios.png'}" />-->
 
-    </TabBar>
+    </Tab>
 </Shell>
 
 <!--Title="Welcome"-->

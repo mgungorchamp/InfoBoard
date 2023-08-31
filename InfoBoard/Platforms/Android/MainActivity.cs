@@ -2,14 +2,11 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace InfoBoard;
- 
+
 [Activity(Theme = "@style/Maui.SplashTheme",
     Enabled = true,
     Exported = true,
@@ -21,7 +18,7 @@ namespace InfoBoard;
 
 public class MainActivity : MauiAppCompatActivity
 {
-    
+
     // In MainActivity
     //Ref:https://peterno.wordpress.com/2015/04/15/unhandled-exception-handling-in-ios-and-android-with-xamarin/
     protected override void OnCreate(Bundle bundle)
@@ -47,7 +44,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         var newExc = new Exception("AndroidEnvironment_UnhandledExceptionRaiser", e.Exception);
         System.Diagnostics.Debug.WriteLine($"**********************************  AndroidEnvironment_UnhandledExceptionRaiser! Details: {e.Exception.ToString()}");
-        
+
 
         LogUnhandledException(newExc);
     }
@@ -82,7 +79,7 @@ public class MainActivity : MauiAppCompatActivity
         try
         {
             const string errorFileName = "Fatal.log";
-            var libraryPath = FileSystem.CacheDirectory ;//Android.OS.Environment.DownloadCacheDirectory.Path;   // iOS: Environment.SpecialFolder.Resources
+            var libraryPath = FileSystem.CacheDirectory;//Android.OS.Environment.DownloadCacheDirectory.Path;   // iOS: Environment.SpecialFolder.Resources
             var errorFilePath = Path.Combine(libraryPath, errorFileName);
             var errorMessage = String.Format("\nTime: {0}\r\nError: Unhandled Exception\r\n{1}",
             DateTime.Now, exception.ToString());
@@ -91,7 +88,7 @@ public class MainActivity : MauiAppCompatActivity
             // Log to Android Device Logging.
             Android.Util.Log.Error("Crash Report", errorMessage);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"**********************************  Unhandled Exception! {ex.Message}");
         }
@@ -126,6 +123,6 @@ public class MainActivity : MauiAppCompatActivity
             .SetMessage(errorText)
             .SetTitle("Crash Report")
             .Show();
-    } 
- #endregion  
+    }
+    #endregion
 }

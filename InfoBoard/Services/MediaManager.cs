@@ -337,12 +337,12 @@ namespace InfoBoard.Services
 
                         //https://learn.microsoft.com/en-us/dotnet/api/system.gc.collect?view=net-7.0
 #if DEBUG && WINDOWS
-                            Debug.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
-                            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-                            GC.Collect();
-                            GC.WaitForPendingFinalizers();
-                            GC.Collect();
-                            Debug.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
+                        Debug.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
+                        //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
+                        Debug.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
 #endif
                     }
                     else

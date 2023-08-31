@@ -1,9 +1,6 @@
 using InfoBoard.Services;
-using InfoBoard.ViewModel;
-using InfoBoard.Views.MediaViews;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Net.Http;
 
 namespace InfoBoard.Views;
 
@@ -15,14 +12,47 @@ public partial class WelcomeView : ContentPage
     //ImageViewModel imageViewModel = new ImageViewModel();
     public WelcomeView(IHttpClientFactory httpClientFactory)
     {
-		InitializeComponent();
+        InitializeComponent();
 
         Utilities._httpClientFactory = httpClientFactory;
 
         _logger = Utilities.Logger(nameof(WelcomeView));
         _logger.LogInformation($"{nameof(WelcomeView)} # Constructor Called");
-        Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");        
-        
+
+        /* Unmerged change from project 'InfoBoard (net8.0-ios)'
+        Before:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");        
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        After:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        */
+
+        /* Unmerged change from project 'InfoBoard (net8.0-windows10.0.19041.0)'
+        Before:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");        
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        After:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        */
+
+        /* Unmerged change from project 'InfoBoard (net8.0-android)'
+        Before:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");        
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        After:
+                Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");
+
+                // Set the KeepScreenOn property to true to prevent the screen from turning off        
+        */
+        Debug.WriteLine($"{nameof(WelcomeView)} # Constructor Called");
+
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         //DeviceDisplay.Current.KeepScreenOn = true;
         //MediaManager manager = MediaManager.Instance;
@@ -58,7 +88,7 @@ public partial class WelcomeView : ContentPage
             //var toast = Toast.Make($"Appearing! ImageDisplay");
             //await toast.Show();
             //mainPageImage.Source = ImageSource.FromFile(_imageViewModel.ImageSource);
-           // await imageViewModel.GoTimeNow();
+            // await imageViewModel.GoTimeNow();
 
 
         }
@@ -66,7 +96,7 @@ public partial class WelcomeView : ContentPage
         {
             Debug.WriteLine(ex.Message);
             _logger.LogError($"WELCOME #275 Exception: {ex.Message}\n");
-        }       
+        }
 
     }
 

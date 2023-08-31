@@ -119,7 +119,7 @@ namespace InfoBoard.Services
 #if WINDOWS
         private static ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddStreamingFileLogger(options =>
         {
-            options.RetainDays = 2;            
+            options.RetainDays = 2;
             options.FolderPath = Path.Combine(FileSystem.CacheDirectory, "InfoBoardLogs");
         }));
 #endif
@@ -134,7 +134,8 @@ namespace InfoBoard.Services
         }));
 #endif
 
-        public static ILogger Logger(string categoryName) {            
+        public static ILogger Logger(string categoryName)
+        {
             return loggerFactory.CreateLogger(categoryName);
         }
 
@@ -207,7 +208,7 @@ namespace InfoBoard.Services
 
         //https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient?view=net-7.0
         // HttpClient is intended to be instantiated once per application, rather than per-use. See Remarks.
-               
+
         //public static async Task UpdateInternetStatus()
         //{
         //    Debug.WriteLine("isInternetAvailable+!");
@@ -238,5 +239,4 @@ namespace InfoBoard.Services
 }
 
 
- 
- 
+

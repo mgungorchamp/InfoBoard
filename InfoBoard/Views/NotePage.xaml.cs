@@ -29,7 +29,8 @@ public partial class NotePage : ContentPage
 
         BindingContext = noteModel;
     }
-    public string ItemId {
+    public string ItemId
+    {
         set { LoadNote(value); }
     }
 

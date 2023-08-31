@@ -5,9 +5,11 @@ internal class ImageLoader
 {
     public ObservableCollection<string> ImageBasket { get; set; } = new ObservableCollection<string>();
 
-    public Image FirstImage {
+    public Image FirstImage
+    {
 
-        get {
+        get
+        {
             Image image = new Image();
             image.Source = new UriImageSource
             {

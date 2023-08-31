@@ -12,7 +12,7 @@
     <!--<ContentPage.BindingContext>
         <models:Media/>
     </ContentPage.BindingContext>-->
-    <Grid x:Name="myGrid">
+    <!--<Grid x:Name="myGrid">
         <WebView 
                 x:Name="webView"                              
                 VerticalOptions="FillAndExpand"     
@@ -42,7 +42,7 @@
             FontSize="Large"
             VerticalOptions="EndAndExpand" 
             HorizontalOptions="CenterAndExpand" />
-    </Grid>
+    </Grid>-->
 </ContentPage>
 
 <!--Source="{Binding path, TargetNullValue='https://vermontic.com/'}"

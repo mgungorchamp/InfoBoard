@@ -1,5 +1,5 @@
 using InfoBoard.Models;
- 
+
 
 namespace InfoBoard.Views;
 
@@ -11,32 +11,36 @@ namespace InfoBoard.Views;
 [QueryProperty(nameof(MediaInformation), "MediaInformationParam")]
 public partial class WebSiteView : ContentPage
 {
-    
+
     public WebSiteView()
-	{
-		InitializeComponent();      
+    {
+        InitializeComponent();
     }
 
     Media mediaInfo;
-    public Media MediaInformation {
+    public Media MediaInformation
+    {
         get => mediaInfo;
-        set {
+        set
+        {
             mediaInfo = value;
             //Url = mediaInfo.presignedURL;
             showWebSite(mediaInfo.path);
-            OnPropertyChanged();           
+            OnPropertyChanged();
         }
     }
 
-    private void showWebSite(string urlPath) 
+    private void showWebSite(string urlPath)
     {
         Url = urlPath;
         //await Task.Delay(TimeSpan.FromSeconds(10));
     }
     //string url;
-    public string Url {
+    public string Url
+    {
         get => webView.Source.ToString();
-        set {
+        set
+        {
             webView.Source = value;
             webView.Reload();
             OnPropertyChanged();
@@ -46,7 +50,7 @@ public partial class WebSiteView : ContentPage
 
     protected override void OnAppearing()
     {
-        base.OnAppearing();        
+        base.OnAppearing();
         //webView.Source = "https://learn.microsoft.com/dotnet/maui";
         //Url = "https://cdn.destguides.com/files/store/itinerarystop/29947/background_image/webp_large_202112291737-0fca27aa82c1f5eb16403d66d58cb1a7.webp";
         //Url = "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4";

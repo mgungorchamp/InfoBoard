@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InfoBoard.Models
+﻿namespace InfoBoard.Models
 {
     public class MediaCategory
     {
@@ -19,5 +12,5 @@ namespace InfoBoard.Models
         public string color { get; set; }
         public int random_order { get; set; }
         public List<Media> media { get; set; }
-    }   
+    }
 }

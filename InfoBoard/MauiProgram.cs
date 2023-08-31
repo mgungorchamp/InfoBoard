@@ -50,7 +50,7 @@ public static class MauiProgram
 
         //https://github.com/yogigrantz/MAUIWithHttpClientFactory/blob/main/MAUIMultiPage/MainPage.xaml.cs
         builder.Services.AddHttpClient();   // with david
-        
+
 
 
 
@@ -60,7 +60,7 @@ public static class MauiProgram
 
 
         //builder.Services.AddSingleton<EmptyPage>();
-        
+
         builder.Services.AddSingleton<ImageViewer>();
         builder.Services.AddSingleton<WebViewViewer>();
 
@@ -68,7 +68,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<InformationView>();
 
-       
+
         //builder.Services.AddTransient<ImageViewModel>();
 
 
@@ -82,17 +82,17 @@ public static class MauiProgram
             configure.AddDebug();
         });
 #endif
-       // CustomizeWebViewHandler();
+        // CustomizeWebViewHandler();
 
         return builder.Build();
     }
-//    private static void CustomizeWebViewHandler()
-//    {
-//#if ANDROID26_0_OR_GREATER
-//    Microsoft.Maui.Handlers.WebViewHandler.Mapper.ModifyMapping(
-//        nameof(Android.Webkit.WebView.WebChromeClient),
-//        (handler, view, args) => handler.PlatformView.SetWebChromeClient(new MyWebChromeClient(handler)));
-//#endif
-//    }
+    //    private static void CustomizeWebViewHandler()
+    //    {
+    //#if ANDROID26_0_OR_GREATER
+    //    Microsoft.Maui.Handlers.WebViewHandler.Mapper.ModifyMapping(
+    //        nameof(Android.Webkit.WebView.WebChromeClient),
+    //        (handler, view, args) => handler.PlatformView.SetWebChromeClient(new MyWebChromeClient(handler)));
+    //#endif
+    //    }
 
 }

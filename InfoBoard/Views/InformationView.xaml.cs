@@ -7,8 +7,8 @@ public partial class InformationView : ContentPage, IQueryAttributable
 
     //public Information InfoMessage { get; private set; }
     public InformationView()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         //BindingContext = InfoMessage;
     }
 

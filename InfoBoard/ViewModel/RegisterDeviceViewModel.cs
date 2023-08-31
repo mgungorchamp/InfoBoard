@@ -1,17 +1,46 @@
-﻿using InfoBoard.Services;
+﻿
+/* Unmerged change from project 'InfoBoard (net8.0-ios)'
+Before:
+using InfoBoard.Services;
+using System.ComponentModel;
+After:
+using InfoBoard.Models;
+using InfoBoard.Services;
+using System.Views;
+*/
+
+/* Unmerged change from project 'InfoBoard (net8.0-windows10.0.19041.0)'
+Before:
+using InfoBoard.Services;
+using System.ComponentModel;
+After:
+using InfoBoard.Models;
+using InfoBoard.Services;
+using System.Views;
+*/
+
+/* Unmerged change from project 'InfoBoard (net8.0-android)'
+Before:
+using InfoBoard.Services;
+using System.ComponentModel;
+After:
+using InfoBoard.Models;
+using InfoBoard.Services;
+using System.Views;
+*/
+using InfoBoard.Models;
+using InfoBoard.Services;
+using Microsoft.Extensions.Logging;
+using QRCoder;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using QRCoder;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp;
-using InfoBoard.Models;
-using InfoBoard.Views;
-using Microsoft.Extensions.Logging;
 
 namespace InfoBoard.ViewModel
 {
     public sealed class RegisterDeviceViewModel : INotifyPropertyChanged
-    {          
+    {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ILogger _logger;
         //System.Timers.Timer aRegistrationTimer = new System.Timers.Timer();
@@ -24,7 +53,7 @@ namespace InfoBoard.ViewModel
 
         public Command OnRegenerateQrCodeCommand { get; set; }
         public Command OnOpenRegisterDeviveWebPageCommand { get; set; }
-        public RegisterDeviceViewModel() 
+        public RegisterDeviceViewModel()
         {
             _logger = Utilities.Logger(nameof(RegisterDeviceViewModel));
             counter = 0;
@@ -34,13 +63,13 @@ namespace InfoBoard.ViewModel
             OnRegenerateQrCodeCommand = new Command(
                execute: () =>
                {
-                   generateQrCode();                   
+                   generateQrCode();
                });
 
             OnOpenRegisterDeviveWebPageCommand = new Command(
                  execute: async () =>
                  {
-                    // Navigate to the specified URL in the system browser.
+                     // Navigate to the specified URL in the system browser.
                      await Launcher.Default.OpenAsync($"{Utilities.Scheme}://{Utilities.HostUrl}/index.php?action=devices&temporary_code={Utilities.TEMPORARY_CODE}");
 
                  });
@@ -50,33 +79,39 @@ namespace InfoBoard.ViewModel
             //startTimedRegisterationEvent();
             _logger.LogInformation($"**RegisterDeviceViewModel** Constructor");
         }
-             
+
 
         public void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        public string RegisterationKey {
+        public string RegisterationKey
+        {
             get => _registerKeyLabel;
-            set {
+            set
+            {
                 if (_registerKeyLabel == value)
                     return;
                 _registerKeyLabel = value;
                 OnPropertyChanged();
             }
         }
-      
-        public string QRImageButton {
+
+        public string QRImageButton
+        {
             get => _qrImageButton;
-            set {
+            set
+            {
                 if (_qrImageButton == value)
                     return;
                 _qrImageButton = value;
                 OnPropertyChanged();
             }
         }
-        public string Status {
-            get => _status ;
-            set {
+        public string Status
+        {
+            get => _status;
+            set
+            {
                 if (_status == value)
                     return;
                 _status = value;
@@ -89,7 +124,7 @@ namespace InfoBoard.ViewModel
         public async void StartTimed4DeviceRegisterationEvent()
         {
             generateQrCode();
-          //  this.imageViewModel = imageViewModel;
+            //  this.imageViewModel = imageViewModel;
             await StartTimer4DeviceRegistration();
 
             timer4Registration.Interval = TimeSpan.FromSeconds(20);
@@ -104,7 +139,7 @@ namespace InfoBoard.ViewModel
 
         public void StopTimed4DeviceRegisterationEvent()
         {
-         
+
             timer4Registration.IsRepeating = false;
             timer4Registration.Stop();
             _status = "Timer stopped...";
@@ -115,41 +150,41 @@ namespace InfoBoard.ViewModel
         private async Task StartTimer4DeviceRegistration()
         {
             counter++;
-            
+
             if (!Utilities.isInternetAvailable())
-            {             
+            {
                 _status = "No Internet Connection";
                 OnPropertyChanged(nameof(Status));
                 return;
             }
 
-            _status =   $"Activating" +
-                        $"\nAttempt #{counter}"; 
+            _status = $"Activating" +
+                        $"\nAttempt #{counter}";
             OnPropertyChanged(nameof(Status));
 
             //Register Device
             RestService restService = new RestService();
             //RestService restService = RestService.Instance;
-            string registrationMessage= await restService.registerDevice();
+            string registrationMessage = await restService.registerDevice();
 
 
             //DeviceSettingsService deviceSettingsService = DeviceSettingsService.Instance;            
-            DeviceSettingsService deviceSettingsService = new DeviceSettingsService();  
+            DeviceSettingsService deviceSettingsService = new DeviceSettingsService();
             DeviceSettings deviceSettings = await deviceSettingsService.loadDeviceSettings();
 
-            if(deviceSettings == null)
+            if (deviceSettings == null)
             {
                 _status = $"Attempt #{counter}" +
-                          $"\n{registrationMessage}"+                    
+                          $"\n{registrationMessage}" +
                           $"\n\nI'm not about to give up. " +
                           $"\nI'll keep pushing forward, " +
                           $"\nno matter how many trials it takes " +
                           $"\nLet's go!";
                 OnPropertyChanged(nameof(Status));
                 return;
-            }            
+            }
 
-            _status =   $"\n{registrationMessage}" +                         
+            _status = $"\n{registrationMessage}" +
                         $"\n\nDevice ID: {deviceSettings.device_key}" +
                         $"\nUpdating MediaInfo Files... " +
                         $"\nand going to front page!";

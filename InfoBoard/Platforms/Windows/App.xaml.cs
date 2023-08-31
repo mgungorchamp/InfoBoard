@@ -5,8 +5,6 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls.Platform;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 using System.Diagnostics;
 
 namespace InfoBoard.WinUI;
@@ -47,8 +45,41 @@ public partial class App : MauiWinUIApplication
 
     #region Error handling
     private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+
+    /* Unmerged change from project 'InfoBoard (net8.0-ios)'
+    Before:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    After:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    */
+
+    /* Unmerged change from project 'InfoBoard (net8.0-windows10.0.19041.0)'
+    Before:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    After:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    */
+
+    /* Unmerged change from project 'InfoBoard (net8.0-android)'
+    Before:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    After:
+        {
+
+            System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
+    */
     {
-        
+
         System.Diagnostics.Debug.WriteLine($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
         _logger.LogError($"**********************************  TaskSchedulerOnUnobservedTaskException! Details: {e.Exception.ToString()}");
         //throw new NotImplementedException();
@@ -83,8 +114,41 @@ public partial class App : MauiWinUIApplication
             DateTime.Now, exception.ToString());
             //File.WriteAllText(errorFilePath, errorMessage);
             File.AppendAllText(errorFilePath, errorMessage);
+
+            /* Unmerged change from project 'InfoBoard (net8.0-ios)'
+            Before:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            After:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            */
+
+            /* Unmerged change from project 'InfoBoard (net8.0-windows10.0.19041.0)'
+            Before:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            After:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            */
+
+            /* Unmerged change from project 'InfoBoard (net8.0-android)'
+            Before:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            After:
+                        // Log to Android Device Logging.
+
+                        _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
+            */
             // Log to Android Device Logging.
-            
+
             _logger.LogError($"**********************************  Error Logged ! \nDetails at: {errorFilePath} Message {errorMessage}");
         }
         catch (Exception ex)
@@ -107,12 +171,12 @@ public partial class App : MauiWinUIApplication
         var errorText = File.ReadAllText(errorFilePath);
 
         var toast = Toast.Make($"Crash Report {errorText}", ToastDuration.Long);
-        
+
         await toast.Show();
-        
-        File.Delete(errorFilePath);        
+
+        File.Delete(errorFilePath);
     }
-#endregion
+    #endregion
 
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }

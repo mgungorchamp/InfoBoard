@@ -1,5 +1,5 @@
-using InfoBoard.ViewModel;
 using InfoBoard.Services;
+using InfoBoard.ViewModel;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -14,11 +14,11 @@ public partial class ImageDisplay : ContentPage
     public ImageDisplay(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        
+
         Utilities._httpClientFactory = httpClientFactory;
 
         _logger = Utilities.Logger(nameof(ImageDisplay));
-        
+
         InitializeComponent();
         //NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasNavigationBar(this, false);
@@ -30,8 +30,8 @@ public partial class ImageDisplay : ContentPage
         _logger.LogInformation("\n++++++++++++++ ImageDisplay Constructor");
     }
 
-    
-    ~ImageDisplay() 
+
+    ~ImageDisplay()
     {
         Debug.WriteLine("\n\n------------- ImageDisplay Destructor\n\n");
         _logger.LogInformation("------------- ImageDisplay Destructor");
@@ -53,7 +53,7 @@ public partial class ImageDisplay : ContentPage
         //DeviceDisplay.Current.KeepScreenOn = true;
         DeviceDisplay.Current.KeepScreenOn = true;
 
-        MediaManager manager = MediaManager.Instance;        
+        MediaManager manager = MediaManager.Instance;
         manager.SetImageDisplay(this);
 
 
@@ -72,7 +72,7 @@ public partial class ImageDisplay : ContentPage
         await ((ImageViewModel)BindingContext).GoTimeNow(/*_httpClientFactory*/);
     }
 
-     
+
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
@@ -137,9 +137,9 @@ public partial class ImageDisplay : ContentPage
     {
         //myGrid.Children.Clear();
         //myGrid.Children.RemoveAt(myGrid.Children.Count - 1);
-               
-       // myGrid.RemoveAt(myGrid.Count - 1);
-        
+
+        // myGrid.RemoveAt(myGrid.Count - 1);
+
         web.Cookies = null;
         web.Source = null;
         Content = null;
@@ -160,7 +160,7 @@ public partial class ImageDisplay : ContentPage
     {
         //// Get the screen points 
         //double screenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
-        
+
         //double screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
 
         //Debug.WriteLine(screenWidth);

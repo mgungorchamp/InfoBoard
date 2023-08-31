@@ -21,7 +21,7 @@ namespace InfoBoard.Services
         //static SentryHttpMessageHandler httpHandler = new SentryHttpMessageHandler();
         HttpClient _httpClient;
         //static HttpClient _httpClient = new HttpClient() // new HttpClient(httpHandler)
-        
+
         JsonSerializerOptions _serializerOptions;
         private readonly ILogger _logger;
 
@@ -39,12 +39,12 @@ namespace InfoBoard.Services
         public RestService()
         {
             _logger = Utilities.Logger(nameof(RestService));
-            
+
             _httpClient = Utilities._httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri(Utilities.BASE_ADDRESS);  
+            _httpClient.BaseAddress = new Uri(Utilities.BASE_ADDRESS);
 
             _httpClient.Timeout = TimeSpan.FromMinutes(5); //Default is 100 seconds
-                                                       //_httpClient.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
+                                                           //_httpClient.Timeout = TimeSpan.FromSeconds(200); //Default is 100 seconds
 
             _serializerOptions = new JsonSerializerOptions
             {

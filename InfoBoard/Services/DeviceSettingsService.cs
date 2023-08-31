@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using InfoBoard.Models;
+﻿using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace InfoBoard.Services
 {

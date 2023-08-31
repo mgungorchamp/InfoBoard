@@ -9,12 +9,12 @@ public partial class RegisterView : ContentPage
 {
     private readonly ILogger _logger;
     public RegisterView()
-	{
+    {
         _logger = Utilities.Logger(nameof(RegisterView));
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         NavigationPage.SetHasBackButton(this, false);
-        
+
         //RegisterDeviceViewModel registerDeviceViewModel = new();
         BindingContext = new RegisterDeviceViewModel();// registerDeviceViewModel; //RegisterDeviceViewModel.Instance;
         adressLabel.Text = "Activate via " + Utilities.BASE_ADDRESS;
@@ -33,7 +33,7 @@ public partial class RegisterView : ContentPage
     {
         _logger.LogInformation($"\n\tRegisterView On Appearing\n");
         base.OnAppearing();
-        
+
         ((RegisterDeviceViewModel)BindingContext).StartTimed4DeviceRegisterationEvent();
     }
 

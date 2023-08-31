@@ -1,6 +1,7 @@
 using InfoBoard.Models;
 using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace InfoBoard.Views.MediaViews;
 
@@ -10,9 +11,14 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
     private readonly ILogger _logger;
     //private MiniMedia contextMedia;
     public static Media contextMedia;
+
+    WebView webView = new WebView();
+    Label imageName = new Label();
+    Label imageTiming = new Label();
+
     public WebViewViewer()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         _logger = Utilities.Logger(nameof(WebViewViewer));
         _logger.LogInformation($"{nameof(WebViewViewer)} # Constructor Called");
     }
@@ -40,21 +46,51 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         //await Task.Delay(TimeSpan.FromSeconds(2));
 
-        _logger.LogInformation($"Web view OnAppearing, Name: {contextMedia.name}");
+        this.Content = webView;
 
+        _logger.LogInformation($"Web view OnAppearing, Name: {contextMedia.name}");
+        Debug.WriteLine($"1 - OnAppearing");
+
+    }
+
+    protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
+    {
+        //webView.Source = null;
+        //webView.Resources.Clear();
+        //webView.Reload();
+
+        base.OnNavigatingFrom(args);
+        //_logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
+        webView.IsVisible = false;
+        Debug.WriteLine($"A - OnNavigatingFrom");
     }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        //webView.Cookies = null;
-        //webView.Source = null;
-        ////Content = null;
+
         ////    webView.Source = null;
         //    webView.Resources.Clear();
         //   webView.Reload();
+        Debug.WriteLine($"B - OnDisappearing");
 
-        
     }
+    ////When navigation away from this page completed - last thing to happen
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        //webView.Resources.Clear();
+        //webView.Reload(); ****
+
+        base.OnNavigatedFrom(args);
+        //_logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
+        //webView.Source = null;
+        //webView.Reload();
+        webView.IsVisible = false;
+        webView.Cookies = null;
+        webView.Source = null;
+        Content = null;
+        Debug.WriteLine($"C - OnNavigatedFrom");
+    }
+
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
@@ -67,35 +103,14 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
         base.OnNavigatedTo(args);
         _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
         webView.IsVisible = true;
-    }
-
-    protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
-    {
-        //webView.Source = null;
-        //webView.Resources.Clear();
-        //webView.Reload();
-
-        base.OnNavigatingFrom(args);
-        //_logger.LogInformation($"Web view OnNavigatingFrom, Name: {contextMedia.name}");
-        webView.IsVisible = false;
+        Debug.WriteLine($"2 - OnNavigatedTo");
     }
 
 
 
-    ////When navigation away from this page completed - last thing to happen
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        
-        //webView.Resources.Clear();
 
-        //webView.Reload(); ****
 
-        base.OnNavigatedFrom(args);
-        //_logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
-        //webView.Source = null;
-        //webView.Reload();
-        webView.IsVisible = false;
-    }
+
 
 
 

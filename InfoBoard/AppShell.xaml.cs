@@ -1,8 +1,6 @@
-﻿using InfoBoard.Services;
-using InfoBoard.Views;
+﻿using InfoBoard.Views;
 using InfoBoard.Views.MediaViews;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace InfoBoard;
 
@@ -71,11 +69,11 @@ public partial class AppShell : Shell
 
 
     //To prevent the app from changing view when the back button is pressed via mouse or remote control
-    //protected override bool OnBackButtonPressed()
-    //{
-    //    Debug.WriteLine($"AppShell OnBackButtonPressed");
-    //    return true;
-    //}
+    protected override bool OnBackButtonPressed()
+    {
+        Debug.WriteLine($"AppShell OnBackButtonPressed");
+        return true;
+    }
 
     //https://github.com/dotnet/maui/issues/9300
     protected override void OnNavigated(ShellNavigatedEventArgs args)
@@ -87,7 +85,7 @@ public partial class AppShell : Shell
             Debug.WriteLine($"AppShell location {location}");
             base.OnNavigated(args);
         }
-       
+
         catch (System.Runtime.InteropServices.COMException ex)
         {
             //_logger.LogError($"\n\t #036 Exception Error Code: {(uint)ce.ErrorCode}\n" +
@@ -98,8 +96,8 @@ public partial class AppShell : Shell
         }
         catch (System.UriFormatException ex)
         {
-        //    _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
-        //           $"Path: {media.path}\n");
+            //    _logger.LogError($"\n\t #044 Exception: {exFormat.Message}\n" +
+            //           $"Path: {media.path}\n");
             Debug.WriteLine($"AppShell #934 OnNavigated Exception {ex.Message}");
         }
         catch (Exception ex)
@@ -116,7 +114,7 @@ public partial class AppShell : Shell
         //}
     }
 
-    
+
 
     //https://gist.github.com/mattjohnsonpint/7b385b7a2da7059c4a16562bc5ddb3b7
 }

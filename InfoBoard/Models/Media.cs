@@ -2,9 +2,9 @@
 {
     public class Media : IEquatable<Media>
     {
-        public Media() 
+        public Media()
         {
-            path = "uploadimage.png";            
+            path = "uploadimage.png";
             s3key = "uploadimage.png";
             type = "file";
             display_width = -1;
@@ -23,7 +23,7 @@
         public string mime_type { get; set; }
         public int display_width { get; set; }
         public List<string> media_categories { get; set; }
-        
+
 
         public bool Equals(Media other)
         {

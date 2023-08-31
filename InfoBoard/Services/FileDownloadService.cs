@@ -1,10 +1,5 @@
 ﻿using InfoBoard.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Storage;
-using System.Collections;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 //using Microsoft.Maui.Graphics;
 //using Microsoft.UI.Xaml.Controls;
@@ -57,11 +52,11 @@ namespace InfoBoard.Services
         //}
         public FileDownloadService()
         {
-            _logger = Utilities.Logger(nameof(FileDownloadService));           
+            _logger = Utilities.Logger(nameof(FileDownloadService));
             httpClient = Utilities._httpClientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(5);
         }
-        
+
 
         public async Task<List<MediaCategory>> synchroniseMediaFiles()
         {

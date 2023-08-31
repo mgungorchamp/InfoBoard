@@ -1,8 +1,6 @@
-﻿using InfoBoard.Models;
-using InfoBoard.Services;
+﻿using InfoBoard.Services;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace InfoBoard.ViewModel
@@ -107,23 +105,23 @@ namespace InfoBoard.ViewModel
 
         //}
 
-        
+
         public async Task GoTimeNow(/*IHttpClientFactory _httpClientFactory*/)
         {
             _logger.LogInformation("\n\n+++ GoTimeNow() is called\n\n");
 
             //Utilities._httpClientFactory = _httpClientFactory;
 
-            MediaManager manager = MediaManager.Instance;           
+            MediaManager manager = MediaManager.Instance;
             manager.SetImageViewModel(this);
-            
+
 
             //manager.SetHttpClientFactory(_httpClientFactory);
 
 
             //To start with a default image
             imageTiming = 3;
-            _imageMediaSource = "welcome.jpg"; 
+            _imageMediaSource = "welcome.jpg";
             WebViewVisible = false;
             ImageSourceVisible = true;
 
@@ -137,9 +135,11 @@ namespace InfoBoard.ViewModel
             manager.StopTimersNow4MediaDisplayAndFilesAndSettings();
         }
 
-        public string WebMediaSource {
+        public string WebMediaSource
+        {
             get => _webMediaSource;
-            set {
+            set
+            {
                 if (_webMediaSource == value)
                     return;
                 _webMediaSource = value;
@@ -147,9 +147,11 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public string ImageMediaSource {
+        public string ImageMediaSource
+        {
             get => _imageMediaSource;
-            set {
+            set
+            {
                 if (_imageMediaSource == value)
                     return;
                 _imageMediaSource = value;
@@ -157,9 +159,11 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public string MediaInformation {
+        public string MediaInformation
+        {
             get => mediaInformation;
-            set {
+            set
+            {
                 if (mediaInformation == value)
                     return;
                 mediaInformation = value;
@@ -167,19 +171,23 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public bool ImageSourceVisible {
+        public bool ImageSourceVisible
+        {
             get => imageSourceVisible;
-            set {
+            set
+            {
                 if (imageSourceVisible == value)
                     return;
                 imageSourceVisible = value;
                 OnPropertyChanged();
             }
         }
-        
-        public bool ItemVisible {
+
+        public bool ItemVisible
+        {
             get => _itemVisible;
-            set {
+            set
+            {
                 if (_itemVisible == value)
                     return;
                 _itemVisible = value;
@@ -187,9 +195,11 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public bool ShowNoInternetIcon {
+        public bool ShowNoInternetIcon
+        {
             get => showNoInternetIcon;
-            set {
+            set
+            {
                 if (showNoInternetIcon == value)
                     return;
                 showNoInternetIcon = value;
@@ -197,9 +207,11 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public bool WebViewVisible {
+        public bool WebViewVisible
+        {
             get => webViewVisible;
-            set {
+            set
+            {
                 if (webViewVisible == value)
                     return;
                 webViewVisible = value;
@@ -207,18 +219,22 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public string ImageName {
+        public string ImageName
+        {
             get => imageName;
-            set {
+            set
+            {
                 if (imageName == value)
                     return;
                 imageName = value;
                 OnPropertyChanged();
             }
         }
-        public int ImageTiming {
+        public int ImageTiming
+        {
             get => imageTiming;
-            set {
+            set
+            {
                 if (imageTiming == value)
                     return;
                 imageTiming = value;
@@ -226,9 +242,11 @@ namespace InfoBoard.ViewModel
             }
         }
 
-        public int DisplayWidth {
+        public int DisplayWidth
+        {
             get => _display_width;
-            set {
+            set
+            {
                 if (_display_width == value)
                     return;
                 _display_width = value;

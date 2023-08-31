@@ -1,9 +1,6 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using InfoBoard.Services;
+﻿using InfoBoard.Services;
 using InfoBoard.ViewModel;
-using InfoBoard.Views;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui;
 using System.Diagnostics;
 
 namespace InfoBoard;
@@ -32,17 +29,17 @@ public partial class App : Application
         _logger = Utilities.Logger(nameof(App));
 
 
-        MainPage = new AppShell(); 
+        MainPage = new AppShell();
         //MainPage = new NavigationPage(root: new WelcomeView());       
 
         // Following the article:  https://learn.microsoft.com/en-us/dotnet/maui/user-interface/pages/navigationpage#perform-modeless-navigation
         Debug.WriteLine($" +++++++++++++++++ > App  CONSTRUCTOR! \n{App.Current.Id}");
         //MainPage = new NavigationPage(root: new ImageDisplay());
-       
+
     }
 
 
-    ~App() 
+    ~App()
     {
         Debug.WriteLine($"  ---------------- > App  DESTRUCTOR!//////// \n{App.Current.Id}");
     }
@@ -56,7 +53,7 @@ public partial class App : Application
         // Set the KeepScreenOn property to true to prevent the screen from turning off        
         DeviceDisplay.Current.KeepScreenOn = true;
 
-        Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");    
+        Debug.WriteLine($" +++++++++++++++++ > App  OnStart!");
 
         await imageViewModel.GoTimeNow();
     }

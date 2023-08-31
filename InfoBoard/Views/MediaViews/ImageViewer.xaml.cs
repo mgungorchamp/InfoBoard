@@ -11,8 +11,8 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
     //private MiniMedia contextMedia;
     //public static Media contextMedia;
     public ImageViewer()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         _logger = Utilities.Logger(nameof(ImageViewer));
         _logger.LogInformation($"{nameof(ImageViewer)} @ Constructor Called");
         //BindingContext = contextMedia;
@@ -28,7 +28,7 @@ public partial class ImageViewer : ContentPage //, IQueryAttributable
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         MediaManager manager = MediaManager.Instance;
-        Media contextMedia = manager.currentMedia; 
+        Media contextMedia = manager.currentMedia;
         noInternetImage.IsVisible = !Utilities.isInternetAvailable();
         mainPageImage.Source = contextMedia.path;
         _logger.LogInformation($"Image view OnNavigatedTo, Name: {contextMedia.name}");

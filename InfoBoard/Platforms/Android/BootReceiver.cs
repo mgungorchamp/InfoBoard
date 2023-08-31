@@ -1,5 +1,5 @@
-﻿using Android.App;
-using Android;
+﻿using Android;
+using Android.App;
 using Android.Content;
 using Android.Widget;
 
@@ -37,4 +37,3 @@ namespace InfoBoard.Platforms.Android
 }
 
 
- 
