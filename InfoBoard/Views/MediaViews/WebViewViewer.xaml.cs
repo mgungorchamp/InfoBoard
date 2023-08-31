@@ -61,8 +61,9 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         base.OnNavigatedTo(args);
         _logger.LogInformation($"Web view OnNavigatedTo, Name: {contextMedia.name}");
-        //webView.IsVisible = true;
+        
         this.Content = webView;
+        webView.IsVisible = true;
         Debug.WriteLine($"2 - OnNavigatedTo");
     }
 
@@ -97,12 +98,13 @@ public partial class WebViewViewer : ContentPage//, IQueryAttributable
 
         base.OnNavigatedFrom(args);
         //_logger.LogInformation($"Web view OnNavigatedFrom, Name: {contextMedia.name}");
-        //webView.Source = null;
-        //webView.Reload();
-        //webView.IsVisible = false;
-        //webView.Cookies = null;
-        //webView.Source = null;
-        //Content = null;
+
+
+        webView.IsVisible = false;
+        webView.Source = null;
+        //webView.Reload();      
+        //webView.Cookies = null;        
+        Content = null;
         Debug.WriteLine($"C - OnNavigatedFrom");
     }
 
